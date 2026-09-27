@@ -1,0 +1,24 @@
+{
+  "id": "thesis-line-craft-a-single-short-sentence",
+  "craft": "thesis-line",
+  "principle": "Craft a single, short sentence that states your core belief, then repeat or isolate it visually at the end as the distilled takeaway.",
+  "when_it_works": {
+    "register": [
+      "resolve"
+    ],
+    "beat": [
+      "result"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Leaves one memorable idea echoing in the viewer’s mind after the story ends.",
+  "evidence": [
+    "f03-apple — resolve register",
+    "f08-volvo-trucks — resolve register"
+  ],
+  "weight": 3,
+  "status": "candidate",
+  "source": "auto:f03-apple"
+}

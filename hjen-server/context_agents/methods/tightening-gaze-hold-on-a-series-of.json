@@ -1,0 +1,23 @@
+{
+  "id": "tightening-gaze-hold-on-a-series-of",
+  "craft": "tightening-gaze",
+  "principle": "Hold on a series of nearly identical, tightening close-ups of a face or focal object to compress time and load the moment with internal tension before anything happens.",
+  "when_it_works": {
+    "register": [
+      "resolve"
+    ],
+    "beat": [
+      "setup"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Makes the audience feel the weight of anticipation and focus so that the eventual release of action lands as earned rather than random.",
+  "evidence": [
+    "f05-guinness — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f05-guinness"
+}

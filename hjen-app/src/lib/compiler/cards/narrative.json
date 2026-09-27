@@ -1,0 +1,38 @@
+[
+  {
+    "id": "narrative.ramadan-arc.001",
+    "dimension": "narrative",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["رمضان", "قوس", "سرد", "narrative", "emotional", "arc"],
+    "ar": "قوس رمضان العاطفي: افتتاح هادئ يزرع غياباً أو مسافة (كرسي فاضي، مكالمة مؤجلة) ← تفاصيل يومية تراكم الحنين ← لحظة لمّة تُرجع الغائب أو تصالح ← ختام دافئ بسطر واحد. البكاء يُستدر بالتفاصيل لا بالموسيقى وحدها.",
+    "en": "The Ramadan emotional arc: quiet open planting an absence or distance (an empty chair, a postponed call) → daily details accumulating longing → the gathering moment that returns or reconciles → warm close on a single line. Tears are earned through details, never through music alone.",
+    "negatives": ["opening on the reunion (no earned arc)", "montage of smiles with no absence to resolve"],
+    "sources": ["seed:narrative"],
+    "weight": 2
+  },
+  {
+    "id": "narrative.commercial-structure.002",
+    "dimension": "narrative",
+    "region": "ksa",
+    "era": "2020s",
+    "tags": ["بنية", "structure", "إعلان", "commercial", "hook", "ثواني"],
+    "ar": "بنية الإعلان التجاري السعودي: خطاف في أول ٣ ثوانٍ (موقف غريب أو سؤال بصري) ← تصعيد الموقف ← دخول المنتج كحلّ طبيعي لا كضيف ثقيل ← ختام بسطر + لوحة. الـ 15 ثانية موقف واحد فقط؛ الـ 60 تتحمل قوسين.",
+    "en": "Saudi commercial structure: hook in the first 3 seconds (an odd situation or visual question) → escalate → the product enters as a natural resolution, not an intruding guest → close on one line + end frame. A :15 holds ONE situation only; a :60 can carry two arcs.",
+    "negatives": ["product features listed as the story", "hook that has nothing to do with the resolution"],
+    "sources": ["seed:narrative"],
+    "weight": 2
+  },
+  {
+    "id": "narrative.pov-stake.003",
+    "dimension": "narrative",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["pov", "وجهة نظر", "stance", "موقف", "سرد"],
+    "ar": "لكل حملة POV — موقف لا مجرد موضوع: عيون من نرى المشهد؟ الكاميرا لها مصلحة في القصة. «عائلة في محطة» ليست توجيهاً؛ «عيون أم ترى ابنها يستقل أول قطار له وحده» توجيه.",
+    "en": "Every campaign has a POV — a stance, not just a subject: whose eyes are we inside? The camera has a stake in the story. 'A family at a station' is not direction; 'a mother's eyes as her son boards his first solo train' is direction.",
+    "negatives": ["observer-from-nowhere neutral coverage"],
+    "sources": ["seed:kv_craft"],
+    "weight": 2
+  }
+]

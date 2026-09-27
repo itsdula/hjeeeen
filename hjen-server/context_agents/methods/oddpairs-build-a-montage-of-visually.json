@@ -1,0 +1,23 @@
+{
+  "id": "oddpairs-build-a-montage-of-visually",
+  "craft": "oddpairs",
+  "principle": "Build a montage of visually surprising, cross-category pairings that clearly enjoy being together, so the viewer instinctively reads your brand as what lets unlike things coexist.",
+  "when_it_works": {
+    "register": [
+      "joy"
+    ],
+    "beat": [
+      "result"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Make audiences feel that difference is delightful and safe under your brand’s umbrella.",
+  "evidence": [
+    "f16-android — joy register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f16-android"
+}

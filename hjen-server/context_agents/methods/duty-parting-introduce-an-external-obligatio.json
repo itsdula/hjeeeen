@@ -1,0 +1,23 @@
+{
+  "id": "duty-parting-introduce-an-external-obligatio",
+  "craft": "duty-parting",
+  "principle": "Introduce an external obligation or public role that forces separation at the emotional peak, then let the characters voice both resistance and acceptance in short lines to make the goodbye feel inevitable rather than arbitrary.",
+  "when_it_works": {
+    "register": [
+      "turbulence"
+    ],
+    "beat": [
+      "conflict"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Turn a simple breakup or ending into a noble sacrifice, deepening the audience’s emotional investment and sympathy for both sides.",
+  "evidence": [
+    "f12-chanel — longing register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f12-chanel"
+}

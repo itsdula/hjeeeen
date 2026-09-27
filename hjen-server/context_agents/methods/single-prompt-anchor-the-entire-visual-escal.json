@@ -1,0 +1,23 @@
+{
+  "id": "single-prompt-anchor-the-entire-visual-escal",
+  "craft": "single-prompt",
+  "principle": "Anchor the entire visual escalation around one simple spoken line that functions as a cue, letting that phrase silently motivate every subsequent scene.",
+  "when_it_works": {
+    "beat": [
+      "setup"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Give the audience a clear, memorable verbal trigger that ties together diverse images into one coherent action or mindset.",
+  "evidence": [
+    "f09-p-g — resolve register",
+    "f10-old-spice — joy register",
+    "f11-honda — groundedness register",
+    "CONFIRMED-TRANSFERABLE: resolve+joy+groundedness"
+  ],
+  "weight": 4,
+  "status": "candidate",
+  "source": "auto:f09-p-g"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "reframe-after-showing-an-oppressive-system",
+  "craft": "reframe",
+  "principle": "After showing an oppressive system, pivot the narration to name your offering as the reason that system will no longer define the future.",
+  "when_it_works": {
+    "register": [
+      "resolve"
+    ],
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Cast your product or idea as the turning point that explains why the old nightmare will not continue.",
+  "evidence": [
+    "f02-apple — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f02-apple"
+}

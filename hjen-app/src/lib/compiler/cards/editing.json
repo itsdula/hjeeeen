@@ -1,0 +1,26 @@
+[
+  {
+    "id": "editing.saudi-pacing.001",
+    "dimension": "editing",
+    "region": "ksa",
+    "era": "2020s",
+    "tags": ["مونتاج", "إيقاع", "editing", "pacing", "قطع", "cut"],
+    "ar": "إيقاع الإعلان السعودي أطول نفَساً من الغربي: اللقطة العاطفية تُترك تتنفس (٣-٥ ثوانٍ)، لقطة الصبر الكوميدية تطول عمداً، والتسارع يُدّخر للحظة الانقلاب. القطع على الحركة أو النظرة، لا على العدّاد.",
+    "en": "Saudi ad pacing breathes longer than Western: emotional shots are allowed 3–5 seconds, the comedic patience beat is deliberately held, acceleration is saved for the turn. Cut on action or on a look — never on a metronome.",
+    "negatives": ["1-second TikTok strobe cutting on an emotional arc", "holding a dead shot with no inner movement"],
+    "sources": ["seed:narrative"],
+    "weight": 2
+  },
+  {
+    "id": "editing.duration-grammar.002",
+    "dimension": "editing",
+    "region": "ksa",
+    "era": "2020s",
+    "tags": ["مدة", "duration", "15s", "30s", "60s", "منصة", "platform"],
+    "ar": "نحو المدد: ٦ث لقطة-فكرة واحدة للسوشال؛ ١٥ث موقف واحد وقفلة؛ ٣٠ث القوس التجاري الكامل؛ ٦٠-٩٠ث الفيلم العاطفي (رمضان/وطني). لكل مدة عدد لقطات طبيعي — ١٥ث تتحمل ٤-٦ لقطات لا ١٢.",
+    "en": "Duration grammar: :06 = one shot-one idea for social; :15 = one situation + punch; :30 = the full commercial arc; :60–:90 = the emotional film (Ramadan/National Day). Each duration has a natural shot count — a :15 carries 4–6 shots, not 12.",
+    "negatives": ["cramming a :60 arc into :15", "12-shot :15"],
+    "sources": ["seed:narrative"],
+    "weight": 1
+  }
+]

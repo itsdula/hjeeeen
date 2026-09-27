@@ -1,0 +1,74 @@
+[
+  {
+    "id": "places.riyadh.001",
+    "dimension": "places",
+    "region": "najd",
+    "era": "2020s",
+    "tags": ["الرياض", "riyadh", "نجد", "مدينة", "urban", "city"],
+    "ar": "الرياض الحقيقية: خلطة معمارية — بروتالي سبعينات جنب زجاج حديث جنب بيوت طين مرممة؛ شوارع عريضة، أرصفة عالية، غبار خفيف دائم؛ أبراج العليا ضباب في الخلفية لا بطاقة بريدية. مواقف السيارات المكشوفة فضاء تأمل مشروع.",
+    "en": "Real Riyadh: architectural mix — 1970s brutalist blocks beside modern glass beside restored mud-brick; wide streets, high curbs, permanent light dust-haze; Olaya towers as soft background haze, never a postcard skyline. Parking garage rooftops are legitimate contemplative spaces with the city behind.",
+    "negatives": ["Dubai Marina glass fantasy standing in for Riyadh", "empty rendered streets with no cars or wear"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  },
+  {
+    "id": "places.jeddah-balad.002",
+    "dimension": "places",
+    "region": "hijaz",
+    "era": "timeless",
+    "tags": ["جدة", "البلد", "jeddah", "balad", "حجاز", "روشان", "coastal"],
+    "ar": "جدة/البلد: رواشين خشبية مخرّمة على واجهات مرجانية، أزقة ظليلة ضيقة، رطوبة تنعّم الحواف وتهيل الضوء؛ الكورنيش شغل بحري حقيقي — رافعات ميناء وصنارات، ليس شاطئ منتجع.",
+    "en": "Jeddah / Al-Balad: carved wooden rawashin (mashrabiya balconies) on coral-stone facades, narrow shaded alleys, humidity softening every edge with glow. The corniche is a WORKING sea — port cranes, fishing rods, camping chairs — not a resort beach. Grey-green sea with whitecaps, wind-bent palms.",
+    "negatives": ["tropical turquoise resort water", "Moroccan riad details on Hijazi houses"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  },
+  {
+    "id": "places.asir-abha.003",
+    "dimension": "places",
+    "region": "asir",
+    "era": "timeless",
+    "tags": ["عسير", "أبها", "رجال ألمع", "asir", "abha", "جبال", "قط", "mountains"],
+    "ar": "عسير: جبال خضراء بضباب فعلي، بيوت حجرية بشرفات مقرنصة وصفوف حجر مائلة (رقف)، نقش القط العسيري بألوانه على الجدران الداخلية، مدرجات زراعية. الهواء بارد رطب — نور مختلف كلياً عن نجد.",
+    "en": "Asir: green fog-wrapped mountains, stone tower houses with slanted slate rows (ragf) against rain, interior walls painted with Al-Qatt Al-Asiri geometric art in real pigment colors, terraced farms. Cool humid air — a completely different light from Najd: soft, misty, mountain-diffused.",
+    "negatives": ["desert dunes pasted behind Asiri architecture", "Al-Qatt patterns as exterior billboard decoration"],
+    "sources": ["seed:regional_vocab"],
+    "weight": 2
+  },
+  {
+    "id": "places.alula.004",
+    "dimension": "places",
+    "region": "hijaz",
+    "era": "timeless",
+    "tags": ["العلا", "alula", "حجر", "sandstone", "صخور", "heritage"],
+    "ar": "العلا: تكوينات حجر رملي ضخمة منحوتة بالريح، واحة نخيل خضراء تشق الصحراء، بلدة طينية قديمة. المقياس هو البطل — الإنسان صغير أمام الجيولوجيا. ضوء الصباح يشعل الصخر برتقالياً دافئاً.",
+    "en": "AlUla: monumental wind-carved sandstone formations, a green palm oasis cutting through desert, the old mud-brick town. SCALE is the protagonist — humans tiny against geological time. Morning light ignites the rock warm orange (#8A5A30); shadows stay cool.",
+    "negatives": ["generic smooth Sahara dunes", "CGI-perfect rock with no erosion texture"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  },
+  {
+    "id": "places.alahsa-oasis.005",
+    "dimension": "places",
+    "region": "eastern",
+    "era": "timeless",
+    "tags": ["الأحساء", "واحة", "نخيل", "alahsa", "oasis", "شرقية", "فخار"],
+    "ar": "الأحساء: أكبر واحة نخيل، قنوات ري، دخان زراعي يتسلل بين الجذوع كديفيوجن طبيعي، فخار القارة على جرف صخري، أخضر غزير غير متوقع داخل الجفاف — يقرأ مريمية لا زمردي.",
+    "en": "Al-Ahsa: the great palm oasis — irrigation channels, agricultural smoke drifting between palm trunks as natural diffusion, Al-Qara pottery workshops against rock cliffs, improbable lushness inside aridity. The green reads SAGE, never emerald; damp dark irrigated earth underfoot.",
+    "negatives": ["vivid tropical jungle green", "empty ornamental palm rows"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  },
+  {
+    "id": "places.neighborhood-truth.006",
+    "dimension": "places",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["حي", "بقالة", "خبازة", "شارع", "neighborhood", "bakery", "corner"],
+    "ar": "صدق الحي السعودي: خبازة بجدار بلاط مقلّم أحمر-أبيض وتقويم عربي، بقالة بثلاجات مضيئة وعلب مرصوصة، حديقة حي بجدارية وطنية ومقاعد إسمنتية مطلية. الأماكن تحمل أثر الاستعمال — لا شيء جديد لامع.",
+    "en": "Saudi neighborhood truth: the bakery with red-white striped tile wall and Arabic calendar; the baqala (corner store) with glowing fridges and stacked goods; the neighborhood park with a national-day mural and painted concrete benches. Every place shows use, age, weather — nothing showroom-new.",
+    "negatives": ["stock-photo sterile minimarket", "empty concept spaces"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  }
+]

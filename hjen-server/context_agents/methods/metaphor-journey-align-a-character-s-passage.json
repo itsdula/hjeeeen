@@ -1,0 +1,20 @@
+{
+  "id": "metaphor-journey-align-a-character-s-passage",
+  "craft": "metaphor-journey",
+  "principle": "Align a character’s passage through distinct physical states or environments with the narration’s abstract journey (waiting, dreaming, returning) so each visual phase maps to a psychological stage.",
+  "when_it_works": {
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Lets viewers intuitively grasp an inner transformation by watching an outer journey, making the message feel mythic rather than literal.",
+  "evidence": [
+    "f05-guinness — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f05-guinness"
+}

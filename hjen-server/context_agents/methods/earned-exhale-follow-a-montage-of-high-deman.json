@@ -1,0 +1,23 @@
+{
+  "id": "earned-exhale-follow-a-montage-of-high-deman",
+  "craft": "earned-exhale",
+  "principle": "Follow a montage of high-demand, high-input moments with a single, held shot of the caregiver finally at rest, so the audience experiences the relief alongside them and is ready to accept help on their behalf.",
+  "when_it_works": {
+    "register": [
+      "groundedness"
+    ],
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Creates a shared sigh of relief that primes viewers to see your offering as a kindness to the overburdened person they’ve just come to care about.",
+  "evidence": [
+    "ui1785430507716 — groundedness register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:ui1785430507716"
+}

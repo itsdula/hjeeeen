@@ -1,0 +1,15 @@
+{
+  "id": "prof-f16-android",
+  "name": "prof-f16-android — extracted from f16-android",
+  "palette": "Warm natural fur tones, lush greens, and soft earth colors for the live-action; crisp white and neon brand green for the end card.",
+  "light_logic": "Soft, even daylight outdoors and cozy, low-contrast indoor light; no harsh shadows, everything feels safe and approachable.",
+  "lens": "Mostly medium and wide lenses with occasional tight close-ups; slight distortion only to make interiors feel a bit storybook and roomy.",
+  "texture": "Tactile animal fur, grass, and natural surfaces; everything looks touchable and real, with minimal gloss or digital sheen.",
+  "world": "A grounded, real-world menagerie where species that don’t normally mix share space casually, like a gentle fairy tale set in actual backyards and paddocks.",
+  "forbidden": [
+    "Violence or visible threat between characters",
+    "Overly slick, hyper-stylized CG environments",
+    "Cold, desaturated or high-contrast dramatic grading",
+    "Complex human dialogue or plot that competes with the simple visual metaphor"
+  ]
+}

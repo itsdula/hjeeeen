@@ -1,0 +1,916 @@
+/* Cuts Engine 1.0 — internal shot/frame verification workspace. */
+/* Full-bleed view root: fixed below the top chrome; the global
+   .app--statusbar rule anchors bottom to the status-bar height. */
+.cut-view {
+  position: fixed; left: 0; right: 0;
+  top: var(--top-chrome-h, 56px); bottom: var(--status-bar-h, 28px);
+  display: flex; flex-direction: row;
+  background: var(--bg); color: var(--ink); overflow: hidden;
+}
+/* The original workspace column — everything except the right make-dock. */
+.cut-main {
+  flex: 1 1 auto; min-width: 0; min-height: 0;
+  display: flex; flex-direction: column; overflow: hidden;
+}
+
+/* ── Toolbar ── */
+.cut-bar {
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  border-bottom: 1px solid var(--line); background: var(--bg-elev);
+  flex-wrap: wrap;
+}
+.cut-bar__brand { display: flex; flex-direction: column; line-height: 1.05; margin-inline-end: var(--s-2); }
+.cut-bar__title { font-family: 'Anton', sans-serif; letter-spacing: .04em; font-size: 15px; }
+.cut-bar__ver { font-size: var(--t-micro); color: var(--ink-faint); }
+.cut-bar__spacer { flex: 1; }
+.cut-btn {
+  padding: 6px 12px; border: 1px solid var(--line-strong); border-radius: 7px;
+  background: var(--bg-elev-2); color: var(--ink); font-size: var(--t-meta);
+  cursor: pointer; transition: border-color var(--t-fast), background var(--t-fast);
+}
+.cut-btn:hover:not(:disabled) { border-color: var(--accent); }
+.cut-btn:disabled { opacity: .4; cursor: not-allowed; }
+.cut-btn--go { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
+.cut-btn--go:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
+.cut-fetch { display: flex; align-items: center; gap: var(--s-2); }
+.cut-url {
+  width: 220px; height: 30px; padding: 0 10px;
+  background: var(--bg-elev-2); border: 1px solid var(--line-strong); border-radius: 7px;
+  color: var(--ink); font-size: var(--t-meta); font-family: var(--font-mono, monospace);
+}
+.cut-url::placeholder { color: var(--ink-faint); font-family: var(--font-sans); }
+.cut-url:focus { outline: none; border-color: var(--accent); }
+.cut-url:disabled { opacity: .5; }
+.cut-sessions {
+  height: 30px; max-width: 220px; padding: 0 10px;
+  background: var(--bg-elev-2); border: 1px solid var(--line-strong); border-radius: 7px;
+  color: var(--ink); font-size: var(--t-meta); cursor: pointer; white-space: nowrap;
+}
+.cut-sessions:hover:not(:disabled) { border-color: var(--accent); }
+.cut-sessions:disabled { opacity: .5; }
+/* Session manager popover */
+.cut-sess { position: relative; }
+.cut-sess__scrim { position: fixed; inset: 0; z-index: 30; }
+.cut-sess__menu {
+  position: absolute; z-index: 31; top: 34px; left: 0; width: 340px; max-height: 60vh; overflow-y: auto;
+  background: var(--bg-elev); border: 1px solid var(--line-strong); border-radius: 9px; padding: 4px;
+  box-shadow: 0 16px 48px rgba(0,0,0,.45);
+}
+.cut-sess__empty { padding: 12px; color: var(--ink-faint); font-size: var(--t-meta); }
+.cut-sess__row { display: flex; align-items: stretch; gap: 4px; border-radius: 6px; }
+.cut-sess__row:hover { background: var(--bg-elev-2); }
+.cut-sess__row.is-open { outline: 1px solid var(--accent); outline-offset: -1px; }
+.cut-sess__open {
+  flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; text-align: start;
+  padding: 7px 8px; background: transparent; border: none; color: var(--ink); cursor: pointer;
+}
+.cut-sess__name { display: block; max-width: 100%; font-size: var(--t-meta); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cut-sess__meta { display: block; max-width: 100%; font-size: var(--t-micro); color: var(--ink-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cut-sess__del {
+  flex: 0 0 auto; width: 34px; border: none; border-radius: 6px; background: transparent;
+  color: var(--ink-faint); cursor: pointer; font-size: 14px;
+}
+.cut-sess__del:hover { background: color-mix(in srgb, var(--flash) 16%, transparent); color: var(--flash); }
+.cut-src { white-space: nowrap; }
+/* Pipeline: one ordered Step ▾ + Go */
+.cut-run { display: flex; align-items: center; gap: var(--s-2); padding: 3px 3px 3px 0; }
+.cut-step {
+  height: 30px; min-width: 210px; padding: 0 10px;
+  background: var(--bg-elev-2); border: 1px solid var(--accent); border-radius: 7px;
+  color: var(--ink); font-size: var(--t-meta); font-weight: 600; cursor: pointer;
+}
+.cut-step:hover:not(:disabled) { background: var(--bg-elev-3, var(--bg-elev-2)); }
+.cut-step:disabled { opacity: .6; }
+.cut-run .cut-btn--go { min-width: 92px; text-align: center; }
+.cut-name {
+  width: 150px; height: 30px; padding: 0 10px;
+  background: var(--bg-elev-2); border: 1px solid var(--line-strong); border-radius: 7px;
+  color: var(--ink); font-size: var(--t-meta);
+}
+.cut-name::placeholder { color: var(--ink-faint); }
+.cut-name:focus { outline: none; border-color: var(--accent); }
+.cut-thr { display: flex; flex-direction: column; gap: 2px; }
+.cut-thr input[type=range] { width: 96px; accent-color: var(--accent); }
+.cut-undo { display: flex; align-items: center; gap: 4px; }
+.cut-zoom { display: flex; align-items: center; gap: var(--s-2); }
+.cut-icon {
+  width: 26px; height: 26px; border: 1px solid var(--line-strong); border-radius: 6px;
+  background: var(--bg-elev-2); color: var(--ink); cursor: pointer; font-size: 12px;
+}
+.cut-icon:hover:not(:disabled) { border-color: var(--accent); }
+.cut-icon:disabled { opacity: .4; cursor: not-allowed; }
+
+/* ── Stage (monitor + inspector) ── bounded height so the transcript scrolls
+   INSIDE the panel and the timeline below stays fixed. */
+.cut-stage {
+  display: flex; gap: var(--s-3); padding: var(--s-3) var(--s-4);
+  flex: 0 0 auto; height: clamp(210px, 32vh, 360px); align-items: flex-start; min-height: 0;
+}
+.cut-monitor {
+  position: relative;
+  flex: 0 0 auto; width: 360px; display: flex; flex-direction: column; gap: var(--s-2);
+  /* Bounded to the stage height so the video + transport + OVERLAY TRANSFORM
+     stack stays INSIDE the left column. When the column is short the controls
+     scroll here rather than bleeding down over the timeline below. */
+  height: 100%; min-height: 0; overflow-y: auto; overflow-x: hidden;
+}
+/* Edit-track clip layered over the source video in the monitor. */
+.cut-ovl {
+  position: absolute; top: 0; left: 0; width: 100%; aspect-ratio: 16 / 9; z-index: 2;
+  border-radius: 8px; overflow: hidden; border: 1px solid var(--accent); background: #000;
+  pointer-events: none;
+}
+.cut-ovl img, .cut-ovl video { width: 100%; height: 100%; object-fit: contain; display: block; background: #000; }
+/* Transformable, directly-draggable media layer inside the overlay. */
+.cut-ovl__media {
+  position: absolute; inset: 0; transform-origin: center center;
+  pointer-events: auto; cursor: move; touch-action: none;
+}
+.cut-aud { display: none; }   /* scoped audio for active audio-track clips */
+
+/* Per-clip overlay transform controls (under the monitor transport). */
+.cut-xform {
+  flex: 0 0 auto;
+  display: flex; flex-direction: column; gap: 6px; margin-top: 2px;
+  padding: var(--s-2); border: 1px solid var(--line); border-radius: var(--r-2); background: var(--bg-elev-2);
+}
+.cut-xform__head { display: flex; align-items: center; justify-content: space-between; }
+.cut-xform__head .mono-label { color: var(--ink-muted); }
+.cut-xform__nums { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.cut-xform__num { display: flex; align-items: center; gap: 6px; font-size: var(--t-micro); color: var(--ink-muted); }
+.cut-xform__num > span { width: 12px; text-transform: uppercase; letter-spacing: .04em; }
+.cut-xform__num input {
+  flex: 1; min-width: 0; height: 26px; padding: 0 6px;
+  background: var(--bg-elev); border: 1px solid var(--line-strong); border-radius: var(--r-1);
+  color: var(--ink); font-size: var(--t-meta);
+}
+.cut-xform__num input:focus { outline: none; border-color: var(--accent); }
+.cut-xform__slider { display: flex; flex-direction: column; gap: 2px; font-size: var(--t-micro); color: var(--ink-muted); }
+.cut-xform__slider input[type=range] { width: 100%; accent-color: var(--accent); }
+.cut-ovl__tag {
+  position: absolute; top: 6px; inset-inline-start: 6px; padding: 2px 7px; border-radius: var(--r-pill, 999px);
+  background: color-mix(in srgb, var(--accent) 82%, transparent); color: var(--on-accent); font-size: var(--t-micro);
+}
+.cut-monitor video, .cut-monitor__empty {
+  width: 100%; flex: 0 0 auto; aspect-ratio: 16 / 9; background: #000; border-radius: 8px;
+  border: 1px solid var(--line); object-fit: contain;
+}
+.cut-monitor__empty { display: grid; place-items: center; color: var(--ink-faint); font-size: var(--t-meta); }
+.cut-transport { flex: 0 0 auto; display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap; }
+.cut-hint { font-size: var(--t-micro); color: var(--ink-faint); letter-spacing: .02em; }
+
+.cut-inspect {
+  flex: 1; min-width: 0; height: 100%; min-height: 0;
+  border: 1px solid var(--line); border-radius: 8px;
+  background: var(--bg-elev); padding: var(--s-3); overflow-y: auto;
+}
+.cut-inspect__empty { color: var(--ink-faint); font-size: var(--t-meta); }
+.cut-inspect__head { display: flex; align-items: baseline; gap: var(--s-3); margin-bottom: var(--s-2); }
+.cut-inspect__tc { font-size: var(--t-meta); color: var(--ink-dim); }
+.cut-inspect__scene { display: flex; align-items: center; gap: var(--s-2); font-size: var(--t-meta); margin-bottom: var(--s-2); }
+.cut-percept {
+  font-size: var(--t-meta); color: var(--ink-dim); line-height: 1.5;
+  padding: var(--s-2); margin-bottom: var(--s-2);
+  background: var(--bg-elev-2); border: 1px solid var(--line); border-radius: 6px;
+  -webkit-user-select: text; user-select: text; cursor: text;
+}
+.cut-percept b { color: var(--ink-muted); font-weight: 600; }
+.cut-inspect__key img { max-width: 320px; width: 100%; border-radius: 6px; border: 1px solid var(--line); }
+.cut-inspect__why { font-size: var(--t-meta); color: var(--ink-dim); font-style: italic; margin-top: 4px;
+  -webkit-user-select: text; user-select: text; cursor: text; }
+.cut-inspect__tools { display: flex; flex-wrap: wrap; gap: 6px; margin-top: var(--s-3); }
+.cut-tool {
+  padding: 5px 10px; border: 1px solid var(--line-strong); border-radius: 6px;
+  background: var(--bg-elev-2); color: var(--ink); font-size: var(--t-meta); cursor: pointer;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+.cut-tool:hover:not(:disabled) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--bg-elev-2)); }
+.cut-tool:disabled { opacity: .38; cursor: not-allowed; }
+.cut-inspect__cands { display: flex; gap: 4px; flex-wrap: wrap; margin-top: var(--s-2); }
+.cut-inspect__cands img {
+  height: 46px; border-radius: 4px; border: 2px solid transparent; cursor: pointer; opacity: .7;
+}
+.cut-inspect__cands img:hover { opacity: 1; }
+.cut-inspect__cands img.is-pick { border-color: var(--accent); opacity: 1; }
+.cut-swatch { width: 10px; height: 10px; border-radius: 3px; display: inline-block; flex: 0 0 auto; }
+
+/* ── Status ── */
+.cut-status {
+  padding: 6px var(--s-4); font-size: var(--t-meta); color: var(--ink-dim);
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg-elev);
+}
+
+.cut-linkbar {
+  display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap;
+  padding: 6px var(--s-4); background: color-mix(in srgb, var(--accent) 8%, var(--bg-elev));
+  border-bottom: 1px solid var(--line);
+}
+
+/* ── Lower region: scenes list (left) + timeline (right) ── */
+.cut-lower { flex: 1; display: flex; min-height: 0; }
+
+.cut-scenes {
+  flex: 0 0 300px; display: flex; flex-direction: column; min-height: 0;
+  border-inline-end: 1px solid var(--line); background: var(--bg-elev);
+}
+.cut-scenes__head {
+  padding: 8px var(--s-3); border-bottom: 1px solid var(--line);
+  color: var(--ink-muted); flex: 0 0 auto;
+}
+.cut-suggest { flex: 0 0 auto; max-height: 44%; display: flex; flex-direction: column; border-bottom: 1px solid var(--line); }
+.cut-suggest .cut-scenes__head { border-bottom: 1px solid var(--line); color: var(--accent); }
+.cut-suggest__list { overflow-y: auto; padding: 4px; }
+.cut-sugg {
+  display: flex; align-items: center; gap: 6px; padding: 4px; border-radius: 6px;
+}
+.cut-sugg:hover { background: var(--bg-elev-2); }
+.cut-sugg img { width: 46px; height: 26px; object-fit: cover; border-radius: 3px; border: 1px solid var(--line); cursor: pointer; }
+.cut-sugg__meta { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.cut-sugg__tag { font-size: 9px; color: var(--ink-faint); }
+.cut-sugg__tag.face { color: var(--accent); }
+.cut-sugg__link, .cut-sugg__x {
+  flex: 0 0 auto; width: 24px; height: 24px; border: 1px solid var(--line-strong); border-radius: 5px;
+  background: var(--bg-elev-2); color: var(--ink); cursor: pointer; font-size: 12px;
+}
+.cut-sugg__link:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--bg-elev-2)); }
+.cut-sugg__x:hover { border-color: var(--flash); color: var(--flash); }
+.cut-scenes__list { flex: 1; overflow-y: auto; padding: 4px; }
+.cut-scenes__empty { padding: var(--s-3); color: var(--ink-faint); font-size: var(--t-meta); }
+.cut-scene {
+  display: flex; align-items: flex-start; gap: 8px; width: 100%; text-align: start;
+  padding: 6px 8px; border: 1px solid transparent; border-radius: 6px;
+  background: transparent; color: var(--ink-dim); cursor: pointer; font-size: var(--t-meta);
+  transition: color var(--t-fast), background var(--t-fast), border-color var(--t-fast);
+}
+.cut-scene:hover { color: var(--ink); background: var(--bg-elev-2); }
+.cut-scene.is-active { color: var(--ink); background: var(--bg-elev-2); border-color: var(--line-strong); }
+.cut-scene .cut-swatch { margin-top: 3px; }
+.cut-scene__label {
+  flex: 1; min-width: 0; line-height: 1.3;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.cut-scene em { color: var(--ink-faint); font-style: normal; flex: 0 0 auto; }
+
+/* ── Left panel tabs: Scenes | People ── */
+.cut-side__tabs { display: flex; flex: 0 0 auto; border-bottom: 1px solid var(--line); }
+.cut-side__tab {
+  flex: 1; padding: 8px 6px; background: transparent; border: none;
+  border-bottom: 2px solid transparent; color: var(--ink-dim); cursor: pointer;
+  font-size: var(--t-meta); font-weight: 600; letter-spacing: .02em;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  transition: color var(--t-fast), border-color var(--t-fast);
+}
+.cut-side__tab:hover { color: var(--ink); }
+.cut-side__tab.is-active { color: var(--ink); border-bottom-color: var(--accent); }
+.cut-side__tab em { color: var(--ink-faint); font-style: normal; font-weight: 400; }
+
+/* ── People list ── */
+.cut-people__bar { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; padding: 6px 6px 0; }
+.cut-people__edit, .cut-people__merge {
+  padding: 4px 10px; border: 1px solid var(--line-strong); border-radius: 6px;
+  background: var(--bg-elev-2); color: var(--ink-dim); cursor: pointer; font-size: var(--t-meta);
+}
+.cut-people__edit:hover, .cut-people__merge:hover:not(:disabled) { color: var(--ink); border-color: var(--accent); }
+.cut-people__edit.is-active { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+.cut-people__merge:disabled { opacity: .4; cursor: not-allowed; }
+.cut-people__list { flex: 1; overflow-y: auto; padding: 6px; display: flex; flex-direction: column; gap: 6px; }
+.cut-person__all {
+  padding: 4px 10px; border: 1px solid var(--line-strong); border-radius: 6px;
+  background: transparent; color: var(--ink-dim); cursor: pointer; font-size: var(--t-meta);
+}
+.cut-person__all.is-active { color: var(--ink); background: var(--bg-elev-2); border-color: var(--accent); }
+.cut-person.is-edit { cursor: default; }
+.cut-person.is-checked { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.cut-person__check { flex: 0 0 auto; accent-color: var(--accent); cursor: pointer; }
+.cut-person__nameedit {
+  width: 100%; padding: 2px 6px; background: var(--bg-elev); border: 1px solid var(--line-strong);
+  border-radius: 5px; color: var(--ink); font-weight: 600; font-size: var(--t-body, 13px);
+}
+.cut-person__nameedit:focus { outline: none; border-color: var(--accent); }
+.cut-person__del {
+  flex: 0 0 auto; width: 26px; height: 26px; border: 1px solid var(--line-strong); border-radius: 5px;
+  background: var(--bg-elev); color: var(--ink-dim); cursor: pointer; font-size: 13px;
+}
+.cut-person__del:hover { border-color: var(--flash); color: var(--flash); }
+.cut-person__add {
+  height: 22px; padding: 0 4px; border: 1px dashed var(--line-strong); border-radius: 4px;
+  background: var(--bg-elev); color: var(--ink-dim); cursor: pointer; font-size: var(--t-micro);
+}
+.cut-person {
+  border: 1px solid var(--line); border-inline-start: 3px solid var(--pc, var(--accent));
+  border-radius: 7px; padding: 8px; background: var(--bg-elev-2); cursor: pointer;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+.cut-person:hover { background: var(--bg-elev-3, var(--bg-elev-2)); border-color: var(--line-strong); }
+.cut-person.is-active { border-color: var(--pc, var(--accent)); box-shadow: inset 0 0 0 1px var(--pc, var(--accent)); }
+.cut-person__top { display: flex; align-items: center; gap: 8px; }
+.cut-person__face { width: 52px; height: 40px; object-fit: cover; border-radius: 5px; border: 1px solid var(--line); flex: 0 0 auto; }
+.cut-person__face--empty { background: var(--bg-elev); }
+.cut-person__id { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.cut-person__name { color: var(--ink); font-weight: 600; font-size: var(--t-body, 13px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cut-person__count { color: var(--ink-faint); font-size: var(--t-micro); }
+.cut-person__chev { flex: 0 0 auto; color: var(--ink-faint); font-size: 11px; }
+/* Details revealed only when the card is opened (clicked). Text is copyable. */
+.cut-person__body { margin-top: 6px; padding-top: 7px; border-top: 1px solid var(--line);
+  -webkit-user-select: text; user-select: text; cursor: text; }
+.cut-person__desc { margin: 0 0 4px; color: var(--ink-dim); font-size: var(--t-meta); line-height: 1.45; }
+.cut-person__row { color: var(--ink-muted); font-size: var(--t-meta); line-height: 1.45; margin-top: 3px; }
+.cut-person__row b { color: var(--ink-dim); font-weight: 600; margin-inline-end: 5px; }
+.cut-person__shots { display: flex; flex-wrap: wrap; gap: 3px; margin-top: 7px; align-items: center; }
+.cut-person__chip {
+  display: inline-flex; align-items: stretch; border: 1px solid var(--line-strong); border-radius: 4px;
+  overflow: hidden; background: var(--bg-elev);
+}
+.cut-person__chip:hover { border-color: var(--pc, var(--accent)); }
+.cut-person__chipgo {
+  min-width: 20px; padding: 1px 5px; border: none; background: transparent; color: var(--ink-dim);
+  cursor: pointer; font-family: var(--font-mono, monospace); font-size: var(--t-micro);
+}
+.cut-person__chipgo:hover { color: var(--ink); }
+.cut-person__chipx {
+  padding: 1px 4px; border: none; border-inline-start: 1px solid var(--line-strong);
+  background: transparent; color: var(--ink-faint); cursor: pointer; font-size: 11px; line-height: 1;
+}
+.cut-person__chipx:hover { color: var(--flash); background: color-mix(in srgb, var(--flash) 14%, transparent); }
+
+/* ── Master prompt panel (shot inspector) ── */
+.cut-mp { margin-top: var(--s-3); border-top: 1px solid var(--line); padding-top: var(--s-2); }
+.cut-mp__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
+.cut-mp__text {
+  width: 100%; min-height: 150px; resize: vertical; padding: 8px 10px;
+  background: var(--bg-elev-2); border: 1px solid var(--line-strong); border-radius: 7px;
+  color: var(--ink); font-size: var(--t-meta); line-height: 1.5; font-family: var(--font-sans);
+}
+.cut-mp__text:focus { outline: none; border-color: var(--accent); }
+.cut-mp__cam { margin-top: 6px; font-size: var(--t-meta); color: var(--ink-muted); line-height: 1.4;
+  -webkit-user-select: text; user-select: text; }
+.cut-mp__cam b { color: var(--ink-dim); font-weight: 600; margin-inline-end: 5px; }
+.cut-mp__inside { margin-top: 4px; font-size: var(--t-meta); color: var(--ink-dim); font-style: italic; }
+
+/* ── QA · verify groups ── */
+.cut-scenes__head { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+.cut-check {
+  padding: 3px 9px; border: 1px solid var(--line-strong); border-radius: 6px;
+  background: var(--bg-elev-2); color: var(--ink-dim); cursor: pointer; font-size: var(--t-micro); font-weight: 600;
+}
+.cut-check:hover:not(:disabled) { color: var(--ink); border-color: var(--accent); }
+.cut-check:disabled { opacity: .5; cursor: default; }
+.cut-flag { flex: 0 0 auto; font-size: var(--t-micro); color: var(--flash); font-weight: 600; }
+.cut-flag--ok { color: var(--ok, #6FBF73); }
+
+.cut-review {
+  position: fixed; inset: 0; z-index: 50; background: color-mix(in srgb, #000 55%, transparent);
+  display: flex; align-items: center; justify-content: center;
+}
+.cut-review__panel {
+  width: min(1100px, 92vw); max-height: 86vh; display: flex; flex-direction: column;
+  background: var(--bg-elev); border: 1px solid var(--line-strong); border-radius: 12px; overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,.5);
+}
+.cut-review__head { display: flex; align-items: baseline; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.cut-review__title { color: var(--ink); font-size: var(--t-h3, 16px); font-weight: 700; }
+.cut-review__sub { color: var(--ink-faint); font-size: var(--t-meta); flex: 1; }
+.cut-review__x { width: 30px; height: 30px; border: 1px solid var(--line-strong); border-radius: 7px; background: var(--bg-elev-2); color: var(--ink); cursor: pointer; font-size: 16px; }
+.cut-review__x:hover { border-color: var(--flash); color: var(--flash); }
+.cut-review__body { overflow-y: auto; padding: 12px 18px 18px; display: flex; flex-direction: column; gap: 12px; }
+.cut-rev { border: 1px solid var(--line); border-inline-start: 3px solid var(--pc, var(--accent)); border-radius: 8px; padding: 10px 12px; background: var(--bg-elev-2); }
+.cut-rev.is-warn { border-color: color-mix(in srgb, var(--flash) 40%, var(--line)); }
+.cut-rev__head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.cut-rev__swatch { width: 10px; height: 10px; border-radius: 3px; flex: 0 0 auto; }
+.cut-rev__label { color: var(--ink); font-weight: 600; font-size: var(--t-body, 13px); flex: 1; min-width: 0; -webkit-user-select: text; user-select: text; }
+.cut-rev__badge { font-size: var(--t-micro); font-weight: 600; color: var(--ink-faint); }
+.cut-rev.is-warn .cut-rev__badge { color: var(--flash); }
+.cut-rev.is-ok .cut-rev__badge { color: var(--ok, #6FBF73); }
+.cut-rev__strip { display: flex; flex-wrap: wrap; gap: 8px; }
+.cut-rev__cell { position: relative; width: 118px; }
+.cut-rev__cell img { width: 118px; height: 70px; object-fit: cover; border-radius: 5px; border: 2px solid transparent; cursor: pointer; display: block; }
+.cut-rev__cell.is-out img { border-color: var(--flash); }
+.cut-rev__no { position: absolute; top: 3px; left: 3px; padding: 0 5px; border-radius: 3px; background: rgba(0,0,0,.6); color: #fff; font-family: var(--font-mono, monospace); font-size: 10px; }
+.cut-rev__drop {
+  position: absolute; bottom: 3px; left: 50%; transform: translateX(-50%);
+  padding: 2px 8px; border: none; border-radius: 4px; background: var(--flash); color: #fff;
+  cursor: pointer; font-size: 10px; font-weight: 700;
+}
+.cut-rev__drop:hover { filter: brightness(1.1); }
+.cut-rev__reasons { margin-top: 8px; display: flex; flex-direction: column; gap: 3px; }
+.cut-rev__reason { font-size: var(--t-meta); color: var(--ink-dim); line-height: 1.4; }
+.cut-rev__reason b { color: var(--flash); font-weight: 600; }
+
+/* ── Timeline ── */
+.cut-tl { flex: 1; min-width: 0; display: flex; flex-direction: column; min-height: 0; }
+/* Add-track toolbar sits above the timeline body. */
+.cut-tl__tools {
+  flex: 0 0 auto; display: flex; align-items: center; gap: var(--s-2);
+  padding: 5px var(--s-3); border-bottom: 1px solid var(--line); background: var(--bg-elev);
+}
+.cut-tl__tools .mono-label { color: var(--ink-muted); margin-inline-end: var(--s-1); }
+/* Clips the absolutely-positioned heads gutter to the timeline body so, as the
+   lanes scroll vertically, the track labels never spill over the toolbar above
+   or the status row below. Horizontal + vertical scrolling live on __scroll. */
+.cut-tl__body { position: relative; flex: 1; min-height: 0; display: flex; overflow: hidden; }
+/* Heads column — a flex column driven by the visible-lane list; row heights are
+   set inline to match each lane, so hide/reorder/new tracks stay aligned. It is
+   vertical-scroll synced via a transform from the scroll container. */
+.cut-tl__heads {
+  display: flex; flex-direction: column;
+  position: absolute; top: 0; left: 0; z-index: 4; width: 122px; pointer-events: none;
+  will-change: transform;
+}
+.cut-tl__headspacer { height: 22px; flex: 0 0 auto; }
+.cut-tl__head {
+  flex: 0 0 auto; box-sizing: border-box; display: flex; align-items: center; gap: 4px;
+  padding-inline: 6px; overflow: hidden; pointer-events: auto;
+  font-size: var(--t-micro); color: var(--ink-muted); letter-spacing: .02em;
+  background: linear-gradient(90deg, var(--bg-elev) 78%, color-mix(in srgb, var(--bg-elev) 30%, transparent));
+  border-bottom: 1px solid var(--line);
+}
+.cut-tl__head--edit { color: var(--ink-dim); background: linear-gradient(90deg, var(--bg-elev-2) 78%, color-mix(in srgb, var(--bg-elev-2) 20%, transparent)); }
+.cut-tl__head--div { background: transparent; border-bottom: none; pointer-events: none; }
+.cut-tl__head.is-hidden { color: var(--ink-faint); }
+.cut-tl__headlabel { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Always-visible source-audio cue in the SOURCE ♪ head (why it's silent). */
+.cut-tl__headflag {
+  flex: 0 0 auto; margin-inline-start: 4px; padding: 0 5px; border-radius: var(--r-pill, 999px);
+  font-size: var(--t-micro); line-height: 1.5; letter-spacing: .02em; white-space: nowrap;
+  color: var(--ink-dim); background: var(--field-bg); border: 1px solid var(--line);
+}
+.cut-tl__headflag--warn {
+  color: var(--sunflare); background: color-mix(in srgb, var(--sunflare) 16%, transparent);
+  border-color: color-mix(in srgb, var(--sunflare) 40%, transparent);
+}
+.cut-eye {
+  flex: 0 0 auto; width: 18px; height: 18px; display: grid; place-items: center;
+  border: none; background: transparent; color: var(--ink-muted); cursor: pointer;
+  font-size: 11px; border-radius: 4px; filter: grayscale(1);
+  transition: color var(--t-fast), background var(--t-fast), opacity var(--t-fast);
+}
+.cut-eye:hover { background: var(--bg-elev-2); color: var(--ink); }
+.cut-eye.is-off { opacity: .4; }
+
+.cut-tl__scroll { flex: 1; overflow: auto; padding-inline-start: 122px; }
+.cut-tl__inner { position: relative; }
+
+.cut-tl__ruler { position: relative; height: 22px; border-bottom: 1px solid var(--line); cursor: pointer; }
+.cut-tl__tick { position: absolute; top: 0; height: 22px; border-inline-start: 1px solid var(--line); }
+.cut-tl__tick span { font-size: 9px; color: var(--ink-faint); padding-inline-start: 3px; }
+
+.cut-tl__playhead {
+  position: absolute; top: 22px; bottom: 0; width: 1px; background: var(--flash);
+  z-index: 3; pointer-events: none;
+}
+.cut-tl__playhead::before {
+  content: ''; position: absolute; top: -4px; left: -4px; width: 9px; height: 9px;
+  background: var(--flash); transform: rotate(45deg);
+}
+
+.cut-tl__lane { position: relative; border-bottom: 1px solid var(--line); }
+.cut-tl__lane--strip { cursor: pointer; background: #0c0c0c; }
+.cut-tl__lane--keys { background: #0c0c0c; }
+
+/* Editable edit-timeline lanes (heights set inline). */
+.cut-tl__lane--edit { background: var(--bg-elev-2); }
+.cut-tl__lane--video { background: color-mix(in srgb, var(--altitude) 6%, var(--bg-elev-2)); }
+.cut-tl__lane--audio { background: color-mix(in srgb, var(--teal) 6%, var(--bg-elev-2)); }
+.cut-tl__lane--edit.is-dropok { box-shadow: inset 0 0 0 2px var(--accent); }
+.cut-tl__lanehint {
+  position: absolute; inset-inline-start: 8px; top: 50%; transform: translateY(-50%);
+  font-size: var(--t-micro); color: var(--ink-faint); pointer-events: none; letter-spacing: .02em;
+}
+.cut-tl__divider {
+  position: relative; background: var(--bg); border-top: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+}
+
+/* A clip = a placed Take. */
+.cut-clip {
+  position: absolute; top: 4px; bottom: 4px; border-radius: var(--r-1);
+  overflow: hidden; cursor: grab; box-sizing: border-box;
+  border: 1px solid var(--line-strong); background: var(--bg-elev);
+  display: flex; align-items: flex-end;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+.cut-clip:hover { border-color: var(--accent); }
+.cut-clip:active { cursor: grabbing; }
+.cut-clip.is-sel { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.cut-clip img,
+.cut-clip__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .9; pointer-events: none; }
+.cut-clip--audio { background: color-mix(in srgb, var(--teal) 22%, var(--bg-elev)); align-items: center; }
+.cut-clip__label {
+  position: relative; z-index: 1; max-width: 100%; padding: 1px 5px;
+  font-size: var(--t-micro); color: var(--ink); line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  background: color-mix(in srgb, var(--bg) 62%, transparent);
+}
+.cut-clip__play {
+  position: absolute; inset: 0; display: grid; place-items: center; z-index: 1; pointer-events: none;
+  color: var(--whiteout, #fff); font-size: 15px; text-shadow: 0 1px 6px rgba(0,0,0,.7);
+}
+.cut-clip__x {
+  position: absolute; top: 2px; inset-inline-end: 2px; z-index: 2;
+  width: 16px; height: 16px; display: grid; place-items: center; padding: 0;
+  border: none; border-radius: 4px; cursor: pointer; font-size: 12px;
+  background: color-mix(in srgb, var(--bg) 60%, transparent); color: var(--ink-dim);
+  opacity: 0; transition: opacity var(--t-fast), color var(--t-fast);
+}
+.cut-clip:hover .cut-clip__x { opacity: 1; }
+.cut-clip__x:hover { color: var(--flash); }
+
+/* Edge trim handles — thin grab zones at each edge. */
+.cut-clip__trim {
+  position: absolute; top: 0; bottom: 0; width: 8px; z-index: 3;
+  cursor: ew-resize; touch-action: none;
+}
+.cut-clip__trim--l { inset-inline-start: 0; }
+.cut-clip__trim--r { inset-inline-end: 0; }
+.cut-clip__trim::after {
+  content: ''; position: absolute; top: 3px; bottom: 3px; width: 2px; border-radius: 2px;
+  inset-inline-start: 3px; background: transparent; transition: background var(--t-fast);
+}
+.cut-clip:hover .cut-clip__trim::after,
+.cut-clip.is-sel .cut-clip__trim::after { background: color-mix(in srgb, var(--accent) 55%, transparent); }
+.cut-clip__trim:hover::after { background: var(--accent); }
+/* Locked source clip is not trimmable. */
+.cut-clip--src .cut-clip__trim { display: none; }
+
+/* Original source — locked base track clip (not draggable). */
+.cut-tl__head--src .cut-tl__headlabel { color: var(--ink-dim); letter-spacing: .04em; }
+.cut-tl__lane--src { background: color-mix(in srgb, var(--ink) 5%, var(--bg-elev)); }
+.cut-clip--src { cursor: default; border-color: var(--line-strong); border-style: dashed; opacity: .96; }
+/* Source has no audio stream — dim the locked audio lane so it reads as inert. */
+.cut-clip--noaudio { opacity: .55; }
+.cut-clip--noaudio .cut-clip__label { color: var(--ink-muted); }
+.cut-clip--src:hover { border-color: var(--line-strong); }
+.cut-clip__lock { position: absolute; top: 3px; inset-inline-start: 4px; z-index: 2; font-size: 10px; filter: grayscale(1); opacity: .8; }
+
+.cut-say {
+  position: absolute; top: 4px; height: 26px; border-radius: 4px; box-sizing: border-box;
+  display: flex; align-items: center; padding: 0 6px; cursor: pointer; overflow: hidden;
+  border: 1px solid; font-size: 11px; line-height: 1;
+}
+.cut-say__t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cut-say--vo {
+  background: color-mix(in srgb, var(--accent) 22%, transparent); border-color: var(--accent); color: var(--ink);
+}
+.cut-say--dl {
+  background: color-mix(in srgb, #4C9AE8 24%, transparent); border-color: #4C9AE8; color: var(--ink);
+}
+.cut-say:hover { filter: brightness(1.25); }
+.cut-say.is-sel { outline: 2px solid var(--ink); outline-offset: 1px; }
+
+/* ── Transcript panel (right of the monitor) ── */
+.cut-copytext { -webkit-user-select: text; user-select: text; cursor: text; }
+.cut-tr { display: flex; flex-direction: column; gap: var(--s-3); height: 100%; min-height: 0; }
+.cut-tr__sel { border: 1px solid var(--line); border-radius: 8px; padding: var(--s-3); background: var(--bg-elev-2); }
+.cut-tr__selhead { display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap; margin-bottom: var(--s-2); }
+.cut-tr__spk { font-size: var(--t-meta); color: var(--ink-dim); }
+.cut-tr__big { font-size: 15px; line-height: 1.5; color: var(--ink); margin: 0; }
+.cut-say__tag {
+  font-size: 9px; font-weight: 700; letter-spacing: .06em; padding: 2px 5px; border-radius: 3px;
+  border: 1px solid; flex: 0 0 auto;
+}
+.cut-say__tag.vo { color: var(--accent); border-color: var(--accent); }
+.cut-say__tag.dialogue, .cut-say__tag.dl { color: #4C9AE8; border-color: #4C9AE8; }
+
+.cut-tr__list { flex: 1; min-height: 0; overflow-y: auto; border-top: 1px solid var(--line); }
+.cut-tr__listhead {
+  position: sticky; top: 0; background: var(--bg-elev); display: flex; align-items: center;
+  justify-content: space-between; padding: 6px var(--s-2); border-bottom: 1px solid var(--line);
+}
+.cut-trrow {
+  display: flex; align-items: baseline; gap: 8px; padding: 5px var(--s-2); cursor: pointer;
+  border-bottom: 1px solid var(--line); font-size: var(--t-meta); line-height: 1.4;
+}
+.cut-trrow:hover { background: var(--bg-elev-2); }
+.cut-trrow.is-sel { background: color-mix(in srgb, var(--accent) 12%, var(--bg-elev-2)); }
+.cut-trrow__tc { flex: 0 0 auto; color: var(--ink-faint); }
+.cut-trrow__t { color: var(--ink-dim); }
+.cut-trrow.is-sel .cut-trrow__t { color: var(--ink); }
+
+.cut-strip__f { position: absolute; top: 0; height: 56px; object-fit: cover; opacity: .9; }
+
+.cut-seg {
+  position: absolute; top: 5px; height: 34px; border-radius: 4px;
+  background: color-mix(in srgb, var(--seg) 26%, transparent);
+  border: 1px solid var(--seg); box-sizing: border-box;
+  display: flex; align-items: center; justify-content: center; cursor: pointer; overflow: hidden;
+  transition: background var(--t-fast);
+}
+.cut-seg:hover { background: color-mix(in srgb, var(--seg) 42%, transparent); }
+.cut-seg.is-sel { outline: 2px solid var(--ink); outline-offset: -1px; }
+.cut-seg.is-multi { outline: 2px solid var(--accent); outline-offset: 1px; box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 40%, transparent); }
+.cut-seg__no { font-size: 10px; color: var(--ink); font-weight: 600; text-shadow: 0 1px 2px #000; }
+
+.cut-key {
+  position: absolute; top: 4px; height: 56px; border-radius: 4px; overflow: hidden;
+  border: 1px solid var(--line); box-sizing: border-box; cursor: pointer; background: #000;
+}
+.cut-key img { width: 100%; height: 100%; object-fit: cover; }
+.cut-key.is-picked { border-color: var(--accent); }
+.cut-key.is-sel { outline: 2px solid var(--ink); outline-offset: -1px; }
+.cut-key__empty { width: 100%; height: 100%; background: repeating-linear-gradient(45deg, #151515, #151515 6px, #0d0d0d 6px, #0d0d0d 12px); }
+
+.cut-legend {
+  display: flex; flex-wrap: wrap; gap: var(--s-3); padding: var(--s-2) var(--s-4);
+  border-top: 1px solid var(--line); background: var(--bg-elev); font-size: var(--t-meta);
+}
+.cut-legend__item {
+  display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--ink-dim);
+  padding: 3px 8px; border: 1px solid transparent; border-radius: var(--r-pill, 999px);
+  transition: color var(--t-fast), border-color var(--t-fast), background var(--t-fast);
+}
+.cut-legend__item:hover { color: var(--ink); border-color: var(--line); }
+.cut-legend__item.is-active { color: var(--ink); border-color: var(--line-strong); background: var(--bg-elev-2); }
+.cut-legend__item em { color: var(--ink-faint); font-style: normal; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   Right dock · on-page make + takes gallery (CutsGenPanel)
+   TOP = takes gallery (synced to the bottom tab) · BOTTOM = the workspace.
+   Neutral graphite chrome, flat plates, one accent — tokens only.
+   ════════════════════════════════════════════════════════════════════════ */
+/* Constant width regardless of tab/content — width is driven by inline style
+   (resizable); flex is locked so inner content never widens the panel. */
+.cut-gen {
+  position: relative;
+  flex: 0 0 auto; width: 384px; min-width: 0; box-sizing: border-box; min-height: 0;
+  display: flex; flex-direction: column;
+  border-inline-start: 1px solid var(--line-strong); background: var(--bg-elev);
+}
+/* Left-edge drag handle → resize the panel width. */
+.cut-gen__resize {
+  position: absolute; inset-block: 0; inset-inline-start: -3px; width: 7px; z-index: 6;
+  cursor: col-resize; touch-action: none;
+}
+.cut-gen__resize::after {
+  content: ''; position: absolute; inset-block: 0; inset-inline-start: 3px; width: 1px;
+  background: transparent; transition: background var(--t-fast);
+}
+.cut-gen__resize:hover::after, .cut-gen__resize:active::after { background: var(--accent); }
+
+/* Section header — carries the mirrored tabs + count/refresh. */
+.cut-gen__seghead {
+  flex: 0 0 auto; display: flex; align-items: center; gap: var(--s-2);
+  padding: 8px var(--s-3); border-bottom: 1px solid var(--line);
+}
+.cut-gen__grow { flex: 1; }
+.cut-gen__tabs { display: flex; gap: 4px; }
+.cut-gen__tab {
+  padding: 4px 12px; border: 1px solid var(--line-strong); border-radius: 7px;
+  background: var(--bg-elev-2); color: var(--ink-muted); font-size: var(--t-meta); cursor: pointer;
+  transition: color var(--t-fast), border-color var(--t-fast), background var(--t-fast);
+}
+.cut-gen__tab:hover { color: var(--ink); }
+.cut-gen__tab.is-active { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+
+/* ── TOP · takes gallery ── */
+.cut-gen__results {
+  flex: 1 1 42%; min-height: 0; display: flex; flex-direction: column;
+  border-bottom: 1px solid var(--line-strong);
+}
+/* Single full-width column, scrolls vertically. Each take is shown WHOLE at its
+   own natural aspect — no crop — inside a framed, matted card so repetitive
+   content can never bleed across card boundaries. */
+.cut-gen__grid {
+  flex: 1; min-height: 0; overflow-y: auto; padding: var(--s-4) var(--s-3);
+  display: flex; flex-direction: column; gap: var(--s-4);
+}
+.cut-gen__card {
+  display: flex; flex-direction: column; gap: 7px; padding: 6px; width: 100%;
+  cursor: pointer; text-align: start; -webkit-appearance: none; appearance: none;
+  border: 1px solid var(--line-strong); border-radius: var(--r-3);
+  background: var(--bg-elev-2);
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+.cut-gen__card:hover { border-color: var(--accent); background: var(--bg-elev); }
+/* The image sits INSIDE a matte (the card padding + a bordered plate), so it is
+   framed on every side — never edge-to-edge with the next card. */
+.cut-gen__thumb {
+  position: relative; display: block; width: 100%; line-height: 0;
+  border-radius: var(--r-2); overflow: hidden;
+  background: var(--bg); border: 1px solid var(--line);
+}
+.cut-gen__thumb--v { min-height: 132px; }   /* keep the play glyph legible if a poster is missing */
+/* Natural size: full panel width, real aspect ratio, whole frame visible. */
+.cut-gen__card img { display: block; width: 100%; height: auto; }
+.cut-gen__cap {
+  font-size: var(--t-meta); color: var(--ink-dim); text-align: start; line-height: 1.35; padding: 0 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  -webkit-user-select: text; user-select: text; cursor: text;
+}
+/* Take metadata — model · dimensions · aspect · quality. One muted, selectable
+   line; wraps to two only when the panel is narrow. Numbers set in mono for a
+   tidy figure rhythm; the model name stays sans so any non-Latin name renders. */
+.cut-gen__meta {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 1px var(--s-1);
+  padding: 0 2px; font-size: var(--t-micro); line-height: 1.35; color: var(--ink-muted);
+  -webkit-user-select: text; user-select: text; cursor: text;
+}
+.cut-gen__mmodel { color: var(--ink-dim); }
+.cut-gen__mnum { font-family: var(--font-mono); color: var(--ink-dim); font-variant-numeric: tabular-nums; }
+.cut-gen__mq { color: var(--ink-muted); text-transform: uppercase; letter-spacing: .04em; }
+.cut-gen__mdot { color: var(--ink-faint); }
+.cut-gen__play {
+  position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none;
+  color: var(--whiteout, #fff); font-size: 30px; text-shadow: 0 1px 10px rgba(0,0,0,.7);
+}
+.cut-gen__badge {
+  position: absolute; top: 8px; inset-inline-end: 8px; padding: 2px 7px; border-radius: var(--r-pill, 999px);
+  font-size: var(--t-micro); color: var(--ink); background: color-mix(in srgb, var(--bg) 72%, transparent);
+}
+.cut-gen__empty {
+  padding: var(--s-5) var(--s-3); text-align: center;
+  color: var(--ink-faint); font-size: var(--t-meta); line-height: 1.55;
+}
+.cut-gen__more {
+  margin-top: 2px; padding: 9px; width: 100%;
+  border: 1px dashed var(--line-strong); border-radius: var(--r-2);
+  background: transparent; color: var(--ink-dim); font-size: var(--t-meta); cursor: pointer;
+  transition: border-color var(--t-fast), color var(--t-fast);
+}
+.cut-gen__more:hover { border-color: var(--accent); color: var(--ink); }
+
+/* ── BOTTOM · workspace ── */
+.cut-gen__work { flex: 1 1 58%; min-height: 0; display: flex; flex-direction: column; }
+.cut-gen__wbody {
+  flex: 1; min-height: 0; overflow-y: auto; padding: var(--s-3);
+  display: flex; flex-direction: column; gap: var(--s-4);
+}
+
+/* Master prompt */
+.cut-gen__mp { display: flex; flex-direction: column; gap: 6px; }
+.cut-gen__mphead { display: flex; align-items: center; justify-content: space-between; gap: var(--s-2); }
+.cut-gen__prompt {
+  width: 100%; min-height: 108px; resize: vertical; padding: var(--s-2);
+  background: var(--field-bg); border: 1px solid var(--line-strong); border-radius: var(--r-2);
+  color: var(--ink); font-size: var(--t-body); line-height: 1.5; font-family: var(--font-sans);
+  -webkit-user-select: text; user-select: text; cursor: text;
+}
+.cut-gen__prompt--sm { min-height: 52px; font-size: var(--t-meta); }
+.cut-gen__prompt:focus { outline: none; border-color: var(--accent); }
+.cut-gen__prompt::placeholder { color: var(--ink-faint); }
+.cut-gen__look {
+  font-size: var(--t-micro); color: var(--ink-muted); line-height: 1.4;
+  -webkit-user-select: text; user-select: text; cursor: text;
+}
+
+/* Settings groups */
+.cut-gen__group { display: flex; flex-direction: column; gap: 7px; }
+.cut-gen__hint {
+  font-size: var(--t-micro); color: var(--ink-muted); line-height: 1.4;
+  -webkit-user-select: text; user-select: text; cursor: text;
+}
+.cut-gen__rows { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-2); }
+.cut-gen__field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.cut-gen__field > label {
+  font-size: var(--t-micro); color: var(--ink-muted); letter-spacing: .05em; text-transform: uppercase;
+}
+.cut-gen__select, .cut-gen__num {
+  height: 30px; padding: 0 8px; width: 100%;
+  background: var(--bg-elev-2); border: 1px solid var(--line-strong); border-radius: var(--r-2);
+  color: var(--ink); font-size: var(--t-meta);
+}
+.cut-gen__select:focus, .cut-gen__num:focus { outline: none; border-color: var(--accent); }
+.cut-gen__num[type=range] { padding: 0; accent-color: var(--accent); }
+
+/* Segmented control (model · quality) */
+.cut-gen__seg { display: flex; border: 1px solid var(--line-strong); border-radius: var(--r-2); overflow: hidden; }
+.cut-gen__seg button {
+  flex: 1; padding: 6px 4px; border: none; border-inline-start: 1px solid var(--line);
+  background: var(--bg-elev-2); color: var(--ink-muted); font-size: var(--t-meta); cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast); white-space: nowrap;
+}
+.cut-gen__seg button:first-child { border-inline-start: none; }
+.cut-gen__seg button:hover { color: var(--ink); }
+.cut-gen__seg button.is-active { background: var(--accent); color: var(--on-accent); }
+
+/* Toggle chips */
+.cut-gen__toggles { display: flex; flex-wrap: wrap; gap: 6px; }
+.cut-gen__toggle {
+  padding: 5px 11px; border: 1px solid var(--line-strong); border-radius: var(--r-pill, 999px);
+  background: var(--bg-elev-2); color: var(--ink-muted); font-size: var(--t-meta); cursor: pointer;
+  transition: color var(--t-fast), border-color var(--t-fast), background var(--t-fast);
+}
+.cut-gen__toggle:hover:not(:disabled) { color: var(--ink); }
+.cut-gen__toggle.is-on {
+  color: var(--ink); border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, var(--bg-elev-2));
+}
+.cut-gen__toggle:disabled { opacity: .38; cursor: not-allowed; }
+
+/* First-frame anchor */
+.cut-gen__anchor { display: flex; align-items: center; gap: var(--s-2); }
+.cut-gen__anchor img {
+  width: 72px; aspect-ratio: 16 / 9; object-fit: cover;
+  border-radius: var(--r-1); border: 1px solid var(--line); flex: 0 0 auto;
+}
+.cut-gen__anchor.is-off img { opacity: .4; filter: grayscale(1); }
+.cut-gen__anchor-empty {
+  width: 72px; aspect-ratio: 16 / 9; display: grid; place-items: center; flex: 0 0 auto;
+  border-radius: var(--r-1); border: 1px dashed var(--line-strong);
+  color: var(--ink-faint); font-size: var(--t-micro);
+}
+
+/* Make footer */
+.cut-gen__foot {
+  flex: 0 0 auto; display: flex; align-items: center; gap: var(--s-2);
+  padding: var(--s-2) var(--s-3); border-top: 1px solid var(--line); background: var(--bg-elev);
+}
+.cut-gen__make {
+  flex: 1; height: 36px; border: 1px solid var(--accent); border-radius: var(--r-2);
+  background: var(--accent); color: var(--on-accent); font-size: var(--t-body); font-weight: 600; cursor: pointer;
+  transition: background var(--t-fast), border-color var(--t-fast);
+}
+.cut-gen__make:hover:not(:disabled) { background: var(--accent-hover); border-color: var(--accent-hover); }
+.cut-gen__make:disabled { opacity: .45; cursor: not-allowed; }
+.cut-gen__msgrow { flex: 0 0 auto; padding: 5px var(--s-3) 7px; background: var(--bg-elev); }
+.cut-gen__msg {
+  display: block; font-size: var(--t-micro); color: var(--ink-muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  -webkit-user-select: text; user-select: text; cursor: text;
+}
+
+/* Lightbox — enlarge a take */
+.cut-gen__light {
+  position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: var(--s-6);
+  background: color-mix(in srgb, #000 66%, transparent);
+}
+.cut-gen__light img, .cut-gen__light video {
+  max-width: 90vw; max-height: 86vh; border-radius: var(--r-2);
+  border: 1px solid var(--line-strong); box-shadow: 0 24px 64px rgba(0,0,0,.5);
+}
+.cut-gen__lightbar { position: fixed; top: var(--s-4); inset-inline-end: var(--s-4); display: flex; gap: var(--s-2); }
+
+@media (max-width: 1180px) {
+  .cut-gen { flex-basis: 328px; }
+  .cut-gen__rows { grid-template-columns: 1fr; }
+}
+
+/* ── Stage/timeline horizontal splitter (drag to resize their heights) ── */
+.cut-hsplit {
+  flex: 0 0 auto; height: 7px; position: relative; cursor: row-resize; touch-action: none;
+  background: var(--bg-elev);
+}
+.cut-hsplit::after {
+  content: ''; position: absolute; inset-inline: 0; top: 3px; height: 1px;
+  background: var(--line); transition: background var(--t-fast);
+}
+.cut-hsplit:hover::after, .cut-hsplit:active::after { background: var(--accent); }
+
+/* ── Make: progress spinner + concurrent-jobs list ── */
+.cut-spin {
+  display: inline-block; width: 12px; height: 12px; flex: 0 0 auto; box-sizing: border-box;
+  border: 2px solid var(--line-strong); border-top-color: var(--accent);
+  border-radius: 50%; animation: cut-spin .7s linear infinite;
+}
+.cut-spin--onaccent {
+  border-color: color-mix(in srgb, var(--on-accent) 45%, transparent); border-top-color: var(--on-accent);
+  vertical-align: -1px; margin-inline-end: 6px;
+}
+@keyframes cut-spin { to { transform: rotate(360deg); } }
+
+.cut-gen__jobs {
+  flex: 0 0 auto; max-height: 100px; overflow-y: auto;
+  padding: 6px var(--s-3); border-top: 1px solid var(--line); background: var(--bg-elev-2);
+  display: flex; flex-direction: column; gap: 5px;
+}
+.cut-gen__job { display: flex; align-items: center; gap: var(--s-2); font-size: var(--t-micro); }
+.cut-gen__joblabel { color: var(--ink-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 46%; flex: 0 0 auto; }
+.cut-gen__jobstatus {
+  color: var(--ink-muted); flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  -webkit-user-select: text; user-select: text; cursor: text;
+}
+
+/* ── DOP · cinematography (Frames tab) ── */
+.cut-gen__wbody { overflow-x: hidden; }
+.cut-gen__select { max-width: 100%; }
+.cut-gen__dop { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: var(--r-2); overflow: hidden; }
+.cut-gen__dophead {
+  display: flex; align-items: center; gap: var(--s-2); padding: 8px 10px;
+  background: var(--bg-elev-2); border: none; cursor: pointer; color: var(--ink-muted); width: 100%; text-align: start;
+  transition: background var(--t-fast);
+}
+.cut-gen__dophead:hover { background: var(--bg-elev); color: var(--ink); }
+.cut-gen__dopcount {
+  min-width: 16px; height: 16px; padding: 0 4px; display: grid; place-items: center;
+  border-radius: var(--r-pill, 999px); background: var(--accent); color: var(--on-accent);
+  font-size: var(--t-micro); font-weight: 600;
+}
+.cut-gen__chev { color: var(--ink-faint); font-size: 12px; flex: 0 0 auto; }
+.cut-gen__dopbody { display: flex; flex-direction: column; gap: 5px; padding: 8px; background: var(--bg-elev); }
+.cut-gen__seg--sm button { padding: 5px 4px; font-size: var(--t-micro); }
+.cut-gen__doprow {
+  display: flex; align-items: center; gap: var(--s-2); padding: 5px; text-align: start; width: 100%;
+  border: 1px solid var(--line); border-radius: var(--r-1); background: var(--bg-elev-2); cursor: pointer;
+  transition: border-color var(--t-fast);
+}
+.cut-gen__doprow:hover { border-color: var(--accent); }
+.cut-gen__doprow.is-empty { opacity: .8; }
+.cut-gen__dopthumb {
+  width: 34px; height: 34px; flex: 0 0 auto; object-fit: cover; border-radius: var(--r-1);
+  background: var(--bg); border: 1px solid var(--line);
+}
+.cut-gen__dopthumb--none { display: inline-block; }
+.cut-gen__dopmeta { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.cut-gen__doplabel { font-size: var(--t-micro); color: var(--ink-muted); letter-spacing: .04em; text-transform: uppercase; }
+.cut-gen__dopvalue { font-size: var(--t-meta); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cut-gen__dopsub { font-size: var(--t-micro); color: var(--ink-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

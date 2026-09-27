@@ -1,0 +1,16 @@
+{
+  "id": "prof-f04-john-lewis",
+  "name": "prof-f04-john-lewis — extracted from f04-john-lewis",
+  "palette": "Naturalistic seasonal shifts: warm forest greens and browns under golden light, evolving into cool winter whites and soft blues with restrained, festive reds and greens as accents.",
+  "light_logic": "Consistent, story-driven daylight that moves from soft, hopeful warmth to overcast, diffuse cold, then to a dim, cave interior contrasted against bright snow outside.",
+  "lens": "Gently cinematic with moderate focal lengths: wide establishing vistas, then medium and close shots with shallow depth of field to read subtle emotion on simple, animated faces.",
+  "texture": "Soft, tactile rendering of fur, snow, and foliage with slightly stylized realism; edges and details are gentle rather than sharp, supporting a tender, storybook feel.",
+  "world": "A stylized but believable woodland and mountain world where animals behave with humanlike emotional intelligence yet remain non-verbal, and seasonal rituals feel timeless and familiar.",
+  "forbidden": [
+    "Harsh, high-contrast lighting or neon, synthetic color schemes that break the naturalistic mood",
+    "Fast, jittery cutting or aggressive camera moves that disrupt the calm, contemplative pacing",
+    "Complex dialogue or on-the-nose exposition that explains the relationship instead of showing it",
+    "Overly cartoony slapstick or exaggerated expressions that undercut the quiet emotional tone",
+    "Intrusive modern objects or urban settings that break the self-contained forest world"
+  ]
+}

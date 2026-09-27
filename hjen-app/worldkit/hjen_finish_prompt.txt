@@ -1,0 +1,21 @@
+[TASK] This is a FINISHING + ANGLE-LOCK pass, not a re-composition. IMAGE 1 is a rough render captured from a 3D Gaussian-Splatting scene at an exact chosen camera angle. Re-render it as a photoreal frame WITHOUT moving the camera.
+
+[HARD LOCK — do not change]
+- Camera angle, position, lens perspective and field of view of IMAGE 1 — identical.
+- Composition, framing, horizon line, and the placement of every subject and object — identical.
+- IMAGE 2 is a minimal edge map (canny) of the structure — honor these silhouette and perspective lines.
+- IMAGE 3 (if present) is a depth map — honor this near→far volume hierarchy.
+Do NOT add, remove, reposition, or resize anything. Same scene, same angle, cleaned and finished.
+
+[FINISH — what to improve]
+- Remove splat artifacts: floaters, smearing, holes, noise, soft mush. Reconstruct clean, believable surfaces and edges.
+- Restore real material and texture: skin micro-texture, fabric weave, stone, metal, glass — photographic, not plastic.
+- Resolve faces and hands cleanly if present, keeping the same identity, pose and expression implied by the plate.
+
+[HJEN DNA — Clay & Basil grade]
+Contemporary, lived-in Saudi Arabia, the everyday kingdom with the visual weight of a feature film. Environment cools, human warms: teal-olive shadows (#2A4A42), warm amber skin (#B8864A), lifted blacks (deepest point ~#1E2E2A, never pure black), cream highlight rolloff, atmospheric haze as natural diffusion. 70% cool/neutral environment, 20% warm skin/earth, 10% accent.
+The visual style and aesthetics should mimic those of Conan the Barbarian (1982).
+The image looks like it was shot on a Arriflex 35 BL silent camera with a Todd-AO Anamorphic lens on Vintage Eastman Kodak 100T 5254/5247 (1970s cinema grit, muted earth tones, greenish shadow cast, soft contrast, vintage grain structure, desaturated colors, organic texture).
+The scene is shot at Civil Twilight, post-sunset ambient light, even soft illumination, low contrast. The image should look highly realistic.
+
+[CONSTRAINTS] No camera or equipment visible in the frame. No marks, no borders or frames, no burnt-in dates or annotations. Use the full frame, no letterboxing.

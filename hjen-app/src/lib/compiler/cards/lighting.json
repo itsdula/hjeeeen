@@ -1,0 +1,75 @@
+[
+  {
+    "id": "lighting.teal-warm-split.001",
+    "dimension": "lighting",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["grade", "جريد", "لون", "color", "teal", "skin", "بشرة", "طين وريحان", "clay basil"],
+    "ar": "قانون طين وريحان المطلق: البيئة تبرد والإنسان يدفأ. ظلال تيل-زيتوني، سماء فولاذية باهتة، أخضر يميل للمريمية — والبشرة وحدها دافئة عنبرية. الإنسان هو مصدر الحرارة في الكادر.",
+    "en": "Clay & Basil absolute law: the ENVIRONMENT cools while the HUMAN warms. Shadows shift teal-olive (#2A4A42), skies desaturate to steel blue, greens read as sage — but skin stays warm amber (#B8864A), the only true warmth in frame. Highlights roll off to cream (#E8DCC8), never clinical white.",
+    "negatives": ["vivid saturated greens", "brand-blue pushed sky", "orange-teal blockbuster grade at full crush"],
+    "sources": ["seed:clay_basil"],
+    "weight": 3,
+    "always": true
+  },
+  {
+    "id": "lighting.lifted-blacks.002",
+    "dimension": "lighting",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["blacks", "ظلال", "shadow", "grade", "documentary"],
+    "ar": "السواد مرفوع دائماً، لا يُسحق. أعمق ظل يحتفظ بالتفاصيل وبمسحة تيل-زيتونية (#1E2E2A لا #000000). هذا ما يعطي الصور انفتاحها الوثائقي.",
+    "en": "Blacks are LIFTED, never crushed: deepest shadow holds detail with a teal-olive undertone (#1E2E2A, never #000000). This lifted-black openness is the documentary signature — nothing hides in darkness. Exception: blue-hour frames may deepen, but still retain shadow detail.",
+    "negatives": ["crushed cinematic blacks", "HDR halos"],
+    "sources": ["seed:clay_basil"],
+    "weight": 3
+  },
+  {
+    "id": "lighting.found-practical.003",
+    "dimension": "lighting",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["practical", "ضوء", "إضاءة", "فلورسنت", "natural", "light"],
+    "ar": "كل الضوء موجود أو عملي: شمس، نار، فلورسنت محلات، لمبة مكتب، ضوء ثلاجة البقالة. ممنوع إحساس ستوديو الإضاءة الثلاثية. المزيج الصادق: فلورسنت-تيل مع دفء باب مفتوح.",
+    "en": "All light is FOUND or PRACTICAL: sunlight, fire, shop fluorescents, desk lamps, bakery doorway spill. No three-point studio feel. The honest Saudi mix: cool fluorescent interior meeting warm daylight through the door. Fire lights faces from BELOW — rare, intimate, ritual.",
+    "negatives": ["studio softbox look", "rim-light halo on hair for no source reason", "even commercial catalog lighting"],
+    "sources": ["seed:clay_basil"],
+    "weight": 3
+  },
+  {
+    "id": "lighting.film-formula.004",
+    "dimension": "lighting",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["film", "stock", "arriflex", "kodak", "grain", "فيلم", "حبيبات", "conan"],
+    "ar": "صيغة الختم البصري: Arriflex 35 BL + عدسة Todd-AO أنامورفيك + Kodak 100T 5254/5247 — خشونة سبعينات، ألوان ترابية مطفأة، ظل مخضرّ، كونتراست ناعم، حبيبات عضوية. مرجع الجريد: Conan the Barbarian 1982. الواقعية: Civil Twilight بعد الغروب، إضاءة ناعمة متساوية.",
+    "en": "The house film formula, append to image prompts: 'Shot on Arriflex 35 BL with Todd-AO Anamorphic lens on Vintage Eastman Kodak 100T 5254/5247 — 1970s cinema grit, muted earth tones, greenish shadow cast, soft contrast, vintage grain structure, organic texture. Color grade mimics Conan the Barbarian (1982). Civil Twilight realism: post-sunset ambient light, even soft illumination, low contrast, highly realistic.'",
+    "negatives": ["digital clean noise-free rendering", "heavy fake grain filter"],
+    "sources": ["seed:clay_basil"],
+    "weight": 3
+  },
+  {
+    "id": "lighting.category-themes.005",
+    "dimension": "lighting",
+    "region": "ksa",
+    "era": "2020s",
+    "tags": ["فئة", "بنك", "مطعم", "حكومي", "category", "theme", "palette"],
+    "ar": "الثيم البصري بالفئة في الإعلان السعودي: البنوك نظيفة باردة بلمسة ذهبية؛ المطاعم دافئة عملية بضوء بخار؛ الحكومي/الوطني ترابي فخم بعلم وأخضر مقنن؛ التقنية تيل-أزرق ليلي بنيون خفيف. لا تخلط ثيم فئة على فئة.",
+    "en": "Saudi ad category themes: banks = clean, cool, one gold accent; food = warm practicals, steam-lit; government/national = dignified earth tones, controlled green + flag moments; tech = night teal-blue with restrained neon. Match the category's visual dialect; don't light a bakery like a bank.",
+    "negatives": ["restaurant lit like a corporate office", "government campaign in influencer pastels"],
+    "sources": ["seed:kv_craft"],
+    "weight": 1
+  },
+  {
+    "id": "lighting.saudi-daylight.006",
+    "dimension": "lighting",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["نهار", "شمس", "ضهر", "daylight", "noon", "haze", "غبار"],
+    "ar": "شمس السعودية الحقيقية: ضهر عمودي قاسي بظل قصير وارتداد دافئ من الأسفلت؛ غبار وهواء رجراج كديفيوجن طبيعي؛ العصر ذهبي مائل طويل الظل. الرياض غبارية جافة، جدة رطبة بهالة، أبها ضباب جبلي.",
+    "en": "Real Saudi daylight: harsh vertical noon with short shadows and warm asphalt bounce; dust and heat shimmer as natural diffusion; late-afternoon asr light rakes long and golden. Regional air: Riyadh dry dust-haze, Jeddah humid glow with soft edges, Abha mountain fog.",
+    "negatives": ["European soft overcast as default", "tropical postcard sun"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  }
+]

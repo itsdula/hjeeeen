@@ -1,0 +1,15 @@
+{
+  "id": "prof-ui1785430507716",
+  "name": "prof-ui1785430507716 — extracted from ui1785430507716",
+  "palette": "Warm, lived-in neutrals (browns, creams, muted blues and greens) with occasional saturated childlike colors, culminating in a crisp white-and-primary-color brand mark.",
+  "light_logic": "Naturalistic household lighting that tracks time of day—bright outdoor spill, cool night shadows, warm morning blinds, cozy lamp glow—anchoring the emotional arc in real domestic rhythms.",
+  "lens": "Mostly medium and close shots with a slight softness and shallow depth of field, keeping focus on faces and small domestic details while backgrounds blur into contextual texture.",
+  "texture": "Messy, tactile, and imperfect—mud splatter, cluttered rooms, scattered toys—contrasted with the smooth, clean surfaces of the device and final logo frame.",
+  "world": "A single, believable family home shown across different rooms and times, populated by multiple kids and one central caregiver, with technology integrated as a small, non-intrusive part of the environment.",
+  "forbidden": [
+    "Overly slick, minimalist environments that erase domestic mess and fatigue.",
+    "Abstract tech visualizations that detach the product from the family context.",
+    "High-drama conflict or shouting that turns the kids’ demands into villainy instead of affectionate chaos.",
+    "Cold, blue corporate lighting that breaks the warm, home-based feel."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "ritual-toast-use-a-repeated-toast-or",
+  "craft": "ritual-toast",
+  "principle": "Use a repeated toast or blessing phrase in the voiceover to ceremonially name and honor the trait or behavior you want the audience to value.",
+  "when_it_works": {
+    "register": [
+      "resolve"
+    ],
+    "beat": [
+      "result"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Turns an ordinary quality (like waiting) into a celebrated ritual, inviting the audience to adopt it as part of their own identity and culture.",
+  "evidence": [
+    "f05-guinness — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f05-guinness"
+}

@@ -1,0 +1,27 @@
+[
+  {
+    "id": "dialect.registers.001",
+    "dimension": "dialect",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["لهجة", "dialect", "سعودي", "register", "كلام", "حوار"],
+    "ar": "سجلات اللهجة السعودية: البيتي النجدي («وش رايك؟»، «يالله عاد»)، الحجازي الأنعم («ايوه دحين»، «معليش»)، الجنوبي والشمالي لهما موسيقاهما. الرسمي فصحى بيضاء بنكهة محلية. اللهجة تطابق منطقة الشخصية — نجدي في جدة يظل نجدياً.",
+    "en": "Saudi dialect registers: Najdi home register (وش رايك، يالله عاد), softer Hijazi (ايوه دحين، معليش), Southern and Northern with their own music. Formal contexts use clean fusha with local warmth. Dialect follows the CHARACTER's region, not the shoot location.",
+    "negatives": ["Egyptian or Levantine dialect in Saudi mouths", "theatrical fusha in a kitchen conversation"],
+    "sources": ["seed:copy_register"],
+    "weight": 2
+  },
+  {
+    "id": "dialect.banned-ai-arabic.002",
+    "dimension": "dialect",
+    "region": "arab",
+    "era": "timeless",
+    "tags": ["refusal", "ممنوع", "banned", "كليشيه", "copy", "نص"],
+    "ar": "العربية-الآلية الممنوعة في أي نص أو تعليق: «في عالم اليوم…»، «تجربة لا تُنسى»، «أصالة وحداثة»، «بلمسة سعودية/عصرية»، «نحو مستقبل أفضل»، «اكتشف الآن»، «لأنك تستحق الأفضل»، «روح المكان»، «نحن أكثر من مجرد…». الرفض هو الموقف الافتراضي.",
+    "en": "Banned generic AI-Arabic in any copy or VO: 'في عالم اليوم', 'تجربة لا تُنسى', 'أصالة وحداثة', 'بلمسة سعودية/عصرية', 'نحو مستقبل أفضل', 'اكتشف الآن', 'لأنك تستحق الأفضل', 'روح المكان', 'نحن أكثر من مجرد'. Refusal is the default position — replace with a specific, earned line.",
+    "negatives": ["all listed phrases — this card IS the ban list"],
+    "sources": ["seed:copy_register"],
+    "weight": 3,
+    "always": true
+  }
+]

@@ -1,0 +1,20 @@
+{
+  "id": "scale-escalate-from-an-isolated-individual",
+  "craft": "scale",
+  "principle": "Escalate from an isolated individual to a massive, synchronized crowd to make conformity feel systemic and inescapable.",
+  "when_it_works": {
+    "beat": [
+      "conflict"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Turn a personal frustration into a societal problem, raising the stakes of your eventual solution.",
+  "evidence": [
+    "f02-apple — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f02-apple"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "clean-break-end-on-a-stark-simplified",
+  "craft": "clean-break",
+  "principle": "End on a stark, simplified frame—often pure black or minimal graphics—to create a felt separation between the old world and the new promise.",
+  "when_it_works": {
+    "beat": [
+      "result"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Let the audience mentally step out of the story’s oppression and sit for a beat with the possibility of a different future.",
+  "evidence": [
+    "f02-apple — resolve register",
+    "f03-apple — resolve register",
+    "f13-budweiser — groundedness register",
+    "f16-android — joy register",
+    "ui1785430507716 — groundedness register",
+    "CONFIRMED-TRANSFERABLE: resolve+groundedness+joy"
+  ],
+  "weight": 6,
+  "status": "candidate",
+  "source": "auto:f02-apple"
+}

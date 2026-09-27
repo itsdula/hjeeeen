@@ -1,0 +1,62 @@
+[
+  {
+    "id": "era.1980s-riyadh.001",
+    "dimension": "era",
+    "region": "najd",
+    "era": "1980s",
+    "tags": ["ثمانينات", "1980s", "80s", "قديم", "retro", "vintage", "الرياض"],
+    "ar": "ثمانينات الرياض: مرسيدس W123 وكابرس وددسن، لافتات محلات مرسومة يدوياً بخط عربي مطلي، إنارة صوديوم برتقالية، أرصفة مقلّمة أصفر-أسود، فلل بشرفات حديد مشغول، تلفزيون بهوائي. لا جوالات، لا LED، لا أبراج زجاج.",
+    "en": "1980s Riyadh: Mercedes W123, Chevrolet Caprice, Datsun pickups; hand-painted shop signs in enamel Arabic lettering; orange sodium streetlights; yellow-black striped curbs; villas with wrought-iron balconies; TV antennas on roofs. NO smartphones, NO LED signage, NO glass towers — period accuracy is continuity.",
+    "negatives": ["modern LED shopfronts in a period frame", "2020s cars parked in 1985", "anachronistic street furniture"],
+    "sources": ["seed:era_study"],
+    "weight": 2
+  },
+  {
+    "id": "era.1990s-2000s.002",
+    "dimension": "era",
+    "region": "ksa",
+    "era": "1990s",
+    "tags": ["تسعينات", "1990s", "2000s", "التسعينات", "nostalgia", "نوستالجيا"],
+    "ar": "تسعينات/بداية الألفية: كامري وكرسيدا ولاندكروزر 80، محلات فيديو وتسجيلات، لافتات نيون أولى، تلفونات عملة، بلايستيشن 1 في الاستراحة، شوارع أوسع وأول مولات. نوستالجيا جيل اليوم الثلاثيني — منجم الإعلان العاطفي.",
+    "en": "1990s–2000s Saudi: Camry, Cressida, Land Cruiser 80; video rental and cassette shops; first neon signs; payphones; PlayStation 1 in the istiraha; first malls. This is the nostalgia goldmine of today's 30-something audience — get the details right and the ad aches correctly.",
+    "negatives": ["flat generic 'old times' styling", "mixing 80s sodium light with 2000s malls carelessly"],
+    "sources": ["seed:era_study"],
+    "weight": 2
+  },
+  {
+    "id": "era.contemporary.003",
+    "dimension": "era",
+    "region": "ksa",
+    "era": "2020s",
+    "tags": ["حاضر", "2020s", "modern", "اليوم", "contemporary"],
+    "ar": "سعودية اليوم: مدن تتغير بسرعة لكن الحياة اليومية محتفظة بنسيجها — بقالة الحي جنب برج جديد، شاص متروس جنب تسلا، جدّة على فيس تايم. التوتر الجميل بين السرعة والجذر هو صورة العصر.",
+    "en": "Today's Saudi: cities changing fast while daily life keeps its weave — the corner baqala beside a new tower, a mud-spattered Land Cruiser beside an EV, a grandmother on FaceTime. The beautiful tension between velocity and root IS the contemporary image. Technology appears as adopted daily reality, never futurism.",
+    "negatives": ["NEOM-render futurism as everyday setting", "erasing tradition to look modern"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  },
+  {
+    "id": "era.period-photo-look.005",
+    "dimension": "era",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["حقبة", "period", "لوك", "look", "فيلم", "قديم", "retro", "أرشيف", "archive", "1980", "1990", "ثمانينات", "تسعينات"],
+    "ar": "طلب الحقبة يرث لوك وسيطها الفوتوغرافي، لا لوك السينما الحديثة: 1987 = لقطة كوداك نهارية بألوان بطاقة بريدية باهتة قليلاً وفلاش مباشر ليلاً؛ التسعينات = فيلم استهلاكي محبب بحواف دافئة. الجريد السينمائي الحديث على كادر حقبة يكسر صدقه الأرشيفي.",
+    "en": "A period request inherits the LOOK of that era's photographic medium, not modern cinema grade: 1987 = daylight Kodak-print snapshot, slightly faded postcard color, hard on-camera flash at night; 1990s = consumer film grain with warm edges. Applying a modern cinematic grade to a period frame breaks its archival truth — period authenticity beats house style, always.",
+    "negatives": ["modern teal-cinema grade on a 1980s frame", "anamorphic blue-hour drama on an archival-snapshot request"],
+    "sources": ["seed:anwar_review_E11"],
+    "weight": 3
+  },
+  {
+    "id": "era.marker-method.004",
+    "dimension": "era",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["method", "حقبة", "markers", "علامات", "period"],
+    "ar": "منهج الحقبة: كل زمن يُثبت بخمس علامات — سيارة، لافتة/خط، إنارة، جهاز، لبس. علامة واحدة خاطئة تكسر الكادر كله. إن لم تُطلب حقبة، الافتراضي هو الحاضر.",
+    "en": "Era method: anchor any period with five markers — a vehicle, signage/typography, street lighting, a device, a wardrobe detail. One wrong marker breaks the whole frame. If no era is requested, default to contemporary.",
+    "negatives": ["floating timeless-nowhere scenes when a period is implied"],
+    "sources": ["seed:era_study"],
+    "weight": 2
+  }
+]

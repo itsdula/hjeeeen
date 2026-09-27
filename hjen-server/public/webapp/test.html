@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HJEN — Web Adapter Test</title>
+<style>
+  body { margin:0; background:#0b0c0e; color:#e9ebee; font-family:-apple-system,'Segoe UI',system-ui,sans-serif; padding:32px; max-width:820px; margin:0 auto; }
+  h1 { font-size:18px; } .sub { color:#8b929e; font-size:13px; margin-bottom:20px; }
+  .row { display:flex; gap:8px; margin-bottom:18px; }
+  input { flex:1; background:#141619; border:1px solid #24272d; color:#e9ebee; border-radius:8px; padding:10px 12px; font-size:13px; }
+  button { background:#e0a24a; color:#000; font-weight:700; border:none; border-radius:8px; padding:10px 18px; font-size:13px; cursor:pointer; }
+  .log { background:#141619; border:1px solid #24272d; border-radius:10px; padding:14px; font-size:12.5px; line-height:1.9; font-family:ui-monospace,Menlo,monospace; }
+  .ok { color:#5fb98e; } .err { color:#e5705a; } .step { color:#8b929e; }
+  img { max-width:120px; border-radius:8px; border:1px solid #24272d; margin-top:10px; display:block; }
+</style>
+</head>
+<body>
+<h1>HJEN · <span style="color:#e0a24a">Web Adapter Test</span></h1>
+<div class="sub">Proves the cloud <code>window.hjen</code> round-trips against the per-account backend (Phase 0).</div>
+<div class="row">
+  <input id="tok" placeholder="Paste a magic-link token (the part after /s/)" />
+  <button id="run">Run test</button>
+</div>
+<div class="log" id="log">Paste a token and press Run.</div>
+<img id="shot" style="display:none" />
+
+<script>
+// The host page sets the auth getter the adapter reads.
+window.__hjenAuth = async () => document.getElementById('tok').value.trim();
+</script>
+<script src="/webapp/adapter.js"></script>
+<script>
+const log = document.getElementById('log');
+const line = (msg, cls='step') => { log.innerHTML += `<div class="${cls}">${msg}</div>`; };
+document.getElementById('run').onclick = async () => {
+  log.innerHTML = '';
+  try {
+    line('window.hjen present: ' + (!!window.hjen && window.hjen.__web ? 'yes (web adapter)' : 'NO'), window.hjen ? 'ok' : 'err');
+
+    line('① createProject("Web Adapter Test")…');
+    const proj = await window.hjen.createProject('Web Adapter Test');
+    line('   → id=' + proj.id + ' slug=' + proj.slug, 'ok');
+
+    line('② writeProjectState {prompt, aspect}…');
+    await window.hjen.writeProjectState(proj.id, { prompt: 'a Saudi family at a station, dusk', aspect: '16:9' });
+    const state = await window.hjen.readProjectState(proj.id);
+    line('   → read back: ' + JSON.stringify(state), state?.prompt ? 'ok' : 'err');
+
+    line('③ writeStageData(references)…');
+    await window.hjen.writeStageData(proj.id, 'references', { refs: ['a', 'b', 'c'] });
+    const st = await window.hjen.readStageData(proj.id, 'references');
+    line('   → stage read back: ' + JSON.stringify(st), st?.refs ? 'ok' : 'err');
+
+    line('④ saveGeneration (1×1 test PNG)…');
+    const px = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+    const gen = await window.hjen.saveGeneration(proj.id, { b64: px, meta: { prompt: 'test pixel' } });
+    line('   → generation id=' + gen.id, 'ok');
+
+    line('⑤ listAllGenerations…');
+    const list = await window.hjen.listAllGenerations(proj.id);
+    line('   → library count=' + list.length, list.length ? 'ok' : 'err');
+
+    line('⑥ readImageDataUrl → render the saved blob…');
+    const src = await window.hjen.readImageDataUrl(proj.id, gen.id, gen.ext);
+    const img = document.getElementById('shot'); img.src = src; img.style.display = 'block';
+    line('   → image URL resolved (see below)', 'ok');
+
+    line('⑦ getProjects (list)…');
+    const projs = await window.hjen.getProjects();
+    line('   → total projects for this account: ' + projs.length, 'ok');
+
+    line('✓ ALL CORE ADAPTER METHODS ROUND-TRIPPED THROUGH THE CLOUD', 'ok');
+  } catch (e) {
+    line('✗ ' + (e?.message || e), 'err');
+  }
+};
+</script>
+</body>
+</html>

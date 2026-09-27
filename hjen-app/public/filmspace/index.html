@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Film Space — Studio Stage</title>
+<!--
+  Film Space (Phase 3) — a BUILT 3D studio stage. A realistic FK-posable stand-in
+  (COCO-17 preserved), an objects library (Nth stand-in · wall · window · car ·
+  shop · a real CubeCamera mirror), a bottom KEYFRAME TIMELINE (camera + per-object
+  tracks), real-time Play, and MOVE recording (up to 20s). Movement PRESETS move
+  the CAMERA only, relative to a static character; subject/object motion is authored
+  on the timeline. Depth / outline / pose are exact and offline. Three.js is the
+  SAME vendored copy HJEN SET uses. Talks to FilmSpaceView via postMessage.
+-->
+<style>
+  :root{ --bg:#0f1012; --ink:#e9eaec; --ink-dim:rgba(233,234,236,.62); --ink-faint:rgba(233,234,236,.30);
+         --rule:rgba(233,234,236,.14); --accent:#F25502; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--bg);color:var(--ink);
+    font:12px/1.5 -apple-system,Inter,system-ui,sans-serif;overflow:hidden}
+  #stage{position:fixed;inset:0}
+  canvas{display:block;cursor:grab}
+  canvas:active{cursor:grabbing}
+  .hud{position:fixed;z-index:10;background:rgba(0,0,0,.46);backdrop-filter:blur(10px);
+    border:1px solid var(--rule);border-radius:6px;padding:7px 10px;-webkit-user-select:text;user-select:text}
+  .hud.br{right:13px;bottom:13px;font-family:ui-monospace,Menlo,monospace;font-size:11px;
+    color:var(--ink-dim);letter-spacing:.02em;white-space:pre;text-align:right}
+  .hud.bl{left:13px;bottom:13px;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--ink-faint)}
+  #msg{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    color:var(--ink-dim);font-size:13px;pointer-events:none}
+  .pip{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);
+    margin-right:6px;vertical-align:middle}
+  #rec{position:fixed;left:13px;top:13px;z-index:11;display:none;align-items:center;gap:6px;
+    background:rgba(0,0,0,.5);border:1px solid var(--accent);border-radius:6px;padding:5px 9px;
+    font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--ink)}
+  #rec b{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:blink 1s steps(2) infinite}
+  @keyframes blink{50%{opacity:.2}}
+  /* ── in-viewport transform gizmo toolbar (DCC-style) ── */
+  #gizmobar{position:fixed;left:13px;top:13px;z-index:12;display:none;align-items:center;gap:2px;
+    background:rgba(0,0,0,.5);backdrop-filter:blur(10px);border:1px solid var(--rule);
+    border-radius:7px;padding:3px;-webkit-user-select:none;user-select:none}
+  #gizmobar .gm{display:flex;align-items:center;gap:5px;background:transparent;border:0;
+    color:var(--ink-dim);font:600 11px/1 -apple-system,Inter,system-ui,sans-serif;letter-spacing:.02em;
+    padding:6px 10px;border-radius:5px;cursor:pointer;transition:background .12s,color .12s}
+  #gizmobar .gm:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+  #gizmobar .gm.on{color:var(--ink);background:rgba(255,255,255,.08);box-shadow:inset 0 -2px 0 var(--accent)}
+  #gizmobar .gm .k{font-family:ui-monospace,Menlo,monospace;font-size:9px;color:var(--ink-faint);
+    border:1px solid var(--rule);border-radius:3px;padding:1px 3px;line-height:1}
+  #gizmobar .gm.on .k{color:var(--ink-dim)}
+  #gizmobar .gm .i{width:13px;height:13px;flex:0 0 auto}
+  /* ── export-frame guide (FIX 1) ── the canvas is sized to the active export
+     aspect and centred; #frameguide traces that rectangle and dims outside it, so
+     the user composes inside the real exported frame. Only shown when an aspect is
+     locked (a pose-from-image source is active); full-window otherwise. ── */
+  #stage canvas{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+  #frameguide{position:fixed;z-index:8;pointer-events:none;display:none;border:1px solid var(--accent);
+    box-shadow:0 0 0 100vmax rgba(0,0,0,.42);border-radius:2px}
+  #frameguide::before,#frameguide::after{content:"";position:absolute;width:14px;height:14px;
+    border:1px solid rgba(233,234,236,.5)}
+  #frameguide::before{left:-1px;top:-1px;border-right:0;border-bottom:0}
+  #frameguide::after{right:-1px;bottom:-1px;border-left:0;border-top:0}
+  body.framed #frameguide{display:block}
+  #aspectpill{position:fixed;top:13px;left:50%;transform:translateX(-50%);z-index:11;display:none;
+    background:rgba(0,0,0,.5);backdrop-filter:blur(10px);border:1px solid var(--rule);border-radius:999px;
+    padding:5px 12px;font-family:ui-monospace,Menlo,monospace;font-size:10.5px;letter-spacing:.06em;
+    color:var(--ink-dim);text-transform:uppercase;-webkit-user-select:text;user-select:text;white-space:nowrap}
+  body.framed #aspectpill{display:block}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="msg">Building the stage…</div>
+<div id="rec"><b></b>Recording move…</div>
+<div id="frameguide" aria-hidden="true"></div>
+<div id="aspectpill">—</div>
+<div id="gizmobar" role="toolbar" aria-label="Transform gizmo mode">
+  <button class="gm" data-gm="translate" title="Move — W">
+    <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M2 12h20M12 2 9 5M12 2l3 3M2 12l3-3M2 12l3 3M22 12l-3-3M22 12l-3 3M12 22l-3-3M12 22l3-3"/></svg>
+    <span>Move</span><span class="k">W</span></button>
+  <button class="gm" data-gm="rotate" title="Rotate — E">
+    <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg>
+    <span>Rotate</span><span class="k">E</span></button>
+  <button class="gm" data-gm="scale" title="Scale — R">
+    <svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M21 3l-7 7M9 21H3v-6M3 21l7-7"/></svg>
+    <span>Scale</span><span class="k">R</span></button>
+</div>
+<div class="hud br"><span id="cam">—</span></div>
+<div class="hud bl"><span class="pip"></span>drag = orbit + height · scroll = dolly · click = select · right-drag = pan · gizmo: W/E/R</div>
+
+<script type="importmap">{ "imports": { "three": "../world/vendor/three.module.js" } }</script>
+<script type="module">
+import * as THREE from 'three';
+import { TransformControls } from '../world/vendor/TransformControls.js';
+import { buildMannequin } from './mannequin.js';
+
+const SENSOR_W = 36, SENSOR_H = 24;
+const LENS_PRIMES = [8, 14, 24, 35, 50, 85, 100, 135, 200];
+const LENS_CODE = { 8:'8mm fisheye', 14:'14mm ultra-wide', 24:'24mm wide', 35:'35mm', 50:'50mm normal',
+  85:'85mm portrait', 100:'100mm', 135:'135mm tele', 200:'200mm long' };
+const SHOT_BANDS = [['ECU',0.20],['CU',0.35],['MCU',0.50],['MS',0.75],['MLS',0.95],['LS',1.30],['WS',2.50]];
+const COCO = ['nose','left_eye','right_eye','left_ear','right_ear','left_shoulder','right_shoulder',
+  'left_elbow','right_elbow','left_wrist','right_wrist','left_hip','right_hip',
+  'left_knee','right_knee','left_ankle','right_ankle'];
+const SKELETON = [[15,13],[13,11],[16,14],[14,12],[11,12],[5,11],[6,12],[5,6],
+  [5,7],[6,8],[7,9],[8,10],[0,1],[0,2],[1,3],[2,4],[0,5],[0,6]];
+const LIMB_COLOR = ['#3b6fff','#3b8bff','#ff8a3b','#ffb03b','#c46bff','#6b8bff','#ff6b8b','#ffd23b',
+  '#3bd6ff','#3bffb0','#3bff6b','#b0ff3b','#ff3b6b','#ff3bb0','#ff6bff','#b03bff','#6bffd6','#6bff8b'];
+
+const stage = document.getElementById('stage'), msg = document.getElementById('msg');
+const camEl = document.getElementById('cam'), recEl = document.getElementById('rec');
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+stage.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x101113);
+const sceneFog = new THREE.Fog(0x101113, 26, 60); scene.fog = sceneFog;
+const camera = new THREE.PerspectiveCamera(37.8, innerWidth / innerHeight, 0.03, 2000);
+
+scene.add(new THREE.HemisphereLight(0xdfe6ef, 0x1c1e22, 0.9));
+const key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(4, 8, 6); scene.add(key);
+const fill = new THREE.DirectionalLight(0x9fb4c9, 0.4); fill.position.set(-6, 4, -3); scene.add(fill);
+const rim = new THREE.DirectionalLight(0xbfe0ff, 0.3); rim.position.set(-2, 5, -8); scene.add(rim);
+
+// ── the built stage ──
+function checkerTexture(){
+  const N = 512, c = document.createElement('canvas'); c.width = c.height = N;
+  const g = c.getContext('2d'); g.fillStyle = '#17181b'; g.fillRect(0, 0, N, N);
+  g.fillStyle = '#202226';
+  for (let y=0;y<8;y++) for (let x=0;x<8;x++) if ((x+y)%2) g.fillRect(x*N/8, y*N/8, N/8, N/8);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  t.repeat.set(20, 20); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
+}
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 60),
+  new THREE.MeshStandardMaterial({ map: checkerTexture(), roughness: 1, metalness: 0 }));
+floor.rotation.x = -Math.PI / 2; scene.add(floor);
+const grid = new THREE.GridHelper(60, 60, 0x3b3e44, 0x25272b); grid.position.y = 0.002; scene.add(grid);
+const axes = new THREE.AxesHelper(1.2); axes.position.y = 0.004; scene.add(axes);
+
+const clay = () => new THREE.MeshStandardMaterial({ color: 0x9198a1, roughness: 0.85, metalness: 0 });
+const clayDark = () => new THREE.MeshStandardMaterial({ color: 0x6d747d, roughness: 0.95, metalness: 0 });
+
+// ── objects registry ──
+let objects = [];
+let idSeq = 0, selectedId = null, boxHelper = null;
+function primaryMann(){ return objects.find(o => o.type === 'mannequin'); }
+function getObj(id){ return objects.find(o => o.id === id); }
+
+// ── the human stand-in (real rigged GLB) lives in ./mannequin.js ──
+// buildMannequin(height) → { group, nodes, height, pose, setPose, setHeight, cocoWorld }
+// It replaces the old procedural clay figure; cocoWorld() stays exact (reads bone world pos).
+
+// ── object proxies + mirror (CubeCamera) ──
+let mirrors = [];
+function buildProp(type){
+  const g = new THREE.Group(); const mark = m => { m.userData.pick = true; return m; };
+  if (type === 'wall'){ const w = mark(new THREE.Mesh(new THREE.BoxGeometry(2.6, 2.7, 0.16), clay())); w.position.y = 1.35; g.add(w); }
+  else if (type === 'window'){
+    const W=1.4,H2=1.6,t=0.12,fr=clayDark(), frame=new THREE.Group();
+    const bar=(w,h,x,y)=>{ const m=mark(new THREE.Mesh(new THREE.BoxGeometry(w,h,t),fr)); m.position.set(x,y,0); return m; };
+    frame.add(bar(W+0.2,0.18,0,H2/2), bar(W+0.2,0.18,0,-H2/2), bar(0.18,H2,-W/2,0), bar(0.18,H2,W/2,0), bar(0.1,H2,0,0), bar(W,0.1,0,0));
+    frame.position.y = 1.4; g.add(frame);
+  } else if (type === 'car'){
+    const body=mark(new THREE.Mesh(new THREE.BoxGeometry(4.1,0.9,1.8), clay())); body.position.y=0.55;
+    const cabin=mark(new THREE.Mesh(new THREE.BoxGeometry(2.2,0.7,1.66), clayDark())); cabin.position.set(-0.2,1.15,0); g.add(body,cabin);
+    for (const [x,z] of [[1.35,0.9],[1.35,-0.9],[-1.35,0.9],[-1.35,-0.9]]){
+      const wheel=mark(new THREE.Mesh(new THREE.CylinderGeometry(0.4,0.4,0.3,18), clayDark())); wheel.rotation.x=Math.PI/2; wheel.position.set(x,0.4,z); g.add(wheel);
+    }
+  } else if (type === 'shop'){
+    const facade=mark(new THREE.Mesh(new THREE.BoxGeometry(4.2,3.2,0.3), clay())); facade.position.y=1.6;
+    const door=mark(new THREE.Mesh(new THREE.BoxGeometry(1.2,2.2,0.34), new THREE.MeshStandardMaterial({color:0x111316,roughness:1}))); door.position.set(0,1.1,0.02);
+    const sign=mark(new THREE.Mesh(new THREE.BoxGeometry(3.2,0.6,0.36), clayDark())); sign.position.set(0,2.9,0.02);
+    g.add(facade,door,sign);
+  } else if (type === 'mirror'){ return buildMirror(g); }
+  return { group: g };
+}
+function buildMirror(g){
+  const rt = new THREE.WebGLCubeRenderTarget(256, { generateMipmaps:true, minFilter: THREE.LinearMipmapLinearFilter });
+  const cubeCam = new THREE.CubeCamera(0.1, 100, rt);
+  const W=1.4,H2=2.0;
+  const glass = new THREE.Mesh(new THREE.PlaneGeometry(W,H2), new THREE.MeshStandardMaterial({ envMap: rt.texture, metalness: 1.0, roughness: 0.02, color: 0xffffff }));
+  glass.userData.pick = true;
+  const frame = new THREE.Mesh(new THREE.BoxGeometry(W+0.16, H2+0.16, 0.08), clayDark()); frame.position.z = -0.05; frame.userData.pick = true;
+  const holder = new THREE.Group(); holder.add(frame, glass); holder.position.y = H2/2 + 0.05;
+  g.add(holder, cubeCam);
+  const mirror = { cubeCam, glass }; mirrors.push(mirror);
+  return { group: g, mirror };
+}
+function updateMirrors(){ for (const m of mirrors){ m.glass.visible=false; m.glass.getWorldPosition(m.cubeCam.position); m.cubeCam.update(renderer, scene); m.glass.visible=true; } }
+
+// ── add / select / delete ──
+// opts.id forces a specific id (session restore preserves ids so timeline tracks
+// re-bind); opts.noSelect skips the auto-select (restore selects once at the end).
+async function addObject(type, opts){
+  opts = opts || {};
+  const id = opts.id || ('obj-' + (idSeq++).toString(36));
+  if (opts.id){ const nSeq = parseInt(String(opts.id).replace('obj-',''), 36); if (!isNaN(nSeq)) idSeq = Math.max(idSeq, nSeq + 1); }
+  let rec;
+  if (type === 'mannequin'){
+    const mann = await buildMannequin(figH);
+    rec = { id, type, group: mann.group, mann, nodes: mann.nodes, poseInput: { kind:'preset', name:'stand' } };
+    const n = objects.filter(o => o.type==='mannequin').length; mann.group.position.x = n * 0.9;
+  } else {
+    const built = buildProp(type);
+    rec = { id, type, group: built.group, mirror: built.mirror };
+    const n = objects.filter(o => o.type===type).length; rec.group.position.set(1.7 + n*0.4, 0, -1.3);
+  }
+  scene.add(rec.group); objects.push(rec); if (!opts.noSelect) select(id); postScene(); return rec;
+}
+// Remove every object + mirror + timeline track and clear selection/gizmo — the
+// pre-step for a session restore or a fresh scene.
+function clearAllObjects(){
+  for (const o of objects.slice()){ if (o.mirror) mirrors = mirrors.filter(mm => mm !== o.mirror); scene.remove(o.group); }
+  objects = []; tlObj = {}; tlCam = []; selKey = null; selectedId = null;
+  if (boxHelper){ scene.remove(boxHelper); boxHelper = null; }
+  detachGizmo();
+}
+function deleteObject(id){
+  const o = getObj(id); if (!o) return;
+  if (o.mirror) mirrors = mirrors.filter(m => m !== o.mirror);
+  delete tlObj[id];
+  scene.remove(o.group); objects = objects.filter(x => x.id !== id);
+  if (selectedId === id){ selectedId = null; if (boxHelper){ scene.remove(boxHelper); boxHelper = null; } detachGizmo(); }
+  postScene(); postTimeline();
+}
+function select(id){
+  selectedId = id;
+  if (boxHelper){ scene.remove(boxHelper); boxHelper = null; }
+  const o = getObj(id); if (o){ boxHelper = new THREE.BoxHelper(o.group, 0xF25502); scene.add(boxHelper); attachGizmo(id); } else detachGizmo();
+  post('hjen:fs-select', selInfo()); postScene(); postTimeline();
+}
+function selInfo(){
+  const o = getObj(selectedId); if (!o) return null;
+  return { id:o.id, type:o.type, px:+o.group.position.x.toFixed(3), py:+o.group.position.y.toFixed(3), pz:+o.group.position.z.toFixed(3),
+    rx: Math.round(THREE.MathUtils.radToDeg(o.group.rotation.x)), ry: Math.round(THREE.MathUtils.radToDeg(o.group.rotation.y)), rz: Math.round(THREE.MathUtils.radToDeg(o.group.rotation.z)), scale:+o.group.scale.x.toFixed(3),
+    isMann:o.type==='mannequin', pose: o.mann ? o.mann.pose : null };
+}
+function postScene(){ post('hjen:fs-scene', { objects: objects.map(o => ({ id:o.id, type:o.type, selected:o.id===selectedId })), selected: selInfo() }); }
+
+// ── focal-true camera + orbit framing ──
+let focalMm = 50, figH = 1.75;
+function focalToVFov(mm){ return 2 * Math.atan((SENSOR_H/2)/mm) * 180 / Math.PI; }
+function setFocal(mm){ focalMm = Math.max(8, Math.min(400, mm)); camera.fov = focalToVFov(focalMm); camera.updateProjectionMatrix(); apply(); }
+function nearestLens(mm){ return LENS_PRIMES.reduce((a,b)=>Math.abs(b-mm)<Math.abs(a-mm)?b:a); }
+let orbit = { yaw:0, dist:3.6, camY:1.08, target:new THREE.Vector3(0,1.05,0) };
+function frameTarget(){ const m=primaryMann(); const H=m?m.mann.height:figH; return new THREE.Vector3(m?m.group.position.x:0, 0.62*H, m?m.group.position.z:0); }
+function apply(){
+  const t=orbit.target, dy=orbit.camY-t.y, rH=Math.sqrt(Math.max(0.0004, orbit.dist*orbit.dist-dy*dy));
+  camera.position.set(t.x+rH*Math.sin(orbit.yaw), orbit.camY, t.z+rH*Math.cos(orbit.yaw));
+  camera.lookAt(t); updateHud(); pushReadout();
+  rekeySelectedCam();   // live-editing a selected camera key via drag / sliders
+}
+// Reverse-derive the orbit rig from a free camera pose so the orbit sliders keep
+// working after we snap to a keyframe. apply() then reconstructs pos/tgt exactly.
+function syncOrbitFromCam(pos,tgt,fov){
+  orbit.target.copy(tgt);
+  orbit.camY=pos.y;
+  orbit.dist=Math.max(0.001, pos.distanceTo(tgt));
+  orbit.yaw=Math.atan2(pos.x-tgt.x, pos.z-tgt.z);
+  const mm=(SENSOR_H/2)/Math.tan(THREE.MathUtils.degToRad(fov)/2);
+  focalMm=THREE.MathUtils.clamp(mm,8,400); camera.fov=focalToVFov(focalMm); camera.updateProjectionMatrix();
+}
+function shotSizeFor(dist){ const visH=2*dist*Math.tan(THREE.MathUtils.degToRad(camera.fov)/2), r=visH/figH; for (const [c,thr] of SHOT_BANDS) if (r<thr) return c; return 'EWS'; }
+function angleCodeFor(){ const elev=Math.asin(THREE.MathUtils.clamp((orbit.camY-orbit.target.y)/orbit.dist,-1,1))*180/Math.PI;
+  if (Math.abs(elev)<10) return 'EL'; if (elev>=65) return 'OH'; if (elev>=10) return 'HA'; if (elev<=-40) return 'WE'; return 'LA'; }
+function readout(){ const prime=nearestLens(focalMm);
+  return { focalMm:Math.round(focalMm), lensPrime:prime, lensCode:LENS_CODE[prime], shotCode:shotSizeFor(orbit.dist), angleCode:angleCodeFor(), distanceM:+orbit.dist.toFixed(3), camHeight:+orbit.camY.toFixed(3), figureHeight:figH }; }
+function updateHud(){ const r=readout(); camEl.textContent = `${r.focalMm}mm (≈${r.lensPrime}mm) · ${r.shotCode} · ${r.angleCode}\n${r.distanceM.toFixed(2)} m · cam ${r.camHeight.toFixed(2)} m`; }
+function post(type,data){ parent && parent.postMessage({ type, data }, '*'); }
+let readoutT = 0;
+function pushReadout(){ clearTimeout(readoutT); readoutT = setTimeout(()=>post('hjen:fs-readout', readout()), 30); }
+function camPose(){ const t=orbit.target.clone(), dy=orbit.camY-t.y, rH=Math.sqrt(Math.max(0.0004,orbit.dist*orbit.dist-dy*dy));
+  return { pos:new THREE.Vector3(t.x+rH*Math.sin(orbit.yaw), orbit.camY, t.z+rH*Math.cos(orbit.yaw)), tgt:t, fov:camera.fov }; }
+
+// ── input ──
+let dragging=false, panning=false, lx=0, ly=0, moved=0;
+let transformControls=null, gizmoMode='translate', gizmoDragging=false;   // set up below the picker
+const onGizmo = () => transformControls && (transformControls.dragging || transformControls.axis);
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+// Left-drag begins an orbit ONLY when the pointer is not over a gizmo handle — the
+// gizmo owns the drag then, and orbit/pan must not fight it (item 5).
+renderer.domElement.addEventListener('mousedown', e => { dragging=e.button===0 && !onGizmo(); panning=e.button===2 && !onGizmo(); lx=e.clientX; ly=e.clientY; moved=0; });
+addEventListener('mouseup', e => { if (e.button===0 && moved<5 && !gizmoDragging && !onGizmo()) pickAt(e.clientX, e.clientY); dragging=panning=false; });
+addEventListener('contextmenu', e => e.preventDefault());
+addEventListener('mousemove', e => {
+  if (!dragging && !panning || gizmoDragging) return;
+  const dx=e.clientX-lx, dy=e.clientY-ly; lx=e.clientX; ly=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
+  if (dragging){ orbit.yaw += dx*0.005; orbit.camY = THREE.MathUtils.clamp(orbit.camY - dy*0.006, 0.05, figH*2.6); }
+  else if (panning){ const s=orbit.dist*0.0016; orbit.target.x=THREE.MathUtils.clamp(orbit.target.x-dx*s,-6,6); orbit.target.y=THREE.MathUtils.clamp(orbit.target.y+dy*s,0.1,figH*1.6); }
+  apply();
+});
+addEventListener('wheel', e => { orbit.dist=THREE.MathUtils.clamp(orbit.dist+e.deltaY*0.0022*orbit.dist,0.6,30); apply(); }, { passive:true });
+addEventListener('resize', () => { if (capturing||recording) return; fitViewport(); });
+function pickAt(cx, cy){
+  const r = renderer.domElement.getBoundingClientRect();
+  ndc.set(((cx-r.left)/r.width)*2-1, -((cy-r.top)/r.height)*2+1); ray.setFromCamera(ndc, camera);
+  const meshes = []; objects.forEach(o => o.group.traverse(m => { if (m.isMesh && m.userData.pick){ m.userData.__obj=o.id; meshes.push(m);} }));
+  const hit = ray.intersectObjects(meshes, false)[0]; if (hit) select(hit.object.userData.__obj);
+}
+
+// ── in-viewport transform gizmo (DCC-style) ──
+// Vendored three TransformControls (r160). The gizmo attaches to the selected
+// object's GROUP and is constrained to exactly the fields the app persists:
+//   Move   → px/py/pz (X/Z on the ground + Y arrow, floor-clamped, world-space)
+//   Rotate → ry only  (Y ring — heading; X/Z rings hidden, no unsupported roll/pitch)
+//   Scale  → one uniform value (any axis maps to a single scalar)
+// Dragging a handle posts the SAME hjen:fs-select / hjen:fs-scene messages the
+// right-rail sliders send, so the panel tracks live; moving a slider re-poses the
+// object, and the gizmo (attached to its group) follows automatically.
+const gizmoBar = document.getElementById('gizmobar');
+const gizmoBtns = gizmoBar ? [...gizmoBar.querySelectorAll('.gm')] : [];
+transformControls = new TransformControls(camera, renderer.domElement);
+transformControls.size = 0.92;
+transformControls.setSpace('world');
+transformControls.visible = false;
+transformControls.enabled = false;
+scene.add(transformControls);
+// dragging a handle must freeze the orbit rig (item 5)
+transformControls.addEventListener('dragging-changed', e => { gizmoDragging = e.value; });
+transformControls.addEventListener('objectChange', onGizmoChange);
+
+function applyGizmoConstraints(){
+  // All three axes on every mode — full 3-axis rotation (pitch/heading/roll) like a
+  // real DCC app, free translate, and scale (forced uniform in onGizmoChange). The
+  // data model carries full rotation (rx/ry/rz); the right-rail slider stays the
+  // Y heading control.
+  transformControls.showX = true;
+  transformControls.showY = true;
+  transformControls.showZ = true;
+}
+function setGizmoMode(gm){
+  gizmoMode = gm;
+  transformControls.setMode(gm);
+  applyGizmoConstraints();
+  gizmoBtns.forEach(b => b.classList.toggle('on', b.dataset.gm === gm));
+}
+function attachGizmo(id){
+  const o = getObj(id); if (!o) return;
+  transformControls.attach(o.group);
+  transformControls.visible = true;
+  transformControls.enabled = !(playing || capturing || recording);
+  setGizmoMode(gizmoMode);
+  if (gizmoBar) gizmoBar.style.display = 'flex';
+}
+function detachGizmo(){
+  transformControls.detach();
+  transformControls.visible = false;
+  transformControls.enabled = false;
+  if (gizmoBar) gizmoBar.style.display = 'none';
+}
+// Keep a selected object's timeline key in sync when it is dragged live (mirrors
+// the setObjTransform tail, so gizmo edits retime the same way slider edits do).
+function liveKeyEdit(o){
+  if (!(selKey && selKey.track === o.id)) return;
+  const arr = tlObj[o.id]; const k = arr && arr.find(x => x.id === selKey.id);
+  if (k && Math.abs(k.t - head) < 0.03){
+    k.px=o.group.position.x; k.py=o.group.position.y; k.pz=o.group.position.z;
+    k.rx=THREE.MathUtils.radToDeg(o.group.rotation.x); k.ry=THREE.MathUtils.radToDeg(o.group.rotation.y); k.rz=THREE.MathUtils.radToDeg(o.group.rotation.z);
+    k.scale=o.group.scale.x; postTimeline();
+  }
+}
+function onGizmoChange(){
+  const o = getObj(selectedId); if (!o) return;
+  if (transformControls.mode === 'scale'){
+    // uniform: collapse whatever axis was dragged onto a single scalar (data model
+    // carries one scale). Recomputed each frame from the drag's start, so no drift.
+    const s = o.group.scale, ax = transformControls.axis || 'XYZ';
+    const f = ax.indexOf('X')>-1 ? s.x : ax.indexOf('Y')>-1 ? s.y : ax.indexOf('Z')>-1 ? s.z : s.x;
+    o.group.scale.setScalar(THREE.MathUtils.clamp(f, 0.3, 3));
+  } else if (transformControls.mode === 'translate'){
+    // match the slider ranges: X/Z ∈ [-6,6], never sink below the floor (Y ≥ 0)
+    o.group.position.x = THREE.MathUtils.clamp(o.group.position.x, -6, 6);
+    o.group.position.z = THREE.MathUtils.clamp(o.group.position.z, -6, 6);
+    o.group.position.y = THREE.MathUtils.clamp(o.group.position.y, 0, 3);
+  }
+  // rotate is full 3-axis now (rx/ry/rz all read back in selInfo); no floor reposition
+  // on rotate, so a pitched/rolled figure never fights the translate floor clamp.
+  if (o.type === 'mannequin') orbit.target = frameTarget();
+  if (boxHelper) boxHelper.update();
+  apply();
+  post('hjen:fs-select', selInfo()); postScene();
+  liveKeyEdit(o);
+}
+// toolbar clicks + DCC keys (W move · E rotate · R scale) — only with a live selection
+gizmoBtns.forEach(b => b.addEventListener('click', () => { if (selectedId) setGizmoMode(b.dataset.gm); }));
+addEventListener('keydown', e => {
+  const t = e.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+  if (!selectedId || e.metaKey || e.ctrlKey || e.altKey) return;
+  const gm = e.key === 'w' || e.key === 'W' ? 'translate'
+    : e.key === 'e' || e.key === 'E' ? 'rotate'
+    : e.key === 'r' || e.key === 'R' ? 'scale' : null;
+  if (gm){ e.preventDefault(); setGizmoMode(gm); }
+});
+
+// ── depth material ──
+// Banded linear depth. Derived from MeshDepthMaterial so it inherits skinning +
+// morph support — a raw ShaderMaterial would render skinned meshes in BIND pose.
+const depthUniforms = { uNear:{value:1}, uFar:{value:6}, uBands:{value:8} };
+const depthMat = new THREE.MeshDepthMaterial();
+depthMat.onBeforeCompile = (shader) => {
+  shader.uniforms.uNear = depthUniforms.uNear; shader.uniforms.uFar = depthUniforms.uFar; shader.uniforms.uBands = depthUniforms.uBands;
+  shader.vertexShader = shader.vertexShader
+    .replace('#include <common>', '#include <common>\nvarying float vViewZ;')
+    .replace('#include <project_vertex>', '#include <project_vertex>\n  vViewZ = - mvPosition.z;');
+  shader.fragmentShader = 'uniform float uNear,uFar,uBands; varying float vViewZ;\n' +
+    'void main(){ float d=clamp((vViewZ-uNear)/(uFar-uNear),0.0,1.0); float v=1.0-d; v=floor(v*uBands)/(uBands-1.0); gl_FragColor=vec4(vec3(v),1.0); }';
+};
+
+// ── still capture ──
+let capturing=false, recording=false, playing=false;
+// The active EXPORT aspect. When a "Pose from image" source is loaded, the host
+// posts that image's natural {w,h}; the plate + every pack layer (depth / outline /
+// pose) and the move preview are then rendered at THAT aspect — because the pose
+// came from that image AND it is the same image used later as the Camera-Angles
+// source scene, so plate, output and source must share one frame or the composition
+// lock drifts. Null → fall back to the viewer-window aspect (previous behaviour).
+let captureAspect = null;   // { w, h } | null
+function captureAspectRatio(){ return captureAspect ? captureAspect.w / captureAspect.h : innerWidth / innerHeight; }
+// Live viewport size: when an export aspect is locked, fit the largest rectangle of
+// that aspect inside the window so what the user composes IS what gets exported
+// (WYSIWYG); the surround becomes letterbox bars marked by #frameguide.
+function viewportSize(){
+  if (!captureAspect) return { W: innerWidth, H: innerHeight };
+  const a = captureAspect.w / captureAspect.h;
+  let W = innerWidth, H = Math.round(W / a);
+  if (H > innerHeight){ H = innerHeight; W = Math.round(H * a); }
+  return { W: Math.max(16, W), H: Math.max(16, H) };
+}
+function ratioText(w, h){ const g=(a,b)=>b?g(b,a%b):a; const d=g(w,h)||1, rw=Math.round(w/d), rh=Math.round(h/d);
+  return (rw<=64 && rh<=64) ? `${rw}:${rh}` : `${(w/h).toFixed(2)}:1`; }
+const frameGuideEl = document.getElementById('frameguide');
+const aspectPillEl = document.getElementById('aspectpill');
+function updateFrameGuide(){
+  if (captureAspect){
+    const { W, H } = viewportSize();
+    frameGuideEl.style.left = `${Math.round((innerWidth - W) / 2)}px`;
+    frameGuideEl.style.top = `${Math.round((innerHeight - H) / 2)}px`;
+    frameGuideEl.style.width = `${W}px`; frameGuideEl.style.height = `${H}px`;
+    const { W:cw, H:ch } = captureSize();
+    aspectPillEl.textContent = `▣ Export ${cw}×${ch} · ${ratioText(captureAspect.w, captureAspect.h)} · pose source`;
+  }
+  document.body.classList.toggle('framed', !!captureAspect);
+}
+// Size the renderer + camera to the live viewport (window, or the letterboxed export
+// rectangle) and refresh the guide. Called on resize and whenever the aspect changes.
+function fitViewport(){
+  const { W, H } = viewportSize();
+  renderer.setSize(W, H); camera.aspect = W / H; camera.updateProjectionMatrix();
+  updateFrameGuide();
+}
+function setCaptureAspect(w, h){
+  if (!(w > 0 && h > 0)){ captureAspect = null; } else { captureAspect = { w: Math.round(w), h: Math.round(h) }; }
+  fitViewport(); apply();
+}
+function captureSize(){ const a=captureAspectRatio(); let W,H; if (a>=1){ W=1536; H=Math.round(1536/a);} else { H=1536; W=Math.round(1536*a);} W=Math.max(512,Math.round(W/16)*16); H=Math.max(512,Math.round(H/16)*16); return {W,H}; }
+function sobelOutline(srcCanvas,W,H){
+  const s=document.createElement('canvas'); s.width=W; s.height=H; const sg=s.getContext('2d'); sg.drawImage(srcCanvas,0,0,W,H);
+  const src=sg.getImageData(0,0,W,H).data, lum=new Float32Array(W*H);
+  for (let i=0;i<W*H;i++) lum[i]=(0.299*src[i*4]+0.587*src[i*4+1]+0.114*src[i*4+2])/255;
+  const out=document.createElement('canvas'); out.width=W; out.height=H; const og=out.getContext('2d'), od=og.createImageData(W,H);
+  const gx=[-1,0,1,-2,0,2,-1,0,1], gy=[-1,-2,-1,0,0,0,1,2,1];
+  for (let y=1;y<H-1;y++) for (let x=1;x<W-1;x++){ let sx=0,sy=0,k=0;
+    for (let j=-1;j<=1;j++) for (let i=-1;i<=1;i++){ const v=lum[(y+j)*W+(x+i)]; sx+=v*gx[k]; sy+=v*gy[k]; k++; }
+    const e=Math.sqrt(sx*sx+sy*sy)>0.28?255:0, o=(y*W+x)*4; od.data[o]=od.data[o+1]=od.data[o+2]=e; od.data[o+3]=255; }
+  og.putImageData(od,0,0); return out.toDataURL('image/png');
+}
+function poseImage(W,H){
+  const c=document.createElement('canvas'); c.width=W; c.height=H; const g=c.getContext('2d'); g.fillStyle='#000'; g.fillRect(0,0,W,H);
+  const m=primaryMann(); if (!m) return { url:c.toDataURL('image/png'), world:{} };
+  const world=m.mann.cocoWorld(), pts={};
+  for (const name of COCO){ const v=world[name].clone().project(camera); pts[name]={ x:(v.x*0.5+0.5)*W, y:(-v.y*0.5+0.5)*H, vis:v.z>-1&&v.z<1 }; }
+  g.lineCap='round';
+  SKELETON.forEach((pair,i)=>{ const a=pts[COCO[pair[0]]], b=pts[COCO[pair[1]]]; if(!a||!b||!a.vis||!b.vis) return;
+    g.strokeStyle=LIMB_COLOR[i%LIMB_COLOR.length]; g.lineWidth=Math.max(3,W*0.008); g.beginPath(); g.moveTo(a.x,a.y); g.lineTo(b.x,b.y); g.stroke(); });
+  g.fillStyle='#fff'; for (const name of COCO){ const p=pts[name]; if(!p.vis) continue; g.beginPath(); g.arc(p.x,p.y,Math.max(3,W*0.006),0,7); g.fill(); }
+  return { url:c.toDataURL('image/png'), world };
+}
+function captureStills(){
+  capturing=true; const {W,H}=captureSize();
+  // Force pixelRatio 1 for the capture so the plate/depth drawing buffer is EXACTLY
+  // W×H — the same grid as outline/pose (built on W×H canvases) and camera.json's
+  // render size — so every pack layer overlays pixel-perfect for the composition lock.
+  const prevPR = renderer.getPixelRatio(); renderer.setPixelRatio(1);
+  const gzWas = transformControls.visible; transformControls.visible=false;   // never bake the gizmo into a plate/pose/depth
+  renderer.setSize(W,H,false); camera.aspect=W/H; camera.updateProjectionMatrix(); updateMirrors();
+  renderer.render(scene,camera); const plate=renderer.domElement.toDataURL('image/png');
+  grid.visible=false; axes.visible=false; if(boxHelper) boxHelper.visible=false; scene.fog=null;
+  renderer.render(scene,camera); const outline=sobelOutline(renderer.domElement,W,H);
+  depthUniforms.uNear.value=Math.max(0.05, orbit.dist-figH*0.9); depthUniforms.uFar.value=orbit.dist+figH*1.6;
+  scene.overrideMaterial=depthMat; renderer.render(scene,camera); const depth=renderer.domElement.toDataURL('image/png'); scene.overrideMaterial=null;
+  const pose=poseImage(W,H);
+  grid.visible=true; axes.visible=true; if(boxHelper) boxHelper.visible=true; transformControls.visible=gzWas; scene.fog=sceneFog;
+  capturing=false; renderer.setPixelRatio(prevPR); fitViewport();
+  const r=readout(), joints_3d={};
+  for (const name of COCO){ const w=pose.world[name]; if(w) joints_3d[name]=[+w.x.toFixed(4),+w.y.toFixed(4),+w.z.toFixed(4)]; }
+  const eye=(pose.world.left_eye&&pose.world.right_eye)?pose.world.left_eye.clone().add(pose.world.right_eye).multiplyScalar(0.5):new THREE.Vector3(0,1.6,0);
+  const pm=primaryMann();
+  const cameraJson={
+    schema:'hjen.anglepack.camera/1', space:'three-y-up',
+    position:camera.position.toArray().map(n=>+n.toFixed(4)), target:orbit.target.toArray().map(n=>+n.toFixed(4)), up:[0,1,0],
+    fov:+camera.fov.toFixed(3), aspect:+camera.aspect.toFixed(4), near:0.03, far:2000,
+    lens:{ focal_mm:r.focalMm, aperture_f:null, sensor:{name:'FF-36x24',w_mm:SENSOR_W,h_mm:SENSOR_H}, anamorphic:false },
+    vocab:{ shot_size:r.shotCode, angle:r.angleCode, lens_code:r.lensCode, lens_prime:r.lensPrime, move_code:'▣ static', movement_id:'static' },
+    subject:{ mannequin_id:'m1', pose: pm?pm.mann.pose:'stand', height_m:+figH.toFixed(3), eye_height_m:+eye.y.toFixed(3), distance_m:r.distanceM, joints_3d },
+    scene:{ objects: objects.map(o=>({ id:o.id, type:o.type, position:o.group.position.toArray().map(n=>+n.toFixed(3)), rotation_deg:Math.round(THREE.MathUtils.radToDeg(o.group.rotation.y)), rotation_deg_xyz:[Math.round(THREE.MathUtils.radToDeg(o.group.rotation.x)),Math.round(THREE.MathUtils.radToDeg(o.group.rotation.y)),Math.round(THREE.MathUtils.radToDeg(o.group.rotation.z))], scale:+o.group.scale.x.toFixed(3) })) },
+    world:{ id:'filmspace-stage', engine:'three-r160 filmspace-stage', source_image:null, scale_m_per_unit:1.0 },
+    captured_at:new Date().toISOString(), render:{ width:W, height:H },
+  };
+  return { plate, outline, depth, pose:pose.url, camera:cameraJson, readout:r };
+}
+
+// ── MOVE mode: presets SEED keyframes; the timeline is the single source of truth ──
+// A movement preset no longer animates via a hidden path — it WRITES its keyframes
+// onto the CAMERA track (start + end + intermediates for curved moves). Presets and
+// manual keys are the SAME keyframes on the SAME track. Play, scrub and Lock all read
+// only the timeline. `armedMeta` keeps the chosen preset's id/kind for the export vocab.
+let mode='frame', armedMeta=null, duration=5.0;
+function rotY(p,c,a){ const v=p.clone().sub(c), s=Math.sin(a), co=Math.cos(a); return new THREE.Vector3(v.x*co+v.z*s, v.y, -v.x*s+v.z*co).add(c); }
+function rotAxis(p,c,axis,a){ return p.clone().sub(c).applyAxisAngle(axis,a).add(c); }
+function easeIO(u){ return u<0.5 ? 2*u*u : 1-Math.pow(-2*u+2,2)/2; }
+
+// Preset plan — CAMERA ONLY, truthful to each move. Subject is STATIC.
+function buildPlan(motion){
+  const b=camPose(), pos0=b.pos.clone(), tgt0=b.tgt.clone(), fov0=b.fov;
+  let pos1=pos0.clone(), tgt1=tgt0.clone(), fov1=fov0, special=null;
+  const fwd=tgt0.clone().sub(pos0); const dist=Math.max(0.3,fwd.length()); fwd.normalize();
+  const up=new THREE.Vector3(0,1,0), right=fwd.clone().cross(up).normalize();
+  const { kind:k, dir } = motion;
+  switch(k){
+    case 'static': case 'timelapse': case 'tilt-shift': break;
+    case 'pan': case 'whip-pan': tgt1=rotY(tgt0,pos0,(k==='whip-pan'?0.95:0.5)*(dir==='left'?1:-1)); break;   // rotate in place
+    case 'tilt': tgt1=rotAxis(tgt0,pos0,right,0.4*(dir==='up'?1:-1)); break;                                  // rotate in place
+    case 'zoom': case 'crash-zoom': { const f=dir==='in'?(k==='crash-zoom'?0.45:0.62):(k==='crash-zoom'?2.0:1.55); fov1=THREE.MathUtils.clamp(fov0*f,6,90); break; } // fov only
+    case 'infinite-zoom': fov1=fov0*0.5; break;                                                               // fov only, position fixed
+    case 'dolly': case 'fpv': pos1=pos0.clone().addScaledVector(fwd, dist*0.45*(dir==='out'?-1:1)); break;    // translate along look axis
+    case 'push-past': case 'pass-through': pos1=pos0.clone().addScaledVector(fwd, dist*0.7); break;
+    case 'truck': case 'slider': { const amt=k==='slider'?0.4:1.1, s=dir==='right'?1:-1, d=right.clone().multiplyScalar(amt*s); pos1=pos0.clone().add(d); tgt1=tgt0.clone().add(d); break; } // parallel sideways
+    case 'pedestal': { const s=dir==='up'?1:-1, d=up.clone().multiplyScalar(0.7*s); pos1=pos0.clone().add(d); tgt1=tgt0.clone().add(d); break; } // vertical
+    case 'crane': pos1=pos0.clone().add(up.clone().multiplyScalar(1.3*(dir==='up'?1:-1))); break;             // fly, keep looking at subject
+    case 'drone': pos1=pos0.clone().addScaledVector(fwd,dist*0.55*(dir==='in'?1:-1)).add(up.clone().multiplyScalar(0.5)); break;
+    case 'earth-zoom': pos1=pos0.clone().add(up.clone().multiplyScalar(3.2)); fov1=fov0*1.5; break;
+    case 'helicopter': special='heli'; break;
+    case 'arc': special=dir==='left'?'arcL':'arcR'; break;
+    case 'orbit': special=dir==='ccw'?'orbCcw':'orbCw'; break;
+    case 'handheld': special='hand'; break;
+    case 'snorricam': special='snorri'; break;
+    // tracking family — camera translates while keeping the STATIC subject framed
+    case 'track': case 'side-track': case 'vehicle-track': { const s=dir==='left'?-1:1; pos1=pos0.clone().add(right.clone().multiplyScalar(1.2*s)); tgt1=tgt0.clone(); break; }
+    case 'low-track': { const s=dir==='left'?-1:1; pos1=pos0.clone().add(right.clone().multiplyScalar(1.2*s)).add(up.clone().multiplyScalar(-0.4)); tgt1=tgt0.clone(); break; }
+    case 'follow': pos1=pos0.clone().addScaledVector(fwd,dist*0.4); tgt1=tgt0.clone(); break;
+    case 'reverse-track': pos1=pos0.clone().addScaledVector(fwd,-dist*0.4); tgt1=tgt0.clone(); break;
+    case 'chase': pos1=pos0.clone().addScaledVector(fwd,dist*0.55); tgt1=tgt0.clone(); break;
+  }
+  return { motion, pos0,tgt0,fov0, pos1,tgt1,fov1, special };
+}
+function poseAt(plan,u,raw){
+  const e=raw?u:easeIO(u); let pos,tgt,fov=plan.fov0;
+  if (plan.special){
+    switch(plan.special){
+      case 'orbCw': pos=rotY(plan.pos0,plan.tgt0,-1.4*e); tgt=plan.tgt0.clone(); break;
+      case 'orbCcw': pos=rotY(plan.pos0,plan.tgt0, 1.4*e); tgt=plan.tgt0.clone(); break;
+      case 'arcL': pos=rotY(plan.pos0,plan.tgt0, 0.6*e); tgt=plan.tgt0.clone(); break;
+      case 'arcR': pos=rotY(plan.pos0,plan.tgt0,-0.6*e); tgt=plan.tgt0.clone(); break;
+      case 'heli': pos=rotY(plan.pos0,plan.tgt0,0.6*e).add(new THREE.Vector3(0,1.2*e,0)); tgt=plan.tgt0.clone(); break;
+      case 'hand': pos=plan.pos0.clone().add(new THREE.Vector3(Math.sin(u*22)*0.02,Math.cos(u*18)*0.02,Math.sin(u*15)*0.02)); tgt=plan.tgt0.clone().add(new THREE.Vector3(Math.sin(u*19)*0.01,0,0)); break;
+      case 'snorri': pos=plan.pos0.clone().add(new THREE.Vector3(Math.sin(u*10)*0.015,Math.abs(Math.sin(u*12))*0.03,0)); tgt=plan.tgt0.clone(); break;
+      default: pos=plan.pos0.clone(); tgt=plan.tgt0.clone();
+    }
+  } else { pos=plan.pos0.clone().lerp(plan.pos1,e); tgt=plan.tgt0.clone().lerp(plan.tgt1,e); fov=plan.fov0+(plan.fov1-plan.fov0)*e; }
+  return { pos, tgt, fov };
+}
+function applyCam(c){ camera.position.copy(c.pos); camera.fov=c.fov; camera.updateProjectionMatrix(); camera.lookAt(c.tgt); }
+
+// ── keyframe timeline (the single source of truth) ──
+let tlCam = [];          // [{id,t,pos,tgt,fov}]
+let tlObj = {};          // { objId: [{id,t,px,py,pz,rx,ry,rz,scale}] }
+let head = 0;            // playhead 0..1
+let kfSeq = 0;
+let selKey = null;       // { track:'camera'|objId, id } — the keyframe being edited
+// Live-edit: while a camera key is selected and the playhead sits on it, any orbit /
+// slider change re-writes that key (called from apply()).
+function rekeySelectedCam(){
+  if (!selKey || selKey.track!=='camera' || playing || capturing || recording) return;
+  const k=tlCam.find(x=>x.id===selKey.id); if (!k || Math.abs(k.t-head)>0.03) return;
+  const c=camPose(); k.pos.copy(c.pos); k.tgt.copy(c.tgt); k.fov=c.fov;
+}
+function sortT(a){ return a.slice().sort((x,y)=>x.t-y.t); }
+function lerpTrack(arr, u, fn){
+  if (!arr || !arr.length) return null;
+  const s=sortT(arr);
+  if (u<=s[0].t) return fn(s[0], s[0], 0);
+  if (u>=s[s.length-1].t) return fn(s[s.length-1], s[s.length-1], 0);
+  for (let i=0;i<s.length-1;i++){ if (u>=s[i].t && u<=s[i+1].t){ const seg=(u-s[i].t)/Math.max(1e-6,(s[i+1].t-s[i].t)); return fn(s[i], s[i+1], easeIO(seg)); } }
+  return fn(s[s.length-1], s[s.length-1], 0);
+}
+function sampleTLCam(u){ return lerpTrack(tlCam, u, (a,b,e)=>({ pos:a.pos.clone().lerp(b.pos,e), tgt:a.tgt.clone().lerp(b.tgt,e), fov:a.fov+(b.fov-a.fov)*e })); }
+function sampleTLObj(objId,u){ return lerpTrack(tlObj[objId], u, (a,b,e)=>({ px:a.px+(b.px-a.px)*e, py:a.py+(b.py-a.py)*e, pz:a.pz+(b.pz-a.pz)*e, rx:(a.rx||0)+((b.rx||0)-(a.rx||0))*e, ry:a.ry+(b.ry-a.ry)*e, rz:(a.rz||0)+((b.rz||0)-(a.rz||0))*e, scale:a.scale+(b.scale-a.scale)*e })); }
+function camPoseAt(u){ const c=sampleTLCam(u); if (c) return c; const p=camPose(); return { pos:p.pos, tgt:p.tgt, fov:camera.fov }; }
+function applyActiveAt(u){
+  if (tlCam.length) applyCam(camPoseAt(u));
+  for (const objId of Object.keys(tlObj)){ const o=getObj(objId), s=sampleTLObj(objId,u); if (o&&s){ o.group.position.set(s.px,s.py,s.pz); o.group.rotation.set(THREE.MathUtils.degToRad(s.rx||0),THREE.MathUtils.degToRad(s.ry),THREE.MathUtils.degToRad(s.rz||0)); o.group.scale.setScalar(s.scale); } }
+  if (boxHelper) boxHelper.update();
+}
+function hasMoveContent(){ return tlCam.length>=1 || Object.values(tlObj).some(a=>a.length>=1); }
+
+// A preset SEEDS the camera track: sample its plan into visible, draggable keys.
+// Curved moves (orbit / arc / heli / handheld / snorricam) get intermediates so the
+// interpolated path reads true; everything else is a clean start → end pair.
+function seedPreset(motion){
+  const plan=buildPlan(motion);
+  const curved = plan.special && ['orbCw','orbCcw','arcL','arcR','heli','hand','snorri'].includes(plan.special);
+  const N = curved ? 7 : 2;
+  tlCam = []; selKey = null;
+  for (let i=0;i<N;i++){ const t=i/(N-1); const p=poseAt(plan,t,true);
+    tlCam.push({ id:'k'+(kfSeq++), t, pos:p.pos.clone(), tgt:p.tgt.clone(), fov:p.fov }); }
+  head=0; applyActiveAt(0); postTimeline();
+}
+// Snap the playhead to a keyframe AND make it editable: for camera keys we re-derive
+// the orbit rig so the sliders/drag continue smoothly (and live-rekey this key).
+function seekKey(track,id){
+  const arr = track==='camera'?tlCam:tlObj[track]; if(!arr) return;
+  const k=arr.find(x=>x.id===id); if(!k) return;
+  selKey={ track, id }; head=k.t;
+  if (track==='camera'){ syncOrbitFromCam(k.pos,k.tgt,k.fov); apply(); }
+  else { applyActiveAt(head); }
+  postTimeline();
+}
+
+function postTimeline(){
+  post('hjen:fs-timeline', { duration, head:+head.toFixed(4), selKey,
+    camera: tlCam.map(k=>({ id:k.id, t:+k.t.toFixed(4) })),
+    objectId: selectedId, object: (selectedId&&tlObj[selectedId]) ? tlObj[selectedId].map(k=>({ id:k.id, t:+k.t.toFixed(4) })) : [] });
+}
+function addKey(track){
+  let id='k'+(kfSeq++);
+  if (track==='camera'){ const c=camPose(); tlCam=tlCam.filter(k=>Math.abs(k.t-head)>0.02); tlCam.push({ id, t:head, pos:c.pos.clone(), tgt:c.tgt.clone(), fov:c.fov }); }
+  else { const o=getObj(track); if(!o) return; if(!tlObj[track])tlObj[track]=[]; tlObj[track]=tlObj[track].filter(k=>Math.abs(k.t-head)>0.02);
+    tlObj[track].push({ id, t:head, px:o.group.position.x, py:o.group.position.y, pz:o.group.position.z, rx:THREE.MathUtils.radToDeg(o.group.rotation.x), ry:THREE.MathUtils.radToDeg(o.group.rotation.y), rz:THREE.MathUtils.radToDeg(o.group.rotation.z), scale:o.group.scale.x }); }
+  selKey={ track, id };   // the just-added key is selected, ready to edit / delete
+  postTimeline();
+}
+function delKey(track,id){ if (track==='camera') tlCam=tlCam.filter(k=>k.id!==id); else if (tlObj[track]) tlObj[track]=tlObj[track].filter(k=>k.id!==id); if (selKey&&selKey.id===id) selKey=null; postTimeline(); }
+function moveKey(track,id,t){ const arr = track==='camera'?tlCam:tlObj[track]; if(!arr) return; const k=arr.find(x=>x.id===id); if(!k) return; k.t=THREE.MathUtils.clamp(t,0,1); selKey={ track, id }; head=k.t; applyActiveAt(head); postTimeline(); }
+function clearTimeline(){ tlCam=[]; tlObj={}; selKey=null; postTimeline(); }
+function seekTo(u){ head=THREE.MathUtils.clamp(u,0,1); applyActiveAt(head); postTimeline(); }
+
+// real-time playback — renders EVERY frame (the Phase-2 bug was: it didn't render live)
+let playHandle=0;
+function stopMove(){ playing=false; if (playHandle) cancelAnimationFrame(playHandle); playHandle=0; if (transformControls && selectedId) transformControls.enabled=true; }
+function playMove(loop){
+  if (!hasMoveContent()){ post('hjen:fs-play',{ ok:false, reason:'no-move' }); return; }
+  stopMove(); playing=true; if (transformControls) transformControls.enabled=false; const t0=performance.now();
+  (function step(){
+    if (!playing) return;
+    let el=(performance.now()-t0)/(duration*1000);
+    if (el>=1 && !loop){ head=1; applyActiveAt(1); updateMirrors(); renderer.render(scene,camera); playing=false; postTimeline(); post('hjen:fs-play',{ ok:true, done:true }); return; }
+    head = loop ? (el%1) : Math.min(el,1);
+    applyActiveAt(head); updateMirrors(); renderer.render(scene,camera);   // ← interpolate the timeline live, every frame
+    post('hjen:fs-playhead', { head:+head.toFixed(4) });
+    playHandle=requestAnimationFrame(step);
+  })();
+  post('hjen:fs-play',{ ok:true });
+}
+
+function pickRecMime(){ for (const m of ['video/mp4;codecs=avc1','video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm']) if (window.MediaRecorder && MediaRecorder.isTypeSupported(m)) return m; return 'video/webm'; }
+function recordMove(){
+  return new Promise((resolve)=>{
+    if (!window.MediaRecorder){ resolve({ dataUrl:null, mime:null }); return; }
+    const mime=pickRecMime(), stream=renderer.domElement.captureStream(30), rec=new MediaRecorder(stream,{ mimeType:mime, videoBitsPerSecond:5_000_000 });
+    const chunks=[]; rec.ondataavailable=e=>{ if(e.data&&e.data.size) chunks.push(e.data); };
+    rec.onstop=()=>{ const blob=new Blob(chunks,{type:mime}); const fr=new FileReader(); fr.onload=()=>resolve({ dataUrl:fr.result, mime }); fr.readAsDataURL(blob); };
+    const gzWas=transformControls.visible; transformControls.visible=false;   // keep the gizmo out of the recorded clip
+    recording=true; recEl.style.display='flex'; rec.start(); const t0=performance.now();
+    (function step(){ const u=Math.min(1,(performance.now()-t0)/(duration*1000)); applyActiveAt(u); updateMirrors(); renderer.render(scene,camera);
+      if (u>=1){ setTimeout(()=>{ rec.stop(); recording=false; recEl.style.display='none'; transformControls.visible=gzWas; }, 160); } else requestAnimationFrame(step); })();
+  });
+}
+// Export EXACTLY the keyframes on the timeline — their times, poses and fov — plus
+// per-object tracks. The move's duration_s is the timeline span; key.t (0..1) × span
+// is the real time of each key, so dragging keys = retiming = speed control.
+function movePath(){
+  const keys=sortT(tlCam);
+  const path=keys.map(k=>({ t:+k.t.toFixed(4), position:k.pos.toArray().map(n=>+n.toFixed(4)), target:k.tgt.toArray().map(n=>+n.toFixed(4)), fov:+k.fov.toFixed(3) }));
+  const subject_path=[];
+  for (const objId of Object.keys(tlObj)){ for (const k of sortT(tlObj[objId])) subject_path.push({ obj_id:objId, t:+k.t.toFixed(4), position:[+k.px.toFixed(3),+k.py.toFixed(3),+k.pz.toFixed(3)], rotation_deg:Math.round(k.ry), rotation_deg_xyz:[Math.round(k.rx||0),Math.round(k.ry),Math.round(k.rz||0)], scale:+k.scale.toFixed(3) }); }
+  return { id: armedMeta ? armedMeta.presetId : 'timeline', t:0, frame_index:0, frame_count:path.length, duration_s:+duration.toFixed(2), path, subject_path };
+}
+async function captureMove(){
+  if (!hasMoveContent()){ post('hjen:fs-capture', { error:'Add camera keyframes (or pick a movement preset) before locking a move.' }); return; }
+  stopMove();
+  applyActiveAt(0);
+  const still=captureStills();
+  const mpath=movePath();
+  const clip=await recordMove();
+  applyActiveAt(0);
+  still.camera.vocab.movement_id = armedMeta ? armedMeta.presetId : 'timeline';
+  still.camera.vocab.move_code = armedMeta && armedMeta.kind ? armedMeta.kind : 'keyframes';
+  still.camera.move = mpath;
+  post('hjen:fs-capture', { ...still, clip:clip.dataUrl, clipMime:clip.mime, hasMove:true });
+}
+
+// ── preset thumbnails (camera-only) rendered from OUR stage ──
+function renderPresetThumbs(list){
+  const out=[], W=256, H=160; recording=true;
+  const gzWas = transformControls.visible; transformControls.visible=false;
+  renderer.setSize(W,H,false); camera.aspect=W/H; camera.updateProjectionMatrix(); if (boxHelper) boxHelper.visible=false;
+  for (const it of list){ const plan=buildPlan(it.motion); applyCam(poseAt(plan,0.55)); updateMirrors(); renderer.render(scene,camera); out.push({ id:it.id, dataUrl:renderer.domElement.toDataURL('image/png') }); }
+  if (boxHelper) boxHelper.visible=true; transformControls.visible=gzWas;
+  recording=false; fitViewport(); apply();
+  post('hjen:fs-preset-thumbs', { items: out });
+}
+
+// ── Pose from image (LOCAL, offline) ──
+// A vendored MediaPipe Pose Landmarker (Tasks Vision, WASM + .task) estimates 3D
+// body landmarks fully on-device. Everything loads from disk over hjen-file://:
+// the wasm loader + binary become blob URLs (script-injected + Emscripten-fetched)
+// and the model is fed as an in-memory buffer — ZERO network, CSP-safe under
+// file://. worldLandmarks (metric, hips-centred) → mannequin.setPoseFromJoints().
+let poseLandmarker = null, poseBusy = false;
+const POSE_IDX = { nose:0, left_shoulder:11, right_shoulder:12, left_elbow:13, right_elbow:14,
+  left_wrist:15, right_wrist:16, left_hip:23, right_hip:24, left_knee:25, right_knee:26,
+  left_ankle:27, right_ankle:28, left_foot:31, right_foot:32 };
+async function fetchBytes(url){ const r = await fetch(url); if(!r.ok) throw new Error('fetch '+r.status+' '+url); return r.arrayBuffer(); }
+async function initPose(urls){
+  if (poseLandmarker) return { ok:true, already:true };
+  const [loaderBuf, wasmBuf, modelBuf] = await Promise.all([ fetchBytes(urls.loaderUrl), fetchBytes(urls.wasmUrl), fetchBytes(urls.modelUrl) ]);
+  const loaderUrl = URL.createObjectURL(new Blob([loaderBuf], { type:'text/javascript' }));
+  const wasmUrl   = URL.createObjectURL(new Blob([wasmBuf],   { type:'application/wasm' }));
+  const vision = await import('./assets/pose/vision_bundle.mjs');
+  poseLandmarker = await vision.PoseLandmarker.createFromOptions(
+    { wasmLoaderPath: loaderUrl, wasmBinaryPath: wasmUrl },
+    { baseOptions: { modelAssetBuffer: new Uint8Array(modelBuf) },
+      runningMode: 'IMAGE', numPoses: 1, minPoseDetectionConfidence: 0.5, outputSegmentationMasks: false });
+  return { ok:true, model:'pose_landmarker_full', modelBytes: modelBuf.byteLength };
+}
+function loadImage(src){ return new Promise((res, rej) => { const im = new Image(); im.crossOrigin='anonymous'; im.onload=()=>res(im); im.onerror=()=>rej(new Error('image load failed')); im.src=src; }); }
+async function poseFromImage(urls){
+  if (poseBusy) return; poseBusy = true;
+  try {
+    const initR = await initPose(urls);
+    const img = await loadImage(urls.imageUrl);
+    const res = poseLandmarker.detect(img);
+    const wl = res && res.worldLandmarks && res.worldLandmarks[0];
+    if (!wl || !wl.length){ post('hjen:fs-pose', { ok:false, reason:'No person detected in the image.' }); return; }
+    const J = {};
+    for (const k in POSE_IDX){ const p = wl[POSE_IDX[k]]; if (p) J[k] = { x:p.x, y:p.y, z:p.z, v:(p.visibility!=null?p.visibility:1) }; }
+    const pm = (getObj(selectedId) && getObj(selectedId).mann) ? getObj(selectedId) : primaryMann();
+    if (!pm || !pm.mann){ post('hjen:fs-pose', { ok:false, reason:'No stand-in on the stage.' }); return; }
+    const out = pm.mann.setPoseFromJoints(J);
+    if (!out.ok){ post('hjen:fs-pose', { ok:false, reason:out.reason || 'Could not read the pose.', landmarks: wl.length }); return; }
+    pm.poseInput = { kind:'joints', J };   // remember the exact input so a session restores this pose
+    // The LIMB pose retargets reliably; torso azimuth (yaw) does NOT — it rides on
+    // monocular depth, which is ambiguous, so we keep the figure facing the viewer
+    // (the right default for posing) and let the existing Rotation slider turn it.
+    if (boxHelper) boxHelper.update();
+    orbit.target = frameTarget(); apply(); postScene();
+    post('hjen:fs-pose', { ok:true, landmarks: wl.length, segments: out.segments, yawDeg: Math.round(out.yawDeg || 0), model: initR.model || 'pose_landmarker_full' });
+  } catch (err){
+    post('hjen:fs-pose', { ok:false, reason: String((err && err.message) || err) });
+  } finally { poseBusy = false; }
+}
+// ── Pose from HMR params (LOCAL, offline) ──
+// The recovery now runs in a Python sidecar (4D-Humans / HMR2.0) via the host
+// IPC — the host hands us the SMPL params + posed joints; we retarget rotations
+// onto the rig, INCLUDING the recovered global orientation, so a horizontal /
+// pitched / rotated body reads as such.
+function poseFromParams(params){
+  try {
+    const pm = (getObj(selectedId) && getObj(selectedId).mann) ? getObj(selectedId) : primaryMann();
+    if (!pm || !pm.mann){ post('hjen:fs-pose', { ok:false, reason:'No stand-in on the stage.' }); return; }
+    const out = pm.mann.setPoseFromParams(params);
+    if (!out.ok){ post('hjen:fs-pose', { ok:false, reason: out.reason || 'Could not read the body.' }); return; }
+    pm.poseInput = { kind:'params', params };   // remember the exact SMPL params so a session restores this pose
+    if (boxHelper) boxHelper.update();
+    orbit.target = frameTarget(); apply(); postScene();
+    post('hjen:fs-pose', { ok:true, segments: out.segments, model:'hmr2' });
+  } catch (err){
+    post('hjen:fs-pose', { ok:false, reason: String((err && err.message) || err) });
+  }
+}
+// dev diagnostic hook — lets a headless harness prove the HMR retarget offline in
+// a BUILT file:// instance without the React UI.
+window.__poseParamsSelfTest = (params) => {
+  try {
+    const pm = primaryMann(); const out = pm.mann.setPoseFromParams(params);
+    if (boxHelper) boxHelper.update(); orbit.target = frameTarget(); apply();
+    return { ok: out.ok, segments: out.segments, reason: out.reason };
+  } catch(e){ return { ok:false, reason:String((e&&e.message)||e) }; }
+};
+// dev diagnostic hook — lets a headless harness prove Phase 1/2 offline in a BUILT
+// file:// instance without the React UI: returns landmark count + resolved segments.
+window.__poseSelfTest = async (urls) => {
+  try {
+    await initPose(urls);
+    const img = await loadImage(urls.imageUrl);
+    const res = poseLandmarker.detect(img);
+    const wl = res && res.worldLandmarks && res.worldLandmarks[0];
+    if (!wl || !wl.length) return { ok:false, reason:'no person', landmarks:0 };
+    const J = {}; for (const k in POSE_IDX){ const p = wl[POSE_IDX[k]]; if (p) J[k]={ x:p.x, y:p.y, z:p.z, v:(p.visibility!=null?p.visibility:1) }; }
+    const pm = primaryMann(); const out = pm.mann.setPoseFromJoints(J);
+    if (boxHelper) boxHelper.update(); orbit.target = frameTarget(); apply();
+    return { ok:true, landmarks: wl.length, segments: out.segments, yawDeg: Math.round(out.yawDeg||0) };
+  } catch (e){ return { ok:false, reason:String((e&&e.message)||e) }; }
+};
+
+// ── session serialization ──
+// A COMPLETE, self-describing snapshot of the stage: every object (transform +
+// scale, plus mannequin height and the EXACT pose input — preset name, or the
+// image-recovered HMR params / MediaPipe joints so an image-derived pose restores
+// identically), the camera rig, mode, export aspect, and the whole keyframe
+// timeline. setSceneState rebuilds a stage that looks the same when overlaid.
+function getSceneState(){
+  const pm = primaryMann();
+  return {
+    schema: 'hjen.filmspace.session/1',
+    objects: objects.map(o => {
+      const base = {
+        id: o.id, type: o.type,
+        px:+o.group.position.x.toFixed(4), py:+o.group.position.y.toFixed(4), pz:+o.group.position.z.toFixed(4),
+        rx:+THREE.MathUtils.radToDeg(o.group.rotation.x).toFixed(3),
+        ry:+THREE.MathUtils.radToDeg(o.group.rotation.y).toFixed(3),
+        rz:+THREE.MathUtils.radToDeg(o.group.rotation.z).toFixed(3),
+        scale:+o.group.scale.x.toFixed(4),
+      };
+      if (o.type === 'mannequin' && o.mann){
+        base.height = +o.mann.height.toFixed(4);
+        base.pose = o.poseInput || { kind:'preset', name:o.mann.pose || 'stand' };
+      }
+      return base;
+    }),
+    selectedId,
+    figureHeight: +figH.toFixed(4),
+    figureRotation: pm ? +THREE.MathUtils.radToDeg(pm.group.rotation.y).toFixed(3) : 0,
+    mode,
+    captureAspect: captureAspect ? { w:captureAspect.w, h:captureAspect.h } : null,
+    camera: {
+      focalMm: +focalMm.toFixed(3), yaw: +orbit.yaw.toFixed(6), dist: +orbit.dist.toFixed(4), camY: +orbit.camY.toFixed(4),
+      target: [ +orbit.target.x.toFixed(4), +orbit.target.y.toFixed(4), +orbit.target.z.toFixed(4) ], fov: +camera.fov.toFixed(4),
+    },
+    timeline: {
+      duration: +duration.toFixed(3), head: +head.toFixed(4),
+      armedMeta: armedMeta ? { presetId: armedMeta.presetId, kind: armedMeta.kind } : null,
+      selKey: selKey ? { track: selKey.track, id: selKey.id } : null,
+      camera: tlCam.map(k => ({ id:k.id, t:+k.t.toFixed(4), pos:k.pos.toArray().map(n=>+n.toFixed(4)), tgt:k.tgt.toArray().map(n=>+n.toFixed(4)), fov:+k.fov.toFixed(3) })),
+      objects: Object.fromEntries(Object.keys(tlObj).map(id => [id, tlObj[id].map(k => ({ id:k.id, t:+k.t.toFixed(4), px:+(+k.px).toFixed(3), py:+(+k.py).toFixed(3), pz:+(+k.pz).toFixed(3), rx:+(+(k.rx||0)).toFixed(2), ry:+(+k.ry).toFixed(2), rz:+(+(k.rz||0)).toFixed(2), scale:+(+k.scale).toFixed(3) }))])),
+    },
+  };
+}
+// Bump the id sequences past any restored ids so freshly-added objects / keyframes
+// never collide with a restored id.
+function bumpSeqs(){
+  for (const o of objects){ const n=parseInt(String(o.id).replace('obj-',''),36); if(!isNaN(n)) idSeq=Math.max(idSeq,n+1); }
+  const ks=[...tlCam.map(k=>k.id), ...Object.values(tlObj).reduce((a,b)=>a.concat(b),[]).map(k=>k.id)];
+  for (const id of ks){ const mt=/^k(\d+)$/.exec(String(id)); if(mt) kfSeq=Math.max(kfSeq, parseInt(mt[1],10)+1); }
+}
+async function setSceneState(s){
+  if (!s) return;
+  stopMove();
+  clearAllObjects();
+  // rebuild objects, preserving ids so the timeline tracks re-bind
+  for (const od of (s.objects || [])){
+    const rec = await addObject(od.type, { id: od.id, noSelect: true });
+    if (!rec) continue;
+    rec.group.position.set(od.px||0, od.py||0, od.pz||0);
+    rec.group.rotation.set(THREE.MathUtils.degToRad(od.rx||0), THREE.MathUtils.degToRad(od.ry||0), THREE.MathUtils.degToRad(od.rz||0));
+    rec.group.scale.setScalar(od.scale || 1);
+    if (rec.mann){
+      if (od.height) rec.mann.setHeight(od.height);   // re-applies the current pose at the new scale
+      const pi = od.pose;
+      try {
+        if (pi && pi.kind === 'params') rec.mann.setPoseFromParams(pi.params);
+        else if (pi && pi.kind === 'joints') rec.mann.setPoseFromJoints(pi.J);
+        else if (pi && pi.kind === 'preset') rec.mann.setPose(pi.name || 'stand');
+        else if (typeof pi === 'string') rec.mann.setPose(pi);
+      } catch(err){ /* fall back to whatever the build left */ }
+      rec.poseInput = pi || { kind:'preset', name: rec.mann.pose || 'stand' };
+    }
+  }
+  if (s.figureHeight) figH = s.figureHeight;
+  // timeline
+  const tcam = (s.timeline && s.timeline.camera) || [];
+  tlCam = tcam.map(k => ({ id:k.id, t:k.t, pos:new THREE.Vector3(k.pos[0],k.pos[1],k.pos[2]), tgt:new THREE.Vector3(k.tgt[0],k.tgt[1],k.tgt[2]), fov:k.fov }));
+  tlObj = {};
+  const tobj = (s.timeline && s.timeline.objects) || {};
+  for (const id in tobj) tlObj[id] = tobj[id].map(k => ({ ...k }));
+  duration = (s.timeline && s.timeline.duration) || 5;
+  armedMeta = (s.timeline && s.timeline.armedMeta) ? { presetId:s.timeline.armedMeta.presetId, kind:s.timeline.armedMeta.kind } : null;
+  head = (s.timeline && s.timeline.head) || 0;
+  selKey = (s.timeline && s.timeline.selKey) || null;
+  bumpSeqs();
+  // mode + export aspect
+  mode = s.mode || 'frame';
+  setCaptureAspect(s.captureAspect ? s.captureAspect.w : 0, s.captureAspect ? s.captureAspect.h : 0);
+  // camera rig — restore the free-orbit pose the snapshot was framed at
+  if (s.camera){
+    orbit.yaw = s.camera.yaw || 0; orbit.dist = s.camera.dist || 3.6; orbit.camY = s.camera.camY || 1.08;
+    orbit.target.set(s.camera.target[0], s.camera.target[1], s.camera.target[2]);
+    setFocal(s.camera.focalMm || 50);   // calls apply()
+  } else apply();
+  // selection + gizmo
+  selectedId = null;
+  if (s.selectedId && getObj(s.selectedId)) select(s.selectedId);
+  else post('hjen:fs-select', null);
+  post('hjen:fs-armed', { presetId: armedMeta ? armedMeta.presetId : null });
+  postScene(); postTimeline(); pushReadout();
+}
+// A fresh stage: one primary stand-in, default camera, empty timeline, frame mode.
+async function newScene(){
+  stopMove();
+  clearAllObjects();
+  armedMeta = null; duration = 5; mode = 'frame';
+  setCaptureAspect(0, 0);
+  await addObject('mannequin', { noSelect: true }); if (objects[0]) objects[0].isPrimary = true;
+  selectedId = null; if (boxHelper){ scene.remove(boxHelper); boxHelper = null; } detachGizmo();
+  orbit = { yaw:0, dist:3.6, camY:1.08, target:frameTarget() };
+  setFocal(50);
+  post('hjen:fs-armed', { presetId:null });
+  post('hjen:fs-select', null);
+  postScene(); postTimeline(); pushReadout();
+}
+// A small offscreen render of the current framing for the session tile. Restores
+// the live viewport + framing afterwards.
+function captureThumb(){
+  try {
+    const W=384, H=240, prevPR=renderer.getPixelRatio();
+    const gzWas=transformControls.visible; transformControls.visible=false;
+    const bWas=boxHelper?boxHelper.visible:false; if (boxHelper) boxHelper.visible=false;
+    renderer.setPixelRatio(1); renderer.setSize(W,H,false); camera.aspect=W/H; camera.updateProjectionMatrix();
+    updateMirrors(); renderer.render(scene,camera);
+    const url=renderer.domElement.toDataURL('image/png');
+    transformControls.visible=gzWas; if (boxHelper) boxHelper.visible=bWas;
+    renderer.setPixelRatio(prevPR); fitViewport(); apply();
+    return url;
+  } catch(err){ return null; }
+}
+
+// ── host protocol ──
+addEventListener('message', e => {
+  const m=e.data; if (!m || !m.cmd) return;
+  switch(m.cmd){
+    case 'setFocal': setFocal(m.mm); break;
+    case 'setCamHeight': orbit.camY=THREE.MathUtils.clamp(m.y,0.05,figH*2.6); apply(); break;
+    case 'setDistance': orbit.dist=THREE.MathUtils.clamp(m.d,0.6,30); apply(); break;
+    case 'setFigureHeight': {
+      figH=THREE.MathUtils.clamp(m.h,0.6,2.4); const pm=primaryMann();
+      if (pm && pm.mann){ pm.mann.setHeight(figH); if (selectedId===pm.id && boxHelper) boxHelper.update(); }
+      orbit.target=frameTarget(); apply(); break; }
+    case 'setFigureRotation': { const pm=primaryMann(); if (pm) pm.group.rotation.y=THREE.MathUtils.degToRad(m.deg); if (boxHelper) boxHelper.update(); apply(); postScene(); break; }
+    case 'setPose': { const o=(getObj(selectedId)&&getObj(selectedId).mann)?getObj(selectedId):primaryMann(); if (o&&o.mann){ o.mann.setPose(m.pose); o.poseInput={ kind:'preset', name:m.pose }; if (boxHelper) boxHelper.update(); } apply(); postScene(); break; }
+    case 'addObject': addObject(m.objType); break;
+    case 'deleteObject': deleteObject(m.id); break;
+    case 'selectObject': select(m.id); break;
+    case 'setObjTransform': { const o=getObj(m.id); if (o){ if(m.px!=null)o.group.position.x=m.px; if(m.py!=null)o.group.position.y=m.py; if(m.pz!=null)o.group.position.z=m.pz; if(m.rx!=null)o.group.rotation.x=THREE.MathUtils.degToRad(m.rx); if(m.ry!=null)o.group.rotation.y=THREE.MathUtils.degToRad(m.ry); if(m.rz!=null)o.group.rotation.z=THREE.MathUtils.degToRad(m.rz); if(m.scale!=null)o.group.scale.setScalar(m.scale); if (boxHelper) boxHelper.update(); if (o.type==='mannequin') orbit.target=frameTarget(); apply(); postScene();
+      // live-edit a selected object key with the Transform sliders
+      if (selKey && selKey.track===m.id){ const arr=tlObj[m.id]; const k=arr&&arr.find(x=>x.id===selKey.id);
+        if (k && Math.abs(k.t-head)<0.03){ k.px=o.group.position.x; k.py=o.group.position.y; k.pz=o.group.position.z; k.rx=THREE.MathUtils.radToDeg(o.group.rotation.x); k.ry=THREE.MathUtils.radToDeg(o.group.rotation.y); k.rz=THREE.MathUtils.radToDeg(o.group.rotation.z); k.scale=o.group.scale.x; postTimeline(); } }
+    } break; }
+    case 'setCaptureAspect': setCaptureAspect(m.w, m.h); break;
+    case 'clearCaptureAspect': setCaptureAspect(0, 0); break;
+    case 'setMode': mode=m.mode; if (mode==='frame') stopMove(); break;
+    case 'setDuration': duration=THREE.MathUtils.clamp(m.sec,2,20); postTimeline(); break;
+    case 'armPreset': armedMeta={ presetId:m.presetId, kind:m.motion&&m.motion.kind }; seedPreset(m.motion); post('hjen:fs-armed',{ presetId:m.presetId }); break;
+    case 'clearMove': armedMeta=null; clearTimeline(); stopMove(); apply(); post('hjen:fs-armed',{ presetId:null }); break;
+    case 'addKey': addKey(m.track); break;
+    case 'delKey': delKey(m.track, m.id); break;
+    case 'moveKey': moveKey(m.track, m.id, m.t); break;
+    case 'selectKey': selKey = m.id ? { track:m.track, id:m.id } : null; break;
+    case 'seekKey': seekKey(m.track, m.id); break;
+    case 'seek': seekTo(m.u); break;
+    case 'clearTimeline': clearTimeline(); break;
+    case 'playMove': playMove(m.loop!==false); break;
+    // On stop, adopt the current playback pose into the orbit rig BEFORE apply() so
+    // the frame is held (no snap back to the pre-play framing) and later edits are smooth.
+    case 'stopMove': { const s=sampleTLCam(head); if (s) syncOrbitFromCam(camera.position.clone(), s.tgt, camera.fov); stopMove(); apply(); break; }
+    case 'reset': stopMove(); armedMeta=null; selKey=null; clearTimeline(); orbit={ yaw:0, dist:3.6, camY:1.08, target:frameTarget() }; { const pm=primaryMann(); if (pm){ pm.group.rotation.y=0; pm.mann.setPose('stand'); pm.poseInput={ kind:'preset', name:'stand' }; } } setFocal(50); postScene(); break;
+    case 'getSceneState': { const state=getSceneState(); const thumb = (m.withThumb!==false) ? captureThumb() : null; post('hjen:fs-scene-state', { token:m.token, state, thumb }); break; }
+    case 'setSceneState': setSceneState(m.state); break;
+    case 'newScene': newScene(); break;
+    case 'initPose': initPose(m.urls).then(r=>post('hjen:fs-pose-init',{ ok:true, ...r })).catch(err=>post('hjen:fs-pose-init',{ ok:false, reason:String((err&&err.message)||err) })); break;
+    case 'poseFromImage': poseFromImage(m.urls); break;
+    case 'poseFromParams': poseFromParams(m.params); break;
+    case 'renderPresetThumbs': renderPresetThumbs(m.list||[]); break;
+    case 'capture': if (mode==='move') captureMove(); else post('hjen:fs-capture', captureStills()); break;
+  }
+});
+window.__filmspace = { addObject, captureStills, status:()=>({ ready:true, objects:objects.length }),
+  // dev diagnostic: confirms the GLB rig mapped and the COCO-17 joints resolve
+  debug:()=>{ const m=primaryMann(); if(!m||!m.mann) return null; const b=m.mann.bones||{};
+    const coco=m.mann.cocoWorld(); const c={}; for(const k in coco){ const v=coco[k]; c[k]=[+v.x.toFixed(2),+v.y.toFixed(2),+v.z.toFixed(2)]; }
+    return { bones:Object.keys(b), missing:['shoulderL','shoulderR','hipL','kneeL','ankleL','elbowL','wristL','head'].filter(k=>!b[k]), coco:c }; },
+  // dev diagnostic: CSS-pixel screen positions of the selected object's gizmo — its
+  // origin and the +X/+Y/+Z axis tips ~0.9m out — so a headless harness can aim a
+  // drag at a real handle. Returns null when nothing is selected.
+  gizmo:()=>{ const o=getObj(selectedId); if(!o||!transformControls.visible) return null;
+    const proj=v=>{ const p=v.clone().project(camera); return { x:+((p.x*0.5+0.5)*innerWidth).toFixed(1), y:+((-p.y*0.5+0.5)*innerHeight).toFixed(1) }; };
+    const c=o.group.position.clone(), L=0.9;
+    return { mode:transformControls.mode, origin:proj(c),
+      x:proj(c.clone().add(new THREE.Vector3(L,0,0))), y:proj(c.clone().add(new THREE.Vector3(0,L,0))), z:proj(c.clone().add(new THREE.Vector3(0,0,L))) }; } };
+
+// ── boot ──
+await addObject('mannequin'); if (objects[0]) objects[0].isPrimary = true;
+selectedId = null; if (boxHelper){ scene.remove(boxHelper); boxHelper = null; }
+orbit.target = frameTarget(); setFocal(50);
+msg.style.display='none'; post('hjen:fs-ready', readout()); postScene(); postTimeline();
+(function loop(){ if (!capturing && !recording && !playing){ updateMirrors(); renderer.render(scene,camera); } requestAnimationFrame(loop); })();
+</script>
+</body>
+</html>

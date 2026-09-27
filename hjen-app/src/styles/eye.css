@@ -1,0 +1,184 @@
+/* The Eye · Bench. A measurement instrument, not a showroom: the frame on the
+ * left holds still, the read scrolls on the right, and every axis carries its
+ * own verdict. Deliberately NOT the Sorbet candy idiom — that is for hubs and
+ * client-facing surfaces; a bench needs to disappear behind what it is measuring.
+ *
+ * House law: every value is a token. One accent (--eye-accent) on substrates
+ * only; ink stays on the ink ramp. Chrome (.ca-top / .ca-back / .ca-btn) is
+ * inherited from contextagents.css — the Eye is that family's next surface.
+ */
+
+.eye {
+  position: fixed;
+  inset: 0;
+  top: var(--top-chrome-h, 56px);
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--ink);
+  overflow: hidden;
+  font-family: var(--font-sans);
+  --eye-accent: var(--sky);
+  --eye-substrate: rgba(255, 255, 255, .035);
+}
+[data-shell="daylight"] .eye, [data-theme-base="light"] .eye { --eye-substrate: rgba(0, 0, 0, .04); }
+
+.eye-title { display: flex; flex-direction: column; gap: 2px; margin-inline-end: auto; }
+.eye-title__name { font-family: var(--font-serif); font-size: 18px; line-height: 1.2; }
+.eye-title__sub { color: var(--ink-muted); }
+.eye-golden { color: var(--ink-muted); white-space: nowrap; }
+
+.eye-body {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(320px, 38%) 1fr;
+  gap: var(--s-5);
+  padding: var(--s-5);
+  overflow: hidden;
+}
+@media (max-width: 980px) { .eye-body { grid-template-columns: 1fr; overflow: auto; } }
+
+/* ── left column — the frame under the glass ─────────────────────────────── */
+
+.eye-left {
+  display: flex; flex-direction: column; gap: var(--s-3);
+  min-height: 0; overflow-y: auto; padding-inline-end: var(--s-2);
+}
+
+.eye-drop {
+  position: relative;
+  display: grid; place-items: center;
+  min-height: 240px;
+  border: 1px dashed var(--line);
+  border-radius: var(--r-3);
+  background: var(--eye-substrate);
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.eye-drop.is-over { border-color: var(--eye-accent); background: color-mix(in srgb, var(--eye-accent) 8%, transparent); }
+.eye-drop.has-img { border-style: solid; cursor: default; padding: 0; }
+.eye-drop img { display: block; width: 100%; height: auto; max-height: 46vh; object-fit: contain; }
+.eye-drop__empty { text-align: center; padding: var(--s-6); }
+.eye-drop__hd { font-family: var(--font-serif); font-size: 18px; margin: 0 0 var(--s-2); }
+.eye-drop__empty .mono-label { color: var(--ink-muted); }
+
+/* two sources, equal weight: the disk and everything the studio has made */
+.eye-src { display: flex; gap: var(--s-2); }
+.eye-src .ca-btn { flex: 1 1 0; min-width: 0; }
+.eye-srcline {
+  margin: 0; color: var(--ink-muted);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.eye-field { display: flex; flex-direction: column; gap: var(--s-2); }
+.eye-field .mono-label { color: var(--ink-muted); }
+.eye-field textarea,
+.eye-field select {
+  width: 100%;
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--field-bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: var(--t-meta);
+  resize: vertical;
+}
+.eye-field textarea:focus-visible,
+.eye-field select:focus-visible { outline: 2px solid var(--eye-accent); outline-offset: 1px; }
+
+.eye-look { width: 100%; }
+.eye-meta { color: var(--ink-muted); margin: 0; }
+.eye-meta__thin { color: var(--job-interrupted, var(--sunflare)); }
+.eye-error {
+  margin: 0; padding: var(--s-3);
+  border: 1px solid color-mix(in srgb, var(--job-error) 40%, var(--line));
+  border-radius: var(--r-2);
+  background: color-mix(in srgb, var(--job-error) 10%, transparent);
+  font-size: var(--t-meta);
+}
+
+/* ── right column — the read ─────────────────────────────────────────────── */
+
+.eye-right { min-height: 0; overflow-y: auto; padding-inline-end: var(--s-2); }
+
+.eye-idle { max-width: 62ch; padding: var(--s-6) 0; }
+.eye-idle__lede { font-family: var(--font-serif); font-size: 20px; line-height: 1.5; margin: 0 0 var(--s-3); }
+.eye-idle__note { color: var(--ink-muted); line-height: 1.6; }
+
+.eye-layer { margin-bottom: var(--s-5); }
+.eye-layer__head {
+  display: flex; align-items: baseline; gap: var(--s-3);
+  padding-bottom: var(--s-2); margin-bottom: var(--s-3);
+  border-bottom: 1px solid var(--line);
+}
+.eye-layer__name { font-family: var(--font-serif); font-size: 17px; }
+.eye-layer__note { color: var(--ink-muted); }
+/* layer 3 is the one that decides whether this is an eye at all — mark it */
+.eye-layer--3 .eye-layer__head { border-bottom-color: color-mix(in srgb, var(--eye-accent) 45%, var(--line)); }
+.eye-layer--3 .eye-layer__name { color: var(--eye-accent); }
+
+.eye-axis {
+  padding: var(--s-3);
+  margin-bottom: var(--s-2);
+  border: 1px solid var(--line);
+  border-inline-start: 2px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--eye-substrate);
+  transition: border-color var(--t-fast) var(--ease);
+}
+.eye-axis.is-thin { border-inline-start-color: var(--job-interrupted, var(--sunflare)); }
+.eye-axis.is-ok { border-inline-start-color: var(--job-done); }
+.eye-axis.is-wrong { border-inline-start-color: var(--job-error); }
+
+.eye-axis__head { display: flex; align-items: flex-start; gap: var(--s-2); margin-bottom: var(--s-2); }
+/* name over grading-standard: the hint is what makes a ✓ mean the same thing
+ * on every frame, so it sits with the name, not in a tooltip */
+.eye-axis__id { display: flex; flex-direction: column; gap: 1px; min-width: 0; margin-inline-end: auto; }
+.eye-axis__name { font-family: var(--font-serif); font-size: 16px; line-height: 1.25; }
+.eye-axis__hint { color: var(--ink-muted); }
+.eye-axis__flag {
+  padding: 1px var(--s-2); border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--job-interrupted, var(--sunflare)) 18%, transparent);
+  color: var(--job-interrupted, var(--sunflare));
+}
+.eye-axis__grade { display: flex; gap: var(--s-1); flex: 0 0 auto; }
+.eye-g {
+  width: 26px; height: 26px;
+  display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: var(--r-1);
+  background: transparent; color: var(--ink-muted);
+  font-size: 13px; line-height: 1; cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.eye-g:hover { border-color: var(--line-strong); color: var(--ink); }
+.eye-g:focus-visible { outline: 2px solid var(--eye-accent); outline-offset: 1px; }
+.eye-g--ok.is-on { border-color: var(--job-done); color: var(--job-done); background: color-mix(in srgb, var(--job-done) 14%, transparent); }
+.eye-g--no.is-on { border-color: var(--job-error); color: var(--job-error); background: color-mix(in srgb, var(--job-error) 14%, transparent); }
+
+.eye-axis__line { margin: 0 0 var(--s-1); font-size: var(--t-meta); line-height: 1.6; }
+.eye-axis__line:last-of-type { margin-bottom: 0; }
+.eye-axis__none { color: var(--ink-muted); margin: 0; font-style: italic; }
+.eye-axis__fix {
+  width: 100%; margin-top: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid color-mix(in srgb, var(--job-error) 35%, var(--line));
+  border-radius: var(--r-2);
+  background: var(--field-bg); color: var(--ink);
+  font: inherit; font-size: var(--t-meta); resize: vertical;
+}
+.eye-axis__fix:focus-visible { outline: 2px solid var(--eye-accent); outline-offset: 1px; }
+
+/* ── sign bar ────────────────────────────────────────────────────────────── */
+
+.eye-sign {
+  position: sticky; bottom: 0; z-index: 2;
+  display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap;
+  padding: var(--s-4);
+  border: 1px solid var(--line); border-radius: var(--r-3);
+  background: color-mix(in srgb, var(--bg-elev) 92%, transparent);
+  backdrop-filter: blur(8px);
+}
+.eye-sign__count { color: var(--ink-muted); margin-inline-end: auto; }

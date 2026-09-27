@@ -1,0 +1,38 @@
+[
+  {
+    "id": "occasions.ramadan.001",
+    "dimension": "occasions",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["رمضان", "ramadan", "إفطار", "سحور", "فانوس", "iftar"],
+    "ar": "أكواد رمضان البصرية: ضوء المغرب البرتقالي على سفرة الإفطار، تمر وقهوة ولقيمات وشوربة، هدوء ما قبل الأذان ثم حياة، مصابيح دافئة وهلال خفيف — بلا مبالغة فوانيس مصرية. العاطفة: اجتماع، غياب من نفتقده، كرم.",
+    "en": "Ramadan visual codes: maghrib orange light on the iftar sufrah — dates, Saudi coffee, luqaimat, soup; the hush before the athan then life resuming; warm lamps and a subtle crescent — without Egyptian-lantern overload. The emotional register: gathering, the empty chair of someone missed, generosity.",
+    "negatives": ["Cairo fanous walls as Saudi default", "daytime eating scenes in a Ramadan context"],
+    "sources": ["seed:occasions"],
+    "weight": 2
+  },
+  {
+    "id": "occasions.eid.002",
+    "dimension": "occasions",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["عيد", "eid", "عيدية", "معايدة", "celebration"],
+    "ar": "العيد: ثياب جديدة وبشوت للكبار، عيدية بأظرف لامعة تنتقل ليد طفل، صواني معمول وشوكولاتة، زيارات صباحية متتالية، عناق جانبي وضحك. اللون يرتفع درجة عن المعتاد — فرح مضبوط لا كرنفال.",
+    "en": "Eid: new clothes and bishts on elders, eidiya cash in shiny envelopes passing to a child's hand, maamoul and chocolate trays, chained morning visits, side embraces and laughter. The palette lifts one notch warmer and brighter than baseline — measured joy, not carnival.",
+    "negatives": ["Christmas-style decoration logic", "generic party balloons replacing Eid specifics"],
+    "sources": ["seed:occasions"],
+    "weight": 2
+  },
+  {
+    "id": "occasions.national-days.003",
+    "dimension": "occasions",
+    "region": "ksa",
+    "era": "2020s",
+    "tags": ["اليوم الوطني", "يوم التأسيس", "national day", "founding day", "علم", "أخضر"],
+    "ar": "اليوم الوطني (سبتمبر): أخضر مقنن وعلم وفخر حاضر معاش — جدارية حي، شماغ أخضر على مرايا سيارة. يوم التأسيس (فبراير): تاريخي أعمق — لبس درعية قديم، بشوت تراثية، خط ديواني. لا تخلط هوية اليومين.",
+    "en": "Saudi National Day (September): controlled green, the flag, pride as lived present — a neighborhood mural, a green shemagh on a car mirror. Founding Day (February): deeper historical register — old Diriyah dress, heritage bishts, Diwani calligraphy. The two days have distinct identities; never blend them.",
+    "negatives": ["green-drowned frames where every pixel waves a flag", "Founding Day styled like National Day"],
+    "sources": ["seed:occasions"],
+    "weight": 2
+  }
+]

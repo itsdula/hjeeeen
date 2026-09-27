@@ -1,0 +1,19 @@
+{
+  "name": "hjen-studio-server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "HJEN Studio — gated web-demo backend (soft launch). Ports the desktop generation core behind an invitee gate with per-account quota + expiry + remote measurement. Zero runtime dependencies — runs on Node 18+ (or Electron's bundled node) with no install.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "cli": "node src/cli.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "onnxruntime-node": "^1.27.0",
+    "sharp": "^0.35.3"
+  }
+}

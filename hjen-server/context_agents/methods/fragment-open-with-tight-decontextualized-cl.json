@@ -1,0 +1,23 @@
+{
+  "id": "fragment-open-with-tight-decontextualized-cl",
+  "craft": "fragment",
+  "principle": "Open with tight, decontextualized close-ups of the body parts or details people obsess over, then gradually widen the frame to re-situate them as just one part of a whole person in a larger space.",
+  "when_it_works": {
+    "register": [
+      "longing"
+    ],
+    "beat": [
+      "setup"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Turn private insecurities into something visible and relatable, then gently diminish their power by literally zooming out.",
+  "evidence": [
+    "f14-dove — unknown register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f14-dove"
+}

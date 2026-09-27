@@ -1,0 +1,50 @@
+[
+  {
+    "id": "heritage.dallah-ritual.001",
+    "dimension": "heritage",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["قهوة", "دلة", "فنجال", "coffee", "dallah", "ضيافة", "hospitality"],
+    "ar": "القهوة السعودية طقس مضبوط: دلة نحاس مصقول على جمر حقيقي بدخان، فناجيل صغيرة بلا يد، الصب باليسار والتقديم باليمين، هيل ورائحة. الدلة تلمع بذهب النار — أقوى جسم ثقافي في الكادر.",
+    "en": "Saudi coffee is a precise ritual: polished brass dallah on REAL coals with smoke, small handleless finjan cups, pot held in the LEFT hand pouring, cup offered with the RIGHT. The brass catches firelight as gold — the strongest cultural object a frame can hold. Serve the eldest first.",
+    "negatives": ["electric stove under a dallah", "mug instead of finjan", "pouring hand etiquette reversed"],
+    "sources": ["seed:clay_basil"],
+    "weight": 3
+  },
+  {
+    "id": "heritage.saudi-objects.002",
+    "dimension": "heritage",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["أشياء", "objects", "props", "غرض", "cultural truth"],
+    "ar": "قانون الشيء السعودي: كل كادر يحمل غرضاً ثقافياً واحداً على الأقل غير قابل للترجمة — شماغ مطوي على الكنب، ترمس أصفر على طبلون، سجادة صلاة على حافة إسمنت، كرسي تخييم قماش أخضر. الغرض يُستعمل لا يُرتّب: مشروب نصفه ناقص، طين عليه بصمات.",
+    "en": "The Saudi Object law: every frame holds at least one culturally untranslatable object — a folded shemagh on the majlis sofa, a yellow thermos on a dashboard, a prayer rug on a concrete ledge, the green-canvas folding camping chair. Objects show USE, never arrangement: the drink half-finished, clay with fingerprints, bread tray with crumbs.",
+    "negatives": ["floating staged props", "souvenir-shop decoration standing in for lived objects"],
+    "sources": ["seed:clay_basil"],
+    "weight": 3
+  },
+  {
+    "id": "heritage.patterns.003",
+    "dimension": "heritage",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["سدو", "قط", "نقش", "sadu", "qatt", "pattern", "زخرفة"],
+    "ar": "الأنماط بأهلها: السدو نسيج بدوي هندسي بألوان صوف حقيقية — للمجالس والخيام؛ القط العسيري جداريات داخلية نسائية بألوان زاهية — لعسير حصراً. النمط في سياقه الحقيقي لا كورق جدران تسويقي.",
+    "en": "Patterns belong to their people: Sadu is Bedouin geometric weaving in real wool tones — on majlis cushions and tent dividers; Al-Qatt Al-Asiri is women-painted interior wall art — Asir region only. Use each pattern in its true context, never as marketing wallpaper on the wrong surface.",
+    "negatives": ["Sadu print on a Jeddah café wall for vibes", "Moroccan zellige standing in for Saudi pattern"],
+    "sources": ["seed:regional_vocab"],
+    "weight": 2
+  },
+  {
+    "id": "heritage.animals.004",
+    "dimension": "heritage",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["جمل", "خيل", "صقر", "camel", "horse", "falcon", "حيوان"],
+    "ar": "الحيوان رفيق لا خلفية: الجمل رمز محمّل (سباق بروبوت جوكي = تراث يتمكنن)، الخيل العربية شراكة وجمال بيد على الوجه. الصقر ممنوع افتراضياً — دخل قائمة الكليشيه إلا بطلب صريح وسياق صادق.",
+    "en": "Animals are COMPANIONS, not props: the camel is Saudi's most loaded symbol (racing with robot jockeys = tradition mechanized); the Arabian horse is partnership — a hand on its face in a heritage courtyard. The falcon is banned by default — it lives on the cliché list unless explicitly requested with an honest context.",
+    "negatives": ["falcon-on-glove postcard", "camel as static background decoration at a sunset"],
+    "sources": ["seed:clay_basil", "seed:kv_refusals"],
+    "weight": 2
+  }
+]

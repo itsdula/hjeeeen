@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HJEN Studio — Plans</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper:#efece3; --paper-2:#e6e1d3; --ink:#1b1a16; --muted:#6d685c; --muted-2:#8b8677;
+    --mark:#e7c948;
+    --serif:'Instrument Serif', Georgia, 'Times New Roman', serif;
+    --sans:-apple-system,'Segoe UI',Helvetica,Arial,system-ui,sans-serif;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans); min-height:100dvh; }
+  ::selection { background:var(--mark); color:var(--ink); }
+  .wrap { max-width:980px; margin:0 auto; padding:clamp(28px,5vw,64px) 20px 80px; }
+  .brand { font-family:var(--serif); font-size:24px; margin-bottom:38px; }
+  .brand b { font-weight:400; }
+  h1 { font-family:var(--serif); font-weight:400; font-size:clamp(34px,4.6vw,56px); line-height:1.04; margin:0 0 10px; letter-spacing:-.01em; }
+  .sub { color:var(--muted); font-size:15px; margin:0 0 30px; max-width:56ch; line-height:1.55; }
+  .cycle { display:inline-flex; border:1px solid var(--ink); border-radius:99px; overflow:hidden; margin-bottom:26px; font-size:13px; }
+  .cycle button { border:0; background:transparent; padding:8px 18px; cursor:pointer; font:inherit; color:var(--muted); }
+  .cycle button.on { background:var(--ink); color:var(--paper); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px; }
+  .card { background:var(--paper-2); border:1px solid rgba(27,26,22,.12); border-radius:14px; padding:24px; display:flex; flex-direction:column; }
+  .card.hi { border-color:var(--ink); box-shadow:0 1px 0 var(--ink); }
+  .badge { display:inline-block; background:var(--mark); border-radius:99px; padding:2px 10px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; margin-bottom:10px; width:fit-content; }
+  .name { font-family:var(--serif); font-size:26px; }
+  .tag { color:var(--muted); font-size:13px; margin:2px 0 14px; }
+  .price { font-size:34px; font-weight:600; letter-spacing:-.02em; }
+  .price small { font-size:13px; font-weight:400; color:var(--muted); }
+  .save { font-size:12px; color:var(--muted); min-height:16px; margin:2px 0 14px; }
+  ul { list-style:none; padding:0; margin:0 0 22px; font-size:13.5px; color:var(--muted); }
+  ul li { padding:4px 0 4px 18px; position:relative; }
+  ul li::before { content:'·'; position:absolute; left:4px; color:var(--ink); }
+  .cta { margin-top:auto; border:1px solid var(--ink); background:var(--ink); color:var(--paper); border-radius:10px; padding:12px 16px; font:inherit; font-size:14px; cursor:pointer; }
+  .cta.ghost { background:transparent; color:var(--ink); }
+  .cta[disabled] { opacity:.45; cursor:default; }
+  .note { margin-top:26px; font-size:12.5px; color:var(--muted-2); }
+  #state { font-size:13px; color:var(--muted); margin-bottom:20px; min-height:18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand"><b>HJEN</b> Studio</div>
+  <h1>Choose your plan.</h1>
+  <p class="sub">Prices are shown in USD. You'll pay the equivalent in SAR — mada, Apple Pay or STC Pay — on Moyasar's secure page. Each purchase is one month of full access.</p>
+  <div id="state">Loading plans…</div>
+  <div class="cycle" id="cycle" hidden>
+    <button data-c="monthly" class="on">Monthly</button>
+    <button data-c="annual">Annual</button>
+  </div>
+  <div class="grid" id="grid"></div>
+  <p class="note">Payments are processed securely by Moyasar. You'll see the exact SAR amount before confirming.</p>
+</div>
+<script>
+(async function () {
+  const qs = new URLSearchParams(location.search);
+  const token = qs.get('token') || localStorage.getItem('hjen_token') || '';
+  if (token) localStorage.setItem('hjen_token', token);
+  const state = document.getElementById('state');
+  const hdrs = { authorization: 'Bearer ' + token };
+
+  let cfg;
+  try {
+    const r = await fetch('/api/billing/config', { headers: hdrs });
+    cfg = await r.json();
+    if (!cfg.ok) throw new Error(cfg.message || 'unauthorized');
+  } catch (e) {
+    state.textContent = 'Sign in first — open this page from inside the studio.';
+    return;
+  }
+  const pr = await fetch('/api/pricing', { headers: hdrs }).then(r => r.json()).catch(() => null);
+  const plans = (pr && pr.pricing && pr.pricing.plans) || [];
+  const ready = !!(cfg.moyasar && cfg.moyasar.enabled);
+
+  let cycle = 'monthly';
+  const cycleEl = document.getElementById('cycle');
+  cycleEl.hidden = false;
+  cycleEl.addEventListener('click', (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    cycle = b.dataset.c;
+    cycleEl.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+    render();
+  });
+
+  // Ask the server to create a hosted invoice, then redirect to Moyasar's page.
+  async function startCheckout(planId, cyc, btn) {
+    const label = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Redirecting…';
+    try {
+      const r = await fetch('/api/moyasar/checkout', {
+        method: 'POST',
+        headers: { ...hdrs, 'content-type': 'application/json' },
+        body: JSON.stringify({ plan: planId, cycle: cyc }),
+      }).then(x => x.json());
+      if (r && r.ok && r.url) { location.href = r.url; return; }
+      state.textContent = (r && r.message) || 'Could not start checkout — try again.';
+    } catch { state.textContent = 'Could not start checkout — try again.'; }
+    btn.disabled = false; btn.textContent = label;
+  }
+
+  function render() {
+    const grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    for (const p of plans) {
+      const price = cycle === 'annual' ? p.priceAnnual : p.priceMonthly;
+      const card = document.createElement('div');
+      card.className = 'card' + (p.highlight ? ' hi' : '');
+      const current = cfg.plan === p.id;
+      card.innerHTML =
+        (p.badge ? '<span class="badge">' + p.badge + '</span>' : '') +
+        '<div class="name">' + p.name + '</div>' +
+        '<div class="tag">' + (p.tagline || '') + '</div>' +
+        '<div class="price">$' + price + '<small> / month' + (p.id === 'team' ? ' / seat' : '') + '</small></div>' +
+        '<div class="save">' + (cycle === 'annual' && p.priceAnnual < p.priceMonthly ? 'Billed annually — save ' + Math.round(100 - 100 * p.priceAnnual / p.priceMonthly) + '%' : '') + '</div>' +
+        '<ul>' + (p.features || []).map(f => '<li>' + f + '</li>').join('') + '</ul>';
+      const buyable = ready && p.priceMonthly > 0;
+      const btn = document.createElement('button');
+      btn.className = 'cta' + (buyable ? '' : ' ghost');
+      if (current) { btn.textContent = 'Your current plan'; btn.disabled = true; }
+      else if (p.priceMonthly === 0) { btn.textContent = 'Included'; btn.disabled = true; }
+      else if (!buyable) { btn.textContent = 'Coming soon'; btn.disabled = true; }
+      else {
+        btn.textContent = 'Upgrade to ' + p.name;
+        btn.onclick = () => startCheckout(p.id, cycle, btn);
+      }
+      card.appendChild(btn);
+      grid.appendChild(card);
+    }
+  }
+
+  state.textContent = qs.get('done')
+    ? 'Payment received — your plan activates within a few seconds. Refresh to see it.'
+    : 'Signed in as ' + (cfg.email || cfg.acc) + ' — current plan: ' + cfg.plan + '.';
+  render();
+})();
+</script>
+</body>
+</html>

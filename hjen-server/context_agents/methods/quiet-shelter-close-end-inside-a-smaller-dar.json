@@ -1,0 +1,23 @@
+{
+  "id": "quiet-shelter-close-end-inside-a-smaller-dar",
+  "craft": "quiet-shelter-close",
+  "principle": "End inside a smaller, darker, protective space that contrasts with a harsher outside world, using framing and light to make the interior feel like earned safety.",
+  "when_it_works": {
+    "register": [
+      "groundedness"
+    ],
+    "beat": [
+      "result"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Leave viewers with a bodily sense of calm and protection, as if they too have arrived in a safe, shared refuge.",
+  "evidence": [
+    "f04-john-lewis — longing register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f04-john-lewis"
+}

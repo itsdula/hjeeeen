@@ -1,0 +1,23 @@
+{
+  "id": "rupture-introduce-a-single-visually-shocking",
+  "craft": "rupture",
+  "principle": "Introduce a single, visually shocking disruptive act that literally breaks the dominant image or symbol of control on screen.",
+  "when_it_works": {
+    "register": [
+      "resolve"
+    ],
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "loud"
+    ]
+  },
+  "effect": "Give the audience a cathartic, memorable moment where rebellion against the status quo becomes physically undeniable.",
+  "evidence": [
+    "f02-apple — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f02-apple"
+}

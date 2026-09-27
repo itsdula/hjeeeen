@@ -1,0 +1,99 @@
+[
+  {
+    "id": "wardrobe.shemagh-formality.001",
+    "dimension": "wardrobe",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["شماغ", "غترة", "عقال", "رسمي", "shemagh", "ghutra", "igal", "formal", "man", "رجل"],
+    "ar": "الشماغ الأحمر-الأبيض كاجوال/إقليمي، الغترة البيضاء أرسم وأصيف. العقال يرفع الرسمية والعمر. **طريقة اللبس السعودية: مفرود فوق الرأس والأطراف مسدولة أو مرفوعة على الكتف — أبداً ليس ملفوفاً كعمامة (عمة إماراتية/مصر عمانية).**",
+    "en": "Red-white checkered shemagh reads casual/regional; plain white ghutra reads more formal and summer. Black igal raises formality and age. SAUDI WEAR CONSTRUCTION: the cloth lies FLAT over the crown with ends draped down the chest/back or flipped over the shoulders — NEVER wound around the head as a turban (that is Emirati hamdaniya / Omani massar, an instant regional error). Fabric has real weight, edges softly draping — never costume-stiff.",
+    "negatives": ["turban-style wrap (Emirati hamdaniya / Omani massar) on a Saudi character", "igal on a child", "plastic-stiff perfectly symmetrical folds"],
+    "sources": ["seed:kv_wardrobe"],
+    "weight": 3
+  },
+  {
+    "id": "wardrobe.thobe-regional-cut.002",
+    "dimension": "wardrobe",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["ثوب", "قصة", "ياقة", "thobe", "thawb", "collar", "man", "رجل", "سعودي"],
+    "ar": "قصّة الثوب السعودي تختلف عن الإماراتي والكويتي والقطري: ياقة سعودية قائمة بأزرار، بلا طربوشة إماراتية (التكة المتدلية). الخطأ في القصة خطأ استمرارية.",
+    "en": "Saudi thobe: standing two-button collar, tailored fit, cuffed sleeves — distinctly NOT the Emirati kandura (collarless with hanging tarboosh tassel) nor Kuwaiti/Qatari cuts. White is default; winter thobes come in wool tones (grey, camel, olive). Fabric shows real drape and wear creases at elbows and lap.",
+    "negatives": ["Emirati collarless kandura with tassel on a Saudi character", "wrinkle-free plastic fabric", "thobe worn with Western suit jacket (cultural mashup)"],
+    "sources": ["seed:kv_wardrobe"],
+    "weight": 3
+  },
+  {
+    "id": "wardrobe.abaya-generational.003",
+    "dimension": "wardrobe",
+    "region": "ksa",
+    "era": "2020s",
+    "tags": ["عباية", "abaya", "امرأة", "woman", "ألوان", "جيل", "modern"],
+    "ar": "سلم ألوان العباية جيلي: الأسود التقليدي للأكبر سناً والمناسبات؛ كحلي، فحمي، شوكولاتة، بيج مطفي للجيل الأوسط والشابات. اللون إشارة عمرية — لا تلبس الجدة عباية باستيل ولا الجامعية أسود سهرة مذهّب.",
+    "en": "Abaya color is a generational tell: traditional black for elders and formal occasions; navy, charcoal, chocolate, taupe, muted pastels for younger women (2020s). Matte crepe fabrics, softly structured, previously-worn realism. Shela/hijab styling matches age: pinned classic for elders, relaxed drape or turban-adjacent for youth.",
+    "negatives": ["high-gloss evening silk for daytime errands", "gold-edged shela as everyday wear", "elderly woman in pastel influencer abaya"],
+    "sources": ["seed:kv_wardrobe"],
+    "weight": 2
+  },
+  {
+    "id": "wardrobe.youth-streetwear.004",
+    "dimension": "wardrobe",
+    "region": "ksa",
+    "era": "2020s",
+    "tags": ["شباب", "streetwear", "youth", "هودي", "سنيكرز", "modern", "casual", "كاجوال", "كجوال", "مقهى", "كوفي", "cafe", "coffee", "شاب"],
+    "ar": "«كاجوال» لشاب سعودي = ستريت وير عالمي (هودي/تيشيرت، سنيكرز، قصة شعر فيد أو كيرلي حديثة) أو ثوب مرتاح **بدون غترة ولا عقال**. الثوب مع شماغ مضبوط وشعر رسمي = رسمي لا كاجوال. البنات: عباية عصرية مفتوحة فوق تيشيرت وجينز وسنيكرز.",
+    "en": "'Casual' for a young Saudi man = global streetwear (hoodie/tee, sneakers, modern fade or textured curly hair) OR a relaxed thobe WITH NO ghutra and no igal, sleeves possibly rolled. A thobe with a neat shemagh and groomed formal hair reads FORMAL, not casual. Young women casual: modern muted abaya open over t-shirt, jeans, clean sneakers.",
+    "negatives": ["formal thobe+shemagh styling presented as 'casual'", "forcing full traditional dress on every young character", "counterfeit luxury logos", "'cultural mashup' costume styling"],
+    "sources": ["seed:kv_wardrobe"],
+    "weight": 2
+  },
+  {
+    "id": "wardrobe.children.005",
+    "dimension": "wardrobe",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["أطفال", "children", "kids", "طفل", "مدرسة"],
+    "ar": "الأطفال يلبسون كأطفال حقيقيين: مريول مدرسة، تيشيرت شخصيات، ثوب صغير بلا عقال في المناسبات فقط. ممنوع الطفل-الرجل المصغّر بالبشت والعقال.",
+    "en": "Children dress like real children: school uniforms, cartoon t-shirts, scuffed sneakers, a small thobe WITHOUT igal for occasions only. A child's backpack with an Arabic-script name label is a strong cultural-truth object.",
+    "negatives": ["children as miniature formal adults in bisht and igal", "pageant-styled kids", "pristine unworn clothes on a playing child"],
+    "sources": ["seed:kv_wardrobe"],
+    "weight": 2
+  },
+  {
+    "id": "wardrobe.workwear.006",
+    "dimension": "wardrobe",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["عمل", "مهنة", "workwear", "uniform", "حرفي", "خباز", "فخار"],
+    "ar": "لبس المهنة يحمل أثرها: الفخّاري بقع طين على تونك داكن، الخباز مريلة ودقيق، عامل الورشة أفرول باهت. البقع دليل الصدق — الثوب الأبيض الناصع لا يعمل بيديه.",
+    "en": "Work clothing carries the labor: potter's dark tunic with clay stains, baker's apron dusted with flour, mechanic's faded coverall. Stains and wear are the authenticity — a spotless white thobe does not do manual work. Brown or grey thobe reads off-duty, informal.",
+    "negatives": ["pristine white thobe on a craftsman mid-work", "stock-photo clean uniforms"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  },
+  {
+    "id": "wardrobe.bisht.007",
+    "dimension": "wardrobe",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["بشت", "bisht", "مناسبة", "عرس", "تخرج", "formal", "ceremony"],
+    "ar": "البشت للمناسبة الكبيرة فقط: عرس، تخرج، عيد، استقبال رسمي. أسود أو بني أو بيج بحياكة ذهبية على الحواف. ليس لبس شارع ولا مكتب.",
+    "en": "The bisht (gold-trimmed cloak, black/brown/cream) belongs to major occasions only: weddings, graduation, Eid, formal reception — and it is worn OVER A THOBE ONLY, its front edges falling straight and open. Never street or office wear. The gold thread catches light as thin lines.",
+    "negatives": ["bisht over a Western suit or blazer (hard error)", "bisht as everyday wear", "bisht on a taxi driver or shopkeeper mid-shift"],
+    "sources": ["seed:kv_wardrobe"],
+    "weight": 1
+  },
+  {
+    "id": "wardrobe.stock-arab-refusal.008",
+    "dimension": "wardrobe",
+    "region": "arab",
+    "era": "timeless",
+    "tags": ["refusal", "رفض", "كليشيه", "stock", "cliche"],
+    "ar": "الرفضات الدائمة: الثوب-الأبيض-يضحك-على-الجوال، صحراء-غروب-مع-صقر، فريق-متنوع-على-لابتوب، ثوب+جاكيت، لبس رسالته الوحيدة «انظر كم أنا عربي».",
+    "en": "Standing refusals — never render: white-thobe-man-laughing-at-phone stock pose; desert-sunset-with-falcon postcard; diverse-team-at-laptop; thobe with Western blazer; any wardrobe whose only message is 'look how Arab this is'. Wardrobe must belong to a person with a life, not a costume department.",
+    "negatives": ["all of the above — this card IS the negative list"],
+    "sources": ["seed:kv_refusals"],
+    "weight": 3,
+    "always": true
+  }
+]

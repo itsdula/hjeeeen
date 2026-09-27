@@ -1,0 +1,16 @@
+{
+  "id": "prof-f06-sony",
+  "name": "prof-f06-sony — extracted from f06-sony",
+  "palette": "Neutral, sunlit urban base (grays, beiges, muted greens) overrun by high-saturation candy colors (red, yellow, blue, pink) that gradually dominate the frame.",
+  "light_logic": "Consistent bright midday hard sunlight with clear blue sky; no change in time-of-day, so the emotional shift is carried purely by motion and color density.",
+  "lens": "Moderate wide lenses for steep street vistas and environmental context, mixed with medium and low-angle shots that let particles fill the foreground and sky; minimal distortion, grounded realism.",
+  "texture": "Crisp, clean digital image with sharp edges on particles and hard shadows; the ‘softness’ comes from motion blur and density of moving specks rather than from filtration.",
+  "world": "Recognizable, unstyled residential city streets—cars, poles, wires, signage—treated as a realistic stage that becomes surreal only through the invading storm of color.",
+  "forbidden": [
+    "Cutting away to faces or character drama that would compete with the pure environmental spectacle",
+    "Changing weather or time-of-day to signal emotion instead of using the particle event",
+    "Heavy VFX gloss that breaks the grounded, photographic feel of a real street",
+    "Complex narrative exposition or dialogue that explains the phenomenon",
+    "Multiple unrelated visual motifs that dilute the single-color-swarm identity"
+  ]
+}

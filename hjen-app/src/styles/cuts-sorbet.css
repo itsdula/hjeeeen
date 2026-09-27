@@ -1,0 +1,425 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   CUTS ENGINE · SORBET GRID skin  —  Style Bible No. 7, NIGHT SHIFT mood.
+   Proof-of-concept re-skin of the Cuts Engine. EVERYTHING is scoped under
+   `.cut-view.cuts-sorbet` so the graphite tokens (tokens.css) and every OTHER
+   view render exactly as before. This file deliberately REVERSES the app's
+   "no colourful filled buttons" law — candy is the point here (Anwar, 2026-07-26).
+
+   Palette (exact bible hues — the local source of truth for this experiment):
+     canvas = Licorice #13131A      ink-on-candy = #13131A
+     violet #8455EA · sky #1AAEFC · coral #F07A3C · mint #35C4A8 · lemon #F5E642
+   Spacing / radius / motion still borrow the token grid (--s-*, --t-fast, --ease)
+   so the 8pt rhythm and motion system stay consistent with the rest of HJEN.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.cut-view.cuts-sorbet {
+  /* Canvas + ink */
+  --sb-canvas: #13131A;
+  --sb-ink: #13131A;
+  --sb-card: #1B1B22;          /* elevated black card */
+  --sb-card-2: #0E0E13;        /* deepest well (filmstrip / keyframe lanes) */
+  /* Candy */
+  --sb-violet: #8455EA;
+  --sb-sky: #1AAEFC;
+  --sb-coral: #F07A3C;
+  --sb-mint: #35C4A8;
+  --sb-lemon: #F5E642;
+  --sb-lemon-hi: #FBEF5A;
+  /* White ink ramp (only on the black canvas) */
+  --sb-white: #F5F5F2;
+  --sb-dim: rgba(245, 245, 242, .62);
+  --sb-faint: rgba(245, 245, 242, .34);
+  /* Hairlines */
+  --sb-line: rgba(255, 255, 255, .08);
+  --sb-line-2: rgba(255, 255, 255, .17);
+  /* Radii — one consistent card radius family */
+  --sb-r: 18px;
+  --sb-r-sm: 12px;
+  --sb-r-xs: 9px;
+
+  background: var(--sb-canvas);
+  color: var(--sb-white);
+}
+
+/* Candy focus ring — one signal, high contrast on the black canvas. */
+.cuts-sorbet button:focus-visible,
+.cuts-sorbet input:focus-visible,
+.cuts-sorbet select:focus-visible,
+.cuts-sorbet textarea:focus-visible {
+  outline: 2px solid var(--sb-white);
+  outline-offset: 2px;
+}
+.cuts-sorbet input[type=range] { accent-color: var(--sb-violet); }
+.cuts-sorbet .mono-label { color: var(--sb-dim); }
+
+/* ── Header / toolbar ─────────────────────────────────────────────────────
+   Kept dense (this is a pro tool) but re-cast on the licorice canvas with
+   quiet black chip controls, so the candy elsewhere holds the eye. */
+.cuts-sorbet .cut-bar {
+  background: var(--sb-canvas);
+  border-bottom: 1px solid var(--sb-line);
+}
+.cuts-sorbet .cut-bar__brand { margin-inline-end: var(--s-1); }
+.cuts-sorbet .cut-bar__title {
+  font-family: var(--font-display, 'Anton'), sans-serif;
+  font-size: 20px; letter-spacing: .02em; color: var(--sb-white);
+}
+.cuts-sorbet .cut-bar__sub {
+  font-size: var(--t-micro); color: var(--sb-dim); letter-spacing: .02em; margin-top: 1px;
+}
+
+/* Lemon STAT SLAB — display numeral as hero. */
+.cuts-sorbet .cut-stat {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 5px var(--s-3); border-radius: var(--sb-r-sm);
+  background: var(--sb-lemon); color: var(--sb-ink); line-height: 1;
+  margin-inline-end: var(--s-2); flex: 0 0 auto;
+}
+.cuts-sorbet .cut-stat__n {
+  font-family: var(--font-display, 'Anton'), sans-serif; font-size: 26px; letter-spacing: .01em;
+}
+.cuts-sorbet .cut-stat__l { font-size: 9px; margin-top: 2px; opacity: .78; letter-spacing: .04em; }
+
+/* Quiet black chip controls */
+.cuts-sorbet .cut-btn,
+.cuts-sorbet .cut-url,
+.cuts-sorbet .cut-sessions,
+.cuts-sorbet .cut-name {
+  background: var(--sb-card); border: 1px solid var(--sb-line-2); color: var(--sb-white);
+  border-radius: var(--sb-r-xs);
+}
+.cuts-sorbet .cut-url::placeholder,
+.cuts-sorbet .cut-name::placeholder { color: var(--sb-faint); }
+.cuts-sorbet .cut-btn:hover:not(:disabled),
+.cuts-sorbet .cut-sessions:hover:not(:disabled) { border-color: var(--sb-white); }
+.cuts-sorbet .cut-url:focus,
+.cuts-sorbet .cut-name:focus { border-color: var(--sb-lemon); }
+.cuts-sorbet .cut-icon {
+  background: var(--sb-card); border: 1px solid var(--sb-line-2); color: var(--sb-white);
+  border-radius: var(--sb-r-xs);
+}
+.cuts-sorbet .cut-icon:hover:not(:disabled) { border-color: var(--sb-white); }
+
+/* Pipeline step + Go — the header's candy CTA (violet step, lemon Go). */
+.cuts-sorbet .cut-step {
+  background: var(--sb-card); border: 1px solid var(--sb-violet); color: var(--sb-white);
+  border-radius: var(--sb-r-xs); font-weight: 600;
+}
+.cuts-sorbet .cut-btn--go {
+  background: var(--sb-lemon); border: 1px solid var(--sb-lemon); color: var(--sb-ink);
+  font-weight: 700; border-radius: var(--sb-r-xs);
+}
+.cuts-sorbet .cut-btn--go:hover:not(:disabled) {
+  background: var(--sb-lemon-hi); border-color: var(--sb-lemon-hi);
+}
+
+/* Session popover */
+.cuts-sorbet .cut-sess__menu { background: var(--sb-card); border: 1px solid var(--sb-line-2); border-radius: var(--sb-r-sm); }
+.cuts-sorbet .cut-sess__row:hover { background: rgba(255,255,255,.05); }
+.cuts-sorbet .cut-sess__row.is-open { outline-color: var(--sb-lemon); }
+.cuts-sorbet .cut-sess__open { color: var(--sb-white); }
+.cuts-sorbet .cut-sess__name { color: var(--sb-white); }
+.cuts-sorbet .cut-sess__meta { color: var(--sb-faint); }
+
+/* ── Stage: monitor + inspector ──────────────────────────────────────────── */
+.cuts-sorbet .cut-stage { background: var(--sb-canvas); }
+.cuts-sorbet .cut-monitor video,
+.cuts-sorbet .cut-monitor__empty {
+  border-radius: var(--sb-r); border: 1px solid var(--sb-line-2);
+}
+.cuts-sorbet .cut-monitor__empty { background: var(--sb-card); color: var(--sb-faint); }
+.cuts-sorbet .cut-transport .mono-label { color: var(--sb-white); }
+.cuts-sorbet .cut-hint { color: var(--sb-faint); }
+
+/* Big centred play affordance over the source video (matches the mockup). */
+.cuts-sorbet .cut-play {
+  position: absolute; top: 0; left: 0; width: 100%; aspect-ratio: 16 / 9;
+  display: grid; place-items: center; z-index: 3;
+  border: none; background: transparent; cursor: pointer;
+}
+.cuts-sorbet .cut-play__disc {
+  width: 62px; height: 62px; border-radius: 50%;
+  display: grid; place-items: center; color: var(--sb-white);
+  background: rgba(19, 19, 26, .62);
+  backdrop-filter: none; /* Sorbet forbids frosted blur */
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .45);
+  transition: transform var(--t-fast) var(--ease), background var(--t-fast);
+}
+.cuts-sorbet .cut-play:hover .cut-play__disc { transform: scale(1.06); background: rgba(19, 19, 26, .78); }
+.cuts-sorbet .cut-play svg { margin-inline-start: 3px; } /* optical-centre the triangle */
+
+.cuts-sorbet .cut-inspect {
+  background: var(--sb-card); border: 1px solid var(--sb-line); border-radius: var(--sb-r);
+}
+.cuts-sorbet .cut-inspect__empty,
+.cuts-sorbet .cut-scenes__empty { color: var(--sb-faint); }
+.cuts-sorbet .cut-inspect__tc,
+.cuts-sorbet .cut-inspect__why,
+.cuts-sorbet .cut-percept,
+.cuts-sorbet .cut-mp__cam { color: var(--sb-dim); }
+.cuts-sorbet .cut-percept,
+.cuts-sorbet .cut-mp__text {
+  background: var(--sb-card-2); border: 1px solid var(--sb-line);
+}
+.cuts-sorbet .cut-mp__text { color: var(--sb-white); border-radius: var(--sb-r-sm); }
+.cuts-sorbet .cut-mp__text:focus { border-color: var(--sb-lemon); }
+
+/* Ghost tool buttons in the inspector */
+.cuts-sorbet .cut-tool {
+  background: var(--sb-canvas); border: 1px solid var(--sb-line-2); color: var(--sb-white);
+  border-radius: var(--sb-r-xs);
+}
+.cuts-sorbet .cut-tool:hover:not(:disabled) {
+  border-color: var(--sb-lemon); background: var(--sb-canvas);
+}
+
+/* Transcript rows / speaker tags recoloured to candy */
+.cuts-sorbet .cut-say__tag.vo,
+.cuts-sorbet .cut-tr__big + * .cut-say__tag.vo { color: var(--sb-coral); border-color: var(--sb-coral); }
+.cuts-sorbet .cut-say__tag.dialogue,
+.cuts-sorbet .cut-say__tag.dl { color: var(--sb-sky); border-color: var(--sb-sky); }
+.cuts-sorbet .cut-trrow:hover { background: rgba(255,255,255,.05); }
+.cuts-sorbet .cut-trrow.is-sel { background: color-mix(in srgb, var(--sb-lemon) 14%, transparent); }
+.cuts-sorbet .cut-tr__big { color: var(--sb-white); }
+.cuts-sorbet .cut-tr__sel { background: var(--sb-card-2); border-color: var(--sb-line); border-radius: var(--sb-r-sm); }
+
+/* Status + link bar */
+.cuts-sorbet .cut-status {
+  background: var(--sb-canvas); color: var(--sb-dim);
+  border-top: 1px solid var(--sb-line); border-bottom: 1px solid var(--sb-line);
+}
+.cuts-sorbet .cut-linkbar {
+  background: color-mix(in srgb, var(--sb-violet) 14%, var(--sb-canvas));
+  border-bottom: 1px solid var(--sb-line);
+}
+
+/* ── Left rail: Scenes / People + Export hero + mascot ────────────────────── */
+.cuts-sorbet .cut-scenes {
+  background: var(--sb-canvas); border-inline-end: 1px solid var(--sb-line);
+  padding: var(--s-3); gap: var(--s-3);
+}
+.cuts-sorbet .cut-side__tabs {
+  border-bottom: none; background: var(--sb-card); border: 1px solid var(--sb-line);
+  border-radius: var(--sb-r-sm); padding: 3px; gap: 3px;
+}
+.cuts-sorbet .cut-side__tab {
+  border-radius: var(--sb-r-xs); border-bottom: none; color: var(--sb-dim);
+}
+.cuts-sorbet .cut-side__tab:hover { color: var(--sb-white); }
+.cuts-sorbet .cut-side__tab.is-active {
+  background: var(--sb-violet); color: var(--sb-ink); border-bottom: none;
+}
+.cuts-sorbet .cut-side__tab.is-active em { color: var(--sb-ink); opacity: .68; }
+.cuts-sorbet .cut-side__tab em { color: var(--sb-faint); }
+
+.cuts-sorbet .cut-scenes__list,
+.cuts-sorbet .cut-people__list {
+  background: var(--sb-card); border: 1px solid var(--sb-line);
+  border-radius: var(--sb-r-sm); padding: 6px;
+}
+.cuts-sorbet .cut-scenes__head { border-bottom: none; color: var(--sb-dim); padding: 6px 6px 2px; }
+.cuts-sorbet .cut-suggest { border-bottom: 1px solid var(--sb-line); }
+.cuts-sorbet .cut-suggest .cut-scenes__head { color: var(--sb-lemon); }
+
+/* Scene rows — white ink on the black card, candy dots cycle the 5 hues */
+.cuts-sorbet .cut-scene { color: var(--sb-white); border-radius: var(--sb-r-xs); }
+.cuts-sorbet .cut-scene:hover { background: rgba(255,255,255,.05); color: var(--sb-white); }
+.cuts-sorbet .cut-scene.is-active { background: rgba(255,255,255,.08); border-color: var(--sb-line-2); }
+.cuts-sorbet .cut-scene em { color: var(--sb-faint); }
+/* Scene dot keyed to its scene's candy hue (fed inline as --sb-hue in JSX), so
+   the dot matches that scene's Cuts-lane segments. "All shots" carries no hue
+   → neutral. Inline background is beaten with !important. */
+.cuts-sorbet .cut-scene .cut-swatch { background: var(--sb-hue, var(--sb-faint)) !important; }
+.cuts-sorbet .cut-swatch { border-radius: 50%; }
+
+/* Check pill + flags */
+.cuts-sorbet .cut-check {
+  background: var(--sb-canvas); border: 1px solid var(--sb-line-2); color: var(--sb-dim); border-radius: var(--sb-r-xs);
+}
+.cuts-sorbet .cut-check:hover:not(:disabled) { color: var(--sb-white); border-color: var(--sb-lemon); }
+.cuts-sorbet .cut-flag--ok { color: var(--sb-mint); }
+
+/* People cards */
+.cuts-sorbet .cut-person { background: var(--sb-card-2); border-color: var(--sb-line); border-radius: var(--sb-r-sm); }
+.cuts-sorbet .cut-person:hover { background: rgba(255,255,255,.04); }
+.cuts-sorbet .cut-person__name { color: var(--sb-white); }
+.cuts-sorbet .cut-person__count { color: var(--sb-faint); }
+.cuts-sorbet .cut-person__desc,
+.cuts-sorbet .cut-person__row { color: var(--sb-dim); }
+.cuts-sorbet .cut-people__edit,
+.cuts-sorbet .cut-people__merge,
+.cuts-sorbet .cut-person__all {
+  background: var(--sb-canvas); border: 1px solid var(--sb-line-2); color: var(--sb-dim); border-radius: var(--sb-r-xs);
+}
+.cuts-sorbet .cut-people__edit.is-active {
+  background: var(--sb-violet); border-color: var(--sb-violet); color: var(--sb-ink);
+}
+
+/* EXPORT HERO + film-reel mascot */
+.cuts-sorbet .cut-scenes__foot { position: relative; margin-top: auto; flex: 0 0 auto; padding-top: var(--s-1); }
+.cuts-sorbet .cut-export {
+  position: relative; width: 100%; min-height: 116px; overflow: hidden;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s-2);
+  padding: var(--s-4); border: none; border-radius: var(--sb-r);
+  background: var(--sb-lemon); color: var(--sb-ink); cursor: pointer; text-align: start;
+  transition: transform var(--t-fast) var(--ease), filter var(--t-fast);
+}
+.cuts-sorbet .cut-export:hover:not(:disabled) { filter: brightness(1.03); }
+.cuts-sorbet .cut-export:active:not(:disabled) { transform: translateY(1px); }
+.cuts-sorbet .cut-export:disabled { opacity: .5; cursor: not-allowed; }
+.cuts-sorbet .cut-export__label {
+  font-family: var(--font-sans); font-weight: 800; font-size: 27px; line-height: .98; letter-spacing: -.01em;
+  max-width: 62%;
+}
+.cuts-sorbet .cut-export__arrow { font-size: 22px; line-height: 1; font-weight: 700; }
+.cuts-sorbet .cut-export__doodle {
+  position: absolute; inset-inline-end: var(--s-3); bottom: var(--s-2);
+  width: 92px; height: auto; color: var(--sb-ink); opacity: .9; pointer-events: none;
+}
+.cuts-sorbet .cut-mascot {
+  position: absolute; inset-inline-end: -6px; bottom: -10px; width: 66px; height: auto;
+  pointer-events: none; filter: drop-shadow(0 3px 6px rgba(0,0,0,.5));
+}
+
+/* ── Timeline ─────────────────────────────────────────────────────────────
+   Black canvas, candy-filled cut segments (ink numbers), candy-framed
+   keyframes, white playhead, teal audio well. This is where candy carries
+   the >30% ratio at thumbnail size. */
+.cuts-sorbet .cut-tl__tools { background: var(--sb-canvas); border-bottom: 1px solid var(--sb-line); }
+.cuts-sorbet .cut-tl__head,
+.cuts-sorbet .cut-tl__head--edit {
+  background: var(--sb-canvas); color: var(--sb-dim); border-bottom: 1px solid var(--sb-line);
+}
+.cuts-sorbet .cut-tl__headflag { background: var(--sb-card); border-color: var(--sb-line-2); color: var(--sb-dim); }
+.cuts-sorbet .cut-eye { color: var(--sb-dim); }
+.cuts-sorbet .cut-eye:hover { background: rgba(255,255,255,.06); color: var(--sb-white); }
+
+.cuts-sorbet .cut-tl__ruler { border-bottom: 1px solid var(--sb-line); }
+.cuts-sorbet .cut-tl__tick { border-inline-start: 1px solid var(--sb-line); }
+.cuts-sorbet .cut-tl__tick span { color: var(--sb-faint); }
+
+.cuts-sorbet .cut-tl__lane { border-bottom: 1px solid var(--sb-line); }
+.cuts-sorbet .cut-tl__lane--strip,
+.cuts-sorbet .cut-tl__lane--keys { background: var(--sb-card-2); }
+.cuts-sorbet .cut-tl__lane--video { background: #17171E; }
+.cuts-sorbet .cut-tl__lane--audio { background: #101A18; } /* teal-tinted black well */
+.cuts-sorbet .cut-tl__divider { background: var(--sb-canvas); border-color: var(--sb-line-2); }
+.cuts-sorbet .cut-tl__lanehint { color: var(--sb-faint); }
+
+/* White playhead + diamond head */
+.cuts-sorbet .cut-tl__playhead { background: var(--sb-white); }
+.cuts-sorbet .cut-tl__playhead::before { background: var(--sb-white); }
+
+/* Cut segments — candy-filled rounded chips, ink-black numbers. The fill is the
+   scene's candy hue (--sb-hue, keyed in JSX) so each chip matches its scene dot. */
+.cuts-sorbet .cut-seg { border: none; border-radius: var(--sb-r-xs); background: var(--sb-hue, var(--sb-line-2)); }
+.cuts-sorbet .cut-seg__no { color: var(--sb-ink); font-weight: 700; text-shadow: none; }
+.cuts-sorbet .cut-seg:hover { filter: brightness(1.08); }
+.cuts-sorbet .cut-seg.is-sel { outline: 2px solid var(--sb-white); outline-offset: -1px; }
+.cuts-sorbet .cut-seg.is-multi { outline: 2px solid var(--sb-lemon); box-shadow: 0 0 0 2px color-mix(in srgb, var(--sb-lemon) 45%, transparent); }
+
+/* Keyframe cells — candy-framed rounded cards, border = the scene's candy hue. */
+.cuts-sorbet .cut-key { border: 2px solid var(--sb-hue, var(--sb-line-2)); border-radius: var(--sb-r-xs); }
+.cuts-sorbet .cut-key.is-sel { outline: 2px solid var(--sb-white); outline-offset: 1px; }
+
+/* Speech blocks → candy */
+.cuts-sorbet .cut-say--vo { background: var(--sb-coral); border-color: var(--sb-coral); color: var(--sb-ink); }
+.cuts-sorbet .cut-say--dl { background: var(--sb-sky); border-color: var(--sb-sky); color: var(--sb-ink); }
+.cuts-sorbet .cut-say__t { color: var(--sb-ink); }
+.cuts-sorbet .cut-say.is-sel { outline-color: var(--sb-white); }
+
+/* Edit-track clips + suggestions */
+.cuts-sorbet .cut-clip { background: var(--sb-card); border: 1px solid var(--sb-line-2); border-radius: var(--sb-r-xs); }
+.cuts-sorbet .cut-clip:hover { border-color: var(--sb-lemon); }
+.cuts-sorbet .cut-clip.is-sel { border-color: var(--sb-lemon); box-shadow: 0 0 0 1px var(--sb-lemon); }
+.cuts-sorbet .cut-clip__label { color: var(--sb-white); background: rgba(0,0,0,.5); }
+.cuts-sorbet .cut-clip--src { border-color: var(--sb-line-2); }
+.cuts-sorbet .cut-sugg:hover { background: rgba(255,255,255,.05); }
+.cuts-sorbet .cut-sugg__link:hover { border-color: var(--sb-lemon); }
+
+/* ── Right make-dock — keep it on the licorice canvas so it doesn't read as a
+   graphite island; its make CTA becomes lemon, active tab violet. ─────────── */
+.cuts-sorbet .cut-gen { background: var(--sb-canvas); border-inline-start: 1px solid var(--sb-line); }
+.cuts-sorbet .cut-gen__seghead,
+.cuts-sorbet .cut-gen__foot,
+.cuts-sorbet .cut-gen__msgrow,
+.cuts-sorbet .cut-gen__jobs { background: var(--sb-canvas); border-color: var(--sb-line); }
+.cuts-sorbet .cut-gen__results { border-bottom-color: var(--sb-line-2); }
+.cuts-sorbet .cut-gen__tab {
+  background: var(--sb-card); border: 1px solid var(--sb-line-2); color: var(--sb-dim); border-radius: var(--sb-r-xs);
+}
+.cuts-sorbet .cut-gen__tab.is-active { background: var(--sb-violet); border-color: var(--sb-violet); color: var(--sb-ink); }
+.cuts-sorbet .cut-gen__card { background: var(--sb-card); border: 1px solid var(--sb-line); border-radius: var(--sb-r-sm); }
+.cuts-sorbet .cut-gen__card:hover { border-color: var(--sb-lemon); background: var(--sb-card); }
+.cuts-sorbet .cut-gen__thumb { background: var(--sb-card-2); border-color: var(--sb-line); }
+.cuts-sorbet .cut-gen__cap { color: var(--sb-dim); }
+.cuts-sorbet .cut-gen__prompt { background: var(--sb-card-2); border: 1px solid var(--sb-line-2); color: var(--sb-white); }
+.cuts-sorbet .cut-gen__prompt:focus { border-color: var(--sb-lemon); }
+.cuts-sorbet .cut-gen__select,
+.cuts-sorbet .cut-gen__num { background: var(--sb-card); border: 1px solid var(--sb-line-2); color: var(--sb-white); }
+.cuts-sorbet .cut-gen__seg button.is-active { background: var(--sb-violet); color: var(--sb-ink); }
+.cuts-sorbet .cut-gen__toggle { background: var(--sb-card); border: 1px solid var(--sb-line-2); color: var(--sb-dim); }
+.cuts-sorbet .cut-gen__toggle.is-on { color: var(--sb-ink); background: var(--sb-mint); border-color: var(--sb-mint); }
+.cuts-sorbet .cut-gen__make { background: var(--sb-lemon); border-color: var(--sb-lemon); color: var(--sb-ink); }
+.cuts-sorbet .cut-gen__make:hover:not(:disabled) { background: var(--sb-lemon-hi); border-color: var(--sb-lemon-hi); }
+.cuts-sorbet .cut-gen__more:hover { border-color: var(--sb-lemon); color: var(--sb-white); }
+.cuts-sorbet .cut-gen__dophead { background: var(--sb-card); color: var(--sb-dim); }
+.cuts-sorbet .cut-gen__dophead:hover { background: var(--sb-card-2); color: var(--sb-white); }
+.cuts-sorbet .cut-gen__dopcount { background: var(--sb-violet); color: var(--sb-ink); }
+.cuts-sorbet .cut-spin { border-color: var(--sb-line-2); border-top-color: var(--sb-lemon); }
+
+/* ── Fuller candy-bento chrome ─────────────────────────────────────────────
+   Toolbar controls grouped into black bento chips; the dock's sections become a
+   stack of bento cards with candy section-header pills + accent dots. Secondary
+   controls stay quiet ink chips (NIGHT-SHIFT reference: nav murmurs, candy on
+   the content), so the screen doesn't tip into rainbow-vomit. */
+
+/* Toolbar: cluster the pipeline + sliders + zoom + undo into bento chips. */
+.cuts-sorbet .cut-run {
+  background: var(--sb-card); border: 1px solid var(--sb-line);
+  border-radius: var(--sb-r-xs); padding: 3px 3px 3px var(--s-2);
+}
+.cuts-sorbet .cut-thr,
+.cuts-sorbet .cut-zoom,
+.cuts-sorbet .cut-undo {
+  background: var(--sb-card); border: 1px solid var(--sb-line);
+  border-radius: var(--sb-r-xs); padding: 4px var(--s-2);
+}
+.cuts-sorbet .cut-thr { gap: 3px; }
+.cuts-sorbet .cut-thr .mono-label { color: var(--sb-dim); }
+.cuts-sorbet .cut-zoom .mono-label { color: var(--sb-white); }
+
+/* Dock: TAKES / MAKE section headers become lemon candy pills. */
+.cuts-sorbet .cut-gen__seghead .mono-label {
+  padding: 3px 10px; border-radius: var(--r-pill, 999px);
+  background: var(--sb-lemon); color: var(--sb-ink); letter-spacing: .06em; font-weight: 600;
+}
+
+/* Dock: each settings group is a rounded bento card on the canvas. */
+.cuts-sorbet .cut-gen__mp,
+.cuts-sorbet .cut-gen__group {
+  background: var(--sb-card); border: 1px solid var(--sb-line);
+  border-radius: var(--sb-r-sm); padding: var(--s-3);
+}
+/* Group / master-prompt labels get a violet accent dot (punctuation of joy). */
+.cuts-sorbet .cut-gen__group > .mono-label,
+.cuts-sorbet .cut-gen__mphead .mono-label {
+  display: inline-flex; align-items: center; gap: 7px; color: var(--sb-white);
+}
+.cuts-sorbet .cut-gen__group > .mono-label::before,
+.cuts-sorbet .cut-gen__mphead .mono-label::before {
+  content: ''; flex: 0 0 auto; width: 8px; height: 8px; border-radius: 3px; background: var(--sb-violet);
+}
+.cuts-sorbet .cut-gen__field > label { color: var(--sb-dim); }
+.cuts-sorbet .cut-gen__hint,
+.cuts-sorbet .cut-gen__look { color: var(--sb-dim); }
+.cuts-sorbet .cut-gen__seg { border-color: var(--sb-line-2); }
+.cuts-sorbet .cut-gen__seg button { background: var(--sb-card-2); color: var(--sb-dim); border-color: var(--sb-line); }
+.cuts-sorbet .cut-gen__seg button:hover { color: var(--sb-white); }
+.cuts-sorbet .cut-gen__anchor-empty { border-color: var(--sb-line-2); color: var(--sb-faint); }
+
+/* ── QA review overlay ─────────────────────────────────────────────────────*/
+.cuts-sorbet .cut-review__panel { background: var(--sb-card); border: 1px solid var(--sb-line-2); border-radius: var(--sb-r); }
+.cuts-sorbet .cut-rev { background: var(--sb-card-2); border-color: var(--sb-line); border-radius: var(--sb-r-sm); }
+.cuts-sorbet .cut-rev__label { color: var(--sb-white); }
+.cuts-sorbet .cut-rev.is-ok .cut-rev__badge { color: var(--sb-mint); }

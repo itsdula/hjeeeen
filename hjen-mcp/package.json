@@ -1,0 +1,16 @@
+{
+  "name": "hjen-mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "HJEN Studio as an MCP server — zero-dependency (runs on Electron's bundled node, nothing installed). One server, three surfaces: external agent, in-app agent, external-MCP client.",
+  "bin": {
+    "hjen-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "./build.sh",
+    "start": "./run.sh"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

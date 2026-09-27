@@ -1,0 +1,16 @@
+{
+  "id": "prof-f08-volvo-trucks",
+  "name": "prof-f08-volvo-trucks — extracted from f08-volvo-trucks",
+  "palette": "Warm, desaturated sunrise golds and soft blues; metallic yellows of the trucks against a pale blue sky and muted asphalt.",
+  "light_logic": "Low, even early-morning sun from behind camera, creating long soft shadows and gentle highlights with no harsh contrast; consistent direction across the spot.",
+  "lens": "Moderate focal lengths with minimal distortion; calm, stable framing that gradually widens from close-up to wide without handheld shake.",
+  "texture": "Clean, polished metal and denim against a smooth, empty roadway; air is clear, atmosphere crisp, with no visual clutter.",
+  "world": "A controlled, almost empty test-road landscape at dawn, feeling like a real but idealized industrial proving ground—no traffic, no city, just trucks, man, and horizon.",
+  "forbidden": [
+    "Harsh midday overhead light or mixed color temperatures",
+    "Busy urban backgrounds or crowds that distract from the stunt",
+    "Handheld, shaky, or frenetic camera moves",
+    "Fast cutting or montage that obscures the continuity of the stunt",
+    "Heavy color grading gimmicks that break the naturalistic test feel"
+  ]
+}

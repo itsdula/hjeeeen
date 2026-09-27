@@ -1,0 +1,20 @@
+{
+  "id": "command-cuts-use-a-rapid-series-of",
+  "craft": "command-cuts",
+  "principle": "Use a rapid series of imperative phrases that literally direct the viewer’s gaze or imagination, cutting visuals on each command so language seems to control reality.",
+  "when_it_works": {
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "loud"
+    ]
+  },
+  "effect": "Creates a snappy, hypnotic rhythm where each verbal cue unlocks a new surprising image or twist.",
+  "evidence": [
+    "f10-old-spice — joy register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f10-old-spice"
+}

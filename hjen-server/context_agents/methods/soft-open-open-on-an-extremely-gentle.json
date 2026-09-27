@@ -1,0 +1,22 @@
+{
+  "id": "soft-open-open-on-an-extremely-gentle",
+  "craft": "soft-open",
+  "principle": "Open on an extremely gentle, close-up moment of safety or comfort before introducing any broader context, so the emotional baseline is trust rather than excitement or fear.",
+  "when_it_works": {
+    "beat": [
+      "setup"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Lower viewer defenses and create instant warmth that colors everything that follows.",
+  "evidence": [
+    "f16-android — joy register",
+    "ui1785430507716 — groundedness register",
+    "CONFIRMED-TRANSFERABLE: joy+groundedness"
+  ],
+  "weight": 3,
+  "status": "candidate",
+  "source": "auto:f16-android"
+}

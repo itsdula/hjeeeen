@@ -1,0 +1,165 @@
+/* HJEN design tokens — derived from brand_guideline/build/stage7_color.html + stage6_typography.html */
+
+/* Arabic face for any RTL content — IBM Plex Sans Arabic (SIL OFL, free to
+   bundle). Owns the Arabic fallback slot in the font variables below. */
+@font-face {
+  font-family: 'IBM Plex Sans Arabic';
+  src: url('../assets/fonts/IBMPlexSansArabic-400.woff2') format('woff2');
+  font-weight: 400; font-display: swap;
+}
+
+/* Latin faces — display (Anton), body (Inter), accent (Instrument Serif).
+   All SIL OFL, bundled locally so the app stays fully offline. */
+@font-face {
+  font-family: 'Anton';
+  src: url('../assets/fonts/Anton-Regular.woff2') format('woff2');
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/fonts/Inter-400.woff2') format('woff2');
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/fonts/Inter-500.woff2') format('woff2');
+  font-weight: 500; font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/fonts/Inter-600.woff2') format('woff2');
+  font-weight: 600; font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('../assets/fonts/Inter-700.woff2') format('woff2');
+  font-weight: 700; font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('../assets/fonts/InstrumentSerif-Regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Instrument Serif';
+  src: url('../assets/fonts/InstrumentSerif-Italic.woff2') format('woff2');
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+
+:root {
+  /* Brand palette */
+  --whiteout: #FFFFFF;
+  --haze: #F5F5F5;
+  --midnight: #000000;
+  --sky: #1095ED;
+  --altitude: #0563E9;
+  --ember: #F25502;
+  --flash: #E41A2F;
+  --aurora: #E5AAD8;
+  --sunflare: #D1B310;
+  --teal: #257D64;
+  --dust: #DCC9C1;
+  --soil: #AF7757;
+  --canopy: #B2D08D;
+  /* Forensic amber — BREAKDOWN's identity family (تشريح الإعلان). A fixed brand
+     value like the palette above; the same amber the mind.bd* canvas nodes use. */
+  --breakdown: #C97E35;
+  --breakdown-bright: #E39A50;
+  --on-breakdown: #14100A;   /* near-black warm ink drawn on the amber */
+
+  /* Background-job status — the operations subsystem. Semantic and INDEPENDENT
+     of the accent so job state reads identically in every theme: red = an op in
+     flight (non-clickable), green = complete (clickable), amber = stopped with an
+     error. Fixed brand values; mid-saturation so they hold on both dark surfaces
+     and the light/Daylight themes. */
+  --job-running: #E4482F;   /* red — running, non-clickable */
+  --job-done: #3E9E6B;      /* green — done, clickable */
+  --job-error: #D1B310;     /* amber (= sunflare) — stopped on an error */
+  --job-interrupted: #6C7C93;/* muted slate blue-grey — the app quit mid-run;
+                                distinct from red/green/amber, NOT a failure */
+  --on-job: #FFFFFF;        /* ink drawn on a filled job chip */
+  --job-running-tint: rgba(228, 72, 47, 0.16);
+  --job-done-tint: rgba(62, 158, 107, 0.16);
+  --job-error-tint: rgba(209, 179, 16, 0.16);
+  --job-interrupted-tint: rgba(108, 124, 147, 0.18);
+
+  /* Surfaces (dark mode default) — graphite palette: uniform #121212 field,
+     with subtle #141414 / #1D1D1D lifts for panels and inputs. */
+  --bg: #121212;
+  --bg-elev: #141414;
+  --bg-elev-2: #1D1D1D;
+  --topbar-bg: #1e1e1e;   /* top bar — its own token; themes may diverge it from --bg */
+  --ink: var(--whiteout);
+  --ink-dim: rgba(255, 255, 255, 0.72);
+  --ink-muted: rgba(255, 255, 255, 0.48);
+  --ink-faint: rgba(255, 255, 255, 0.24);
+  --line: rgba(255, 255, 255, 0.10);
+  --line-strong: rgba(255, 255, 255, 0.22);
+  --accent: var(--ember);
+  --accent-hover: #ff6817;
+  /* Derived accent washes keep selection/focus surfaces theme-safe without
+     components reaching for fixed brand-colour alphas. */
+  --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
+  --accent-softer: color-mix(in srgb, var(--accent) 8%, transparent);
+  --accent-line: color-mix(in srgb, var(--accent) 48%, transparent);
+  /* Text/icon color drawn on top of the accent. Themed for legibility on
+     light or yellow accents (see the theme system, lib/theme/). */
+  --on-accent: var(--whiteout);
+  /* Subtle field / control fill. Flipped to dark-alpha on light themes. */
+  --field-bg: rgba(255, 255, 255, 0.04);
+
+  /* Typography. Arabic system fonts (SF Arabic on macOS 11+, Geeza Pro as
+     legacy fallback) are appended to every stack so mixed-language strings
+     don't fall to a generic glyph map that clips diacritics. */
+  --font-serif: 'Instrument Serif', Georgia, 'IBM Plex Sans Arabic', 'SF Arabic', serif;
+  --font-sans: 'Inter', -apple-system, system-ui, 'IBM Plex Sans Arabic', 'SF Arabic', sans-serif;
+  --font-mono: 'SF Mono', Menlo, Consolas, 'SF Arabic', monospace;
+  /* Latin brand faces (use explicitly where the design calls for Latin). */
+  --font-display: 'Anton', 'Instrument Serif', 'IBM Plex Sans Arabic', sans-serif;
+  --font-latin: 'Inter', 'IBM Plex Sans Arabic', 'SF Arabic', sans-serif;
+  --font-accent: 'Instrument Serif', Georgia, serif;
+
+  /* Spacing scale (8pt grid) */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --s-9: 96px;
+
+  /* Type scale */
+  --t-display: clamp(48px, 6vw, 96px);
+  --t-h1: clamp(32px, 3.6vw, 56px);
+  --t-h2: 28px;
+  --t-h3: 20px;
+  --t-body: 14px;
+  --t-meta: 12px;
+  --t-micro: 10px;
+
+  /* Radii */
+  --r-square: 0;
+  --r-1: 4px;
+  --r-2: 8px;
+  --r-3: 12px;
+  --r-4: 20px;
+  --r-pill: 999px;
+
+  /* Control geometry */
+  --stroke-hairline: 1px;
+  --focus-ring: 2px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --t-fast: 120ms;
+  --t-med: 260ms;
+  --t-slow: 480ms;
+
+  /* Elevation — reads as raised on both dark and light shells. --shadow-1 is a
+     subtle lift for small controls (active tab, chips); --shadow-2 is for
+     floating cards/panels. Themes may override these per shell. */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.30), 0 4px 10px -3px rgba(0, 0, 0, 0.34);
+  --shadow-2: 0 8px 28px -10px rgba(0, 0, 0, 0.50);
+}

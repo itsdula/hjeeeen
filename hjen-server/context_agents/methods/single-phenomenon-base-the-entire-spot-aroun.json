@@ -1,0 +1,19 @@
+{
+  "id": "single-phenomenon-base-the-entire-spot-aroun",
+  "craft": "single-phenomenon",
+  "principle": "Base the entire spot around one coherent physical phenomenon (like particles, light, or water) seen from multiple angles and scales, instead of many unrelated images.",
+  "when_it_works": {
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Create a strong, memorable visual identity that’s easy to recall and associate with your brand or message.",
+  "evidence": [
+    "f06-sony — turbulence register",
+    "f11-honda — groundedness register",
+    "CONFIRMED-TRANSFERABLE: turbulence+groundedness"
+  ],
+  "weight": 3,
+  "status": "candidate",
+  "source": "auto:f06-sony"
+}

@@ -1,0 +1,239 @@
+/* ============================================================
+   Files — the deliverables browser. A Finder over the customer's
+   outputs: project folders → per-tool folders → the file grid,
+   with a breadcrumb path. Tokens only; theme-blind.
+   Built on the shared .page / .page__header shell.
+   ============================================================ */
+
+/* ── Breadcrumb — the path back up the folder tree ─────────── */
+.files-crumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  margin-bottom: var(--s-5);
+}
+.files-crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  padding: 4px var(--s-2);
+  background: transparent;
+  border: 0;
+  border-radius: var(--r-1);
+  color: var(--ink-muted);
+  font-family: var(--font-sans);
+  font-size: var(--t-meta);
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--t-fast), background var(--t-fast);
+}
+button.files-crumb:hover { color: var(--ink); background: var(--field-bg); }
+button.files-crumb:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+.files-crumb--current { color: var(--ink); cursor: default; }
+.files-crumb svg { opacity: 0.8; flex-shrink: 0; }
+.files-crumb-sep {
+  color: var(--ink-faint);
+  font-size: var(--t-meta);
+  user-select: none;
+}
+
+/* ── Folder tiles — project folders & per-tool folders ─────── */
+.files-folders {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--s-4);
+}
+.files-folder {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color var(--t-fast), transform var(--t-fast);
+}
+.files-folder:hover { border-color: var(--accent); transform: translateY(-1px); }
+.files-folder:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.files-folder__cover {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--bg-elev-2);
+  overflow: hidden;
+}
+.files-folder__cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.files-folder__cover-empty {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: var(--ink-faint);
+  background: var(--field-bg);
+}
+/* Video count chip on a folder cover — sits over imagery, so a fixed dark
+   scrim keeps it legible on every theme; ink uses the whiteout token. */
+.files-folder__vid {
+  position: absolute;
+  top: var(--s-2);
+  right: var(--s-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: rgba(0, 0, 0, 0.62);
+  color: var(--whiteout);
+  font-size: var(--t-micro);
+}
+.files-folder__body {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s-3);
+  padding: var(--s-3);
+}
+.files-folder__label {
+  min-width: 0;
+  font-size: var(--t-body);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.files-folder__count {
+  flex-shrink: 0;
+  color: var(--ink-faint);
+  font-size: var(--t-micro);
+}
+
+.files-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--s-4);
+}
+
+/* ── tile ─────────────────────────────────────────────────── */
+.files-tile {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  overflow: hidden;
+  transition: border-color var(--t-fast), transform var(--t-fast);
+}
+.files-tile:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+.files-tile__thumb-btn {
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 0;
+  background: var(--bg-elev-2);
+  border: 0;
+  cursor: zoom-in;
+}
+.files-tile__thumb {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+.files-tile__thumb--empty {
+  display: grid;
+  place-items: center;
+  color: var(--ink-faint);
+  background: var(--field-bg);
+}
+
+/* Video marker — a small play chip over the poster. Sits over imagery, so a
+   fixed dark scrim is legible on every theme; ink uses the whiteout token. */
+.files-tile__type {
+  position: absolute;
+  top: var(--s-2);
+  right: var(--s-2);
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-pill);
+  background: rgba(0, 0, 0, 0.62);
+  color: var(--whiteout);
+}
+
+.files-tile__body {
+  padding: var(--s-2) var(--s-3);
+  flex: 1;
+}
+.files-tile__title {
+  font-size: var(--t-body);
+  color: var(--ink);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.files-tile__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  flex-wrap: wrap;
+  margin-top: var(--s-1);
+  color: var(--ink-muted);
+  font-size: var(--t-micro);
+}
+.files-tile__proj {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink-dim);
+}
+
+/* Download — always visible (it's the point of this view), quiet until hover. */
+.files-tile__dl {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0 var(--s-3) var(--s-3);
+  padding: var(--s-2);
+  background: var(--field-bg);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-1);
+  color: var(--ink-dim);
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color var(--t-fast), background var(--t-fast), border-color var(--t-fast);
+}
+.files-tile__dl:hover {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent);
+}
+.files-tile__dl svg { opacity: 0.85; }
+.files-tile__dl:disabled { opacity: 0.5; cursor: default; }

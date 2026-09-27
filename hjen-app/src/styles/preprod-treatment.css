@@ -1,0 +1,148 @@
+/* ============================================================
+   Treatment — رؤية المخرج (stage 4). View-specific parts on top
+   of preprod.css. Namespace: .ppt- . Colour lives on substrates
+   (--pp-accent = #AF7757); ink stays on the dark field.
+   ============================================================ */
+
+/* english override for the shared panel sublabel (.pp-panel__ar) —
+   UI text is English; the class stays for layout only */
+.ppt-en {
+  direction: ltr; font-family: var(--font-sans);
+  font-style: normal; font-size: 11.5px;
+}
+
+/* aside status card */
+.ppt-status {
+  border: 1px solid var(--line); border-radius: var(--r-3);
+  background: var(--bg); padding: var(--s-4);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.ppt-status__head { color: var(--ink-muted); }
+.ppt-status__row {
+  display: flex; justify-content: space-between;
+  color: var(--ink-muted); font-size: 10.5px;
+}
+.ppt-status__row .is-bad { color: var(--flash); }
+
+/* declared default line (step 1) — english UI notice */
+.ppt-default {
+  font-family: var(--font-sans);
+  font-size: 12.5px; line-height: 1.6; color: var(--ink-dim);
+  border: 1px dashed var(--line-strong); border-radius: var(--r-2);
+  padding: 9px 12px; margin-top: var(--s-3);
+  border-inline-start: 3px solid var(--pp-accent);
+}
+
+/* signed idea (step 2) — read-only, from stage 1 */
+.ppt-idea {
+  border: 1px solid var(--line); border-radius: var(--r-2);
+  background: var(--field-bg); padding: var(--s-4);
+  display: flex; flex-direction: column; gap: 8px;
+  border-inline-start: 3px solid var(--pp-accent);
+}
+.ppt-idea--empty { color: var(--ink-muted); border-inline-start-color: var(--line-strong); }
+.ppt-idea__line { display: flex; flex-direction: column; gap: 3px; }
+.ppt-idea__line .mono-label { color: var(--ink-faint); }
+.ppt-idea__ar {
+  direction: rtl; font-family: var(--font-serif);
+  font-size: 13.5px; line-height: 1.8; color: var(--ink);
+}
+
+/* stance / three-reader / post — three columns that wrap */
+.ppt-stance {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--s-4);
+}
+
+/* taller arabic textareas */
+.ppt-tall { min-height: 130px; }
+.ppt-frame { min-height: 180px; }
+
+/* choice-pairs (step 3) */
+.ppt-counter {
+  border: 1px solid var(--line-strong); border-radius: var(--r-pill);
+  padding: 5px 10px; color: var(--ink-muted); white-space: nowrap;
+}
+.ppt-counter.is-full { border-color: var(--pp-accent); color: var(--pp-accent); }
+.ppt-pairs { display: flex; flex-direction: column; gap: 10px; }
+.ppt-pair {
+  display: grid; grid-template-columns: 210px 1fr; gap: var(--s-4);
+  align-items: center; padding: 8px 10px;
+  border: 1px solid var(--line); border-radius: var(--r-2);
+  background: var(--bg);
+}
+.ppt-pair.is-decided { border-inline-start: 3px solid var(--pp-accent); }
+.ppt-pair__label { display: flex; flex-direction: column; gap: 3px; }
+.ppt-pair__label .mono-label { color: var(--ink); }
+.ppt-pair__sub {
+  align-self: flex-start;
+  font-family: var(--font-sans); font-size: 11.5px; color: var(--ink-faint);
+}
+@media (max-width: 900px) { .ppt-pair { grid-template-columns: 1fr; } }
+
+/* wardrobe negatives */
+.ppt-negs { align-items: center; }
+.ppt-neg { cursor: pointer; }
+.ppt-neg-input { width: 220px; flex: 0 1 auto; padding: 6px 10px; font-size: 12.5px; }
+/* Arabic reading list for the negatives — one hairline over the set, not per row. */
+.ppt-negs-ar { margin-top: var(--s-2); padding-top: var(--s-2); border-top: 1px solid var(--line); }
+.ppt-negs-ar__line { margin-top: var(--s-1); padding-top: 0; border-top: none; }
+.ppt-negs-ar__line:first-child { margin-top: 0; }
+
+/* cgi restraint toggle */
+.ppt-toggle { align-self: flex-start; }
+
+/* 8-element live checklist — english UI labels */
+.ppt-check {
+  display: flex; flex-wrap: wrap; gap: 6px 14px;
+  margin: -6px 0 var(--s-4);
+  padding: 8px 10px; border: 1px solid var(--line);
+  border-radius: var(--r-2); background: var(--bg);
+}
+.ppt-check__item {
+  display: inline-flex; align-items: baseline; gap: 5px;
+  font-family: var(--font-sans); font-size: 11px; line-height: 1.6;
+}
+.ppt-check__item.is-ok { color: var(--ink-dim); }
+.ppt-check__item.is-miss { color: var(--flash); }
+.ppt-check__dot { font-size: 8px; }
+.ppt-check__item.is-ok .ppt-check__dot { color: var(--pp-accent); }
+
+/* page-plan (step 5) */
+.ppt-plan { display: flex; flex-direction: column; gap: var(--s-4); }
+.ppt-plan-empty { color: var(--ink-muted); padding: var(--s-4) 0; }
+.ppt-plan__row {
+  display: grid; grid-template-columns: 92px 1fr; gap: var(--s-4);
+  border: 1px solid var(--line); border-radius: var(--r-3);
+  background: var(--bg); padding: var(--s-4);
+}
+.ppt-plan__ctrl {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding-top: 2px;
+}
+.ppt-plan__n {
+  width: 24px; height: 24px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid var(--line-strong); color: var(--ink-muted);
+}
+.ppt-rowbtn {
+  width: 24px; height: 22px; display: grid; place-items: center;
+  background: var(--field-bg); border: 1px solid var(--line);
+  border-radius: var(--r-1, 4px); color: var(--ink-dim);
+  font: 500 11px/1 var(--font-sans); cursor: pointer;
+}
+.ppt-rowbtn:hover { border-color: var(--line-strong); color: var(--ink); }
+.ppt-rowbtn:disabled { opacity: .35; cursor: default; }
+.ppt-rowbtn--x:hover { border-color: var(--flash); color: var(--flash); }
+.ppt-plan__cells { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.ppt-plan__section { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; }
+.ppt-plan__text { min-height: 74px; }
+.ppt-plan__spec { font-size: 12px; color: var(--ink-dim); }
+.ppt-plan__foot {
+  display: flex; align-items: center; gap: var(--s-4);
+  margin-top: var(--s-4);
+}
+.ppt-plan__note {
+  font-family: var(--font-sans);
+  font-size: 12px; color: var(--ink-faint);
+}

@@ -1,0 +1,16 @@
+{
+  "id": "prof-f01-nike",
+  "name": "prof-f01-nike — extracted from f01-nike",
+  "palette": "High contrast between warm, human tones (golden streetlights, skin, tan coat, saturated team colors) and cooler, industrial or monumental blues and greys (ocean at dusk, container ship, overcast racecourse, night tennis court). Color is used to separate raw ambition (cool, surreal environments) from human conviction (warm, intimate portraits).",
+  "light_logic": "Naturalistic but heightened: bright, clear daylight for raw action; blue-hour and night lighting for scale and surrealism; arena and court lighting for spectacle; warm, shallow-depth street lighting for intimacy. Light shifts from broad, environmental illumination to focused, character-centric glow as the message narrows.",
+  "lens": "A mix of long-lens telephoto for compressed, epic scale (racecourse, container ship), wide and aerial for monumentality (tennis mural), and medium/close portrait lenses for the narrator. Motion is mostly captured mid-action with dynamic framing, then stabilizes into static or gently moving shots for the direct address.",
+  "texture": "Slightly gritty, lived-in sports realism with occasional grain and motion blur, contrasted with clean, flat graphic design in the end card. Surfaces (concrete, water, asphalt, painted court) feel tactile, grounding the lofty language in physical reality.",
+  "world": "A contemporary, global, urban-sport world where everyday public spaces become arenas for outsized achievement. The environment blends neighborhood, city, and industrial backdrops, suggesting that greatness emerges from ordinary places and marginalized contexts.",
+  "forbidden": [
+    "Overly glossy, studio-perfect imagery that removes the sense of real-world struggle or risk.",
+    "Chaotic, handheld camerawork that distracts from the clarity and symbolism of each action.",
+    "Overloaded graphics or text on screen that compete with the spoken manifesto.",
+    "Cynical or mocking tone that undercuts the sincerity of sacrifice and belief.",
+    "Narrow, elitist settings that imply greatness is only for the already-privileged."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "id": "waking-start-in-a-state-of",
+  "craft": "waking",
+  "principle": "Start in a state of stillness or sleep and progressively move into scenes of motion and exertion so the audience feels the product or idea as a gentle but firm wake-up call.",
+  "when_it_works": {
+    "register": [
+      "resolve"
+    ],
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Make a shift from passive to active behavior feel emotionally grounded and achievable rather than abrupt.",
+  "evidence": [
+    "f09-p-g — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f09-p-g"
+}

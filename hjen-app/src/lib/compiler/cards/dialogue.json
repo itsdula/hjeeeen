@@ -1,0 +1,26 @@
+[
+  {
+    "id": "dialogue.novelist-register.001",
+    "dimension": "dialogue",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["حوار", "سكريبت", "dialogue", "script", "vo", "تعليق"],
+    "ar": "سجل الروائي لا المسوّق: جمل تتنفس بإيقاع طويل-قصير-طويل، فكرة واحدة بالجملة، تنتهي على كلمة الوزن. الحوار الإعلاني السعودي الجيد ناقص الشرح قليلاً — يثق بالمشاهد. الصمت جملة مشروعة.",
+    "en": "Novelist register, not marketer: sentences breathe long–short–long, one thought per line, ending on the weight word. Good Saudi ad dialogue is slightly under-explained — it trusts the viewer. Silence is a legitimate line.",
+    "negatives": ["explaining the joke or the emotion in dialogue", "three same-length sentences in a row"],
+    "sources": ["seed:copy_register"],
+    "weight": 2
+  },
+  {
+    "id": "dialogue.cultural-truth-line.002",
+    "dimension": "dialogue",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["تفصيلة", "specificity", "detail", "truth", "سطر"],
+    "ar": "كل قطعة حوار أو تعليق تحمل تفصيلة صدق واحدة: اسم، مكان، سنة، أكلة، شارع، أغنية يعرفها المشاهد. «قهوة أول ما تفوح» تغلب «طعم لا يقاوم». التفصيلة تُكتسب من سياق القصة لا تُلصق.",
+    "en": "Every dialogue or VO piece carries one cultural-truth detail: a name, a place, a year, a dish, a street, a song the viewer knows. 'The coffee at first rise of its scent' beats 'irresistible taste'. The detail must be EARNED by the story, not pasted on.",
+    "negatives": ["decorative heritage words with no referent", "generic praise adjectives"],
+    "sources": ["seed:copy_register"],
+    "weight": 2
+  }
+]

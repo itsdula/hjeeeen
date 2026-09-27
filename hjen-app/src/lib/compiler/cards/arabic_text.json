@@ -1,0 +1,52 @@
+[
+  {
+    "id": "arabic_text.verbatim-law.001",
+    "dimension": "arabic_text",
+    "region": "arab",
+    "era": "timeless",
+    "tags": ["نص", "كتابة", "خط", "text", "arabic", "typography", "لافتة", "sign"],
+    "ar": "قانون النص الحرفي: أي نص عربي داخل الصورة يُكتب في البرومبت مقتبساً حرفياً بين علامتي تنصيص مع أمر «اكتبه كما هو، لا تخترع». الموديل الذي يُترك ليؤلف عربياً سيخربش. ٦ كلمات كحد أقصى داخل الموديل.",
+    "en": "Verbatim law: any Arabic text inside the image must appear in the prompt as an exact quoted string with the instruction 'render this Arabic text verbatim, letter-for-letter; do not invent or add any other Arabic text'. Max 6 words in-model. A model left to compose Arabic will scribble.",
+    "negatives": ["asking the model to 'add some Arabic signage'", "long paragraphs rendered in-model"],
+    "sources": ["seed:arabic_text"],
+    "weight": 3,
+    "always": true
+  },
+  {
+    "id": "arabic_text.overlay-routing.002",
+    "dimension": "arabic_text",
+    "region": "arab",
+    "era": "timeless",
+    "tags": ["overlay", "تايبوغرافي", "سوبر", "عنوان", "headline", "caption"],
+    "ar": "التوجيه: نص أطول من ٦ كلمات، أو سوبر/عنوان حملة، أو لوكب براند = لا يُرسم بالموديل أبداً — يذهب لأداة الكتابة الحقيقية (Overlay بخط عربي حديث) بعد الصنع. داخل الموديل تُترك مساحة نظيفة هادئة للنص.",
+    "en": "Routing: text longer than 6 words, campaign supers/headlines, or brand lockups are NEVER model-rendered — they go to the real typography overlay (Inter) after the make. In-model, reserve a calm clean area for the text placement (negative space in the composition).",
+    "negatives": ["model-rendered campaign headline", "logo lockups drawn by the image model"],
+    "sources": ["seed:arabic_text"],
+    "weight": 3,
+    "always": true
+  },
+  {
+    "id": "arabic_text.diegetic-signage.003",
+    "dimension": "arabic_text",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["لافتات", "محلات", "signage", "diegetic", "شارع", "بقالة"],
+    "ar": "النص داخل المشهد (لافتات المحلات، التقويم، لوحة السيارة) مرغوب — يضيف صدقاً. اطلبه قصيراً ومحدداً: «لافتة مطعم مكتوب عليها \"مطاعم البخاري\"». إن خرج مخربشاً فحص الـ QC يعيد اللقطة.",
+    "en": "Diegetic text (shop signs, wall calendars, license plates) is WELCOME — it adds truth. Request it short and exact: a bakery sign reading \"مخبز البلد\". Keep one sign per request; multiple invented signs multiply scribble risk. QC re-takes on garble.",
+    "negatives": ["five different Arabic signs in one frame", "English-only signage on a Saudi street"],
+    "sources": ["seed:arabic_text"],
+    "weight": 2
+  },
+  {
+    "id": "arabic_text.typography-styles.004",
+    "dimension": "arabic_text",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["خطوط", "fonts", "كوفي", "ديواني", "نسخ", "style"],
+    "ar": "أعراف الخط في الإعلان السعودي: الحديث سانس هندسي عربي؛ التراثي/التأسيس ديواني أو ثلث؛ المحلات القديمة خط يدوي مطلي؛ الحكومي نسخ رسمي. الخط إشارة زمن وفئة — اختر بوعي.",
+    "en": "Saudi ad typography conventions: modern = geometric Arabic sans (Inter family); heritage/Founding Day = Diwani or Thuluth calligraphy; old shops = hand-painted enamel lettering; government = formal Naskh. Typeface signals era and category — choose deliberately.",
+    "negatives": ["decorative calligraphy on a tech product", "default system font look on a heritage piece"],
+    "sources": ["seed:arabic_text"],
+    "weight": 1
+  }
+]

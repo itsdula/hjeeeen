@@ -1,0 +1,38 @@
+[
+  {
+    "id": "performance.body-language.001",
+    "dimension": "performance",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["أداء", "جسد", "body", "language", "posture", "وقفة"],
+    "ar": "لغة الجسد محددة دائماً، لا «واقف» بل كيف واقف: ميلان على الرفرف، كفوف مبسوطة على كاونتر ستانلس بثقل عقود، تربيعة مرتاحة في المجلس، انحناءة تقبيل رأس الجد. الوقفة العامة المهذبة للتصوير ممنوعة.",
+    "en": "Body language is always SPECIFIC — not 'standing' but HOW: the lean on the fender, palms flat on the stainless counter with decades of weight, the easy cross-legged majlis sit, the bow to kiss a grandfather's head. Generic polite posing-for-camera is forbidden.",
+    "negatives": ["hands-at-sides catalog stance", "identical posture across a group"],
+    "sources": ["seed:clay_basil"],
+    "weight": 3
+  },
+  {
+    "id": "performance.intention-direction.002",
+    "dimension": "performance",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["توجيه", "direction", "انفعال", "emotion", "intention", "inside"],
+    "ar": "الانفعال يُكتب كحالة داخلية لا كنتيجة: ليس «تبتسم أكثر» بل «على وشك أن ترى أختها من خلف الأبواب». لكل كادر جملة حالة داخلية واحدة: «تنتظر زوجها المتأخر خمس دقائق؛ لم تقلق بعد».",
+    "en": "Emotion is written as an INNER STATE, not a result: never 'smile bigger' but 'she is about to see her sister through the doors.' Every frame carries one inside-state sentence: 'waiting for her husband, five minutes late; not worried yet.' The face follows the state.",
+    "negatives": ["result-directed expressions ('look happier')", "emotions with no situation generating them"],
+    "sources": ["seed:kv_casting"],
+    "weight": 3
+  },
+  {
+    "id": "performance.restraint-scale.003",
+    "dimension": "performance",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["تحفظ", "restraint", "فرح", "joy", "درجات", "scale"],
+    "ar": "سلم الانفعال السعودي على الشاشة: التأثر كتمة ونظرة جانبية قبل الدمعة؛ الفرح العائلي دفء مضبوط؛ والطرب الكامل انفجار مشروع في سياقه (فوز، سوق، عرضة). اعرف أين أنت على السلم قبل كتابة الوجه.",
+    "en": "The Saudi on-screen emotion scale: being moved = a held breath and a look away before any tear; family joy = controlled warmth; full TARAB = a legitimate eruption in its context (a win, a market, an ardha). Know where the moment sits on the scale before writing the face.",
+    "negatives": ["Hollywood sobbing in a family kitchen", "flat affect where tarab belongs"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  }
+]

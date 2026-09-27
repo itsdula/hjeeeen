@@ -1,0 +1,16 @@
+{
+  "id": "prof-f11-honda",
+  "name": "prof-f11-honda — extracted from f11-honda",
+  "palette": "Muted neutrals with warm wood (honey, beige, pale brown) contrasted against cool silvers and blacks of metal, with a single accent color (red pedestal) reserved for the climax.",
+  "light_logic": "Soft, even, daylight-like illumination with minimal shadows, consistent across shots to suggest a controlled, test-lab environment.",
+  "lens": "Moderate focal lengths with low distortion, mostly level, side-on or three-quarter views that keep geometry legible and the chain’s direction easy to follow.",
+  "texture": "Clean, polished metals and glass against smooth wooden floors and plain painted walls, avoiding dirt, grease, or clutter so the mechanism reads as intentional design, not workshop mess.",
+  "world": "A single, bright, minimal interior room that feels like a calm studio or design lab, where everyday car parts are repurposed into a precise kinetic sculpture.",
+  "forbidden": [
+    "Handheld or shaky camera that would obscure the clarity of the mechanism",
+    "Busy backgrounds or additional props that break the single-room, single-machine focus",
+    "Harsh, contrasty lighting that creates confusing shadows on the parts",
+    "Fast, chaotic cutting that makes the chain reaction hard to follow",
+    "Overt CGI or impossible physics that would undermine the sense of real-world reliability"
+  ]
+}

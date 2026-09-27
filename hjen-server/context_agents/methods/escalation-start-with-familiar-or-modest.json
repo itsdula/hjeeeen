@@ -1,0 +1,26 @@
+{
+  "id": "escalation-start-with-familiar-or-modest",
+  "craft": "escalation",
+  "principle": "Start with familiar or modest goals and systematically escalate them into bolder, almost impossible ambitions to reframe what is considered normal or acceptable.",
+  "when_it_works": {
+    "register": [
+      "resolve"
+    ],
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Stretch the audience’s sense of what is possible so that your final call-to-action feels aspirational instead of unrealistic.",
+  "evidence": [
+    "f01-nike — resolve register",
+    "f08-volvo-trucks — resolve register",
+    "f10-old-spice — joy register",
+    "CONFIRMED-TRANSFERABLE: resolve+joy"
+  ],
+  "weight": 4,
+  "status": "candidate",
+  "source": "auto:f01-nike"
+}

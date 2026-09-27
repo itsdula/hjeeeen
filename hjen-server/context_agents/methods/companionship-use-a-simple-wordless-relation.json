@@ -1,0 +1,23 @@
+{
+  "id": "companionship-use-a-simple-wordless-relation",
+  "craft": "companionship",
+  "principle": "Use a simple, wordless relationship between two characters moving through a landscape together to embody emotional needs that the voiceover or lyrics name abstractly.",
+  "when_it_works": {
+    "register": [
+      "longing"
+    ],
+    "beat": [
+      "setup"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Make an intangible desire (support, reliance, home) feel concrete and relatable without exposition.",
+  "evidence": [
+    "f04-john-lewis — longing register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f04-john-lewis"
+}

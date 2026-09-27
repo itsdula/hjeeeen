@@ -1,0 +1,202 @@
+/* The Swap. Inherits the Camera Angles chrome (.ang-*) so it reads as the same
+   studio, and adds only what this tool needs: a three-state slot row, the change
+   ledger, and the verdict chips.
+
+   Built on the app's native tokens — no literal colours except the three verdict
+   states, which have to be legible as states at a glance and are therefore
+   mixed from --accent / --ink so they still survive all six themes.
+   Scoped under .swap. UI copy is English only (house law). */
+
+.swap .swap-grid {
+  grid-template-columns: minmax(320px, 400px) minmax(380px, 1fr) minmax(320px, 420px);
+}
+@media (max-width: 1440px) { .swap .swap-grid { grid-template-columns: minmax(300px, 360px) 1fr; } }
+@media (max-width: 1040px) { .swap .swap-grid { grid-template-columns: 1fr; } }
+
+.swap-mid, .swap-right { padding: var(--s-5) var(--s-5) var(--s-9); min-width: 0; }
+.swap-right { border-left: 1px solid var(--line); }
+@media (max-width: 1440px) { .swap-right { border-left: none; border-top: 1px solid var(--line); grid-column: 1 / -1; } }
+@media (max-width: 1040px) { .swap-right { grid-column: auto; } }
+
+.swap-fire { width: 100%; margin-top: var(--s-5); padding: 11px 15px; }
+.swap-settings { display: grid; gap: var(--s-2); }
+.swap-settings select {
+  background: var(--field-bg); border: 1px solid var(--line); color: var(--ink);
+  border-radius: var(--r-2); padding: 8px 10px; font-size: 13px; font-family: inherit;
+}
+
+/* ── every decomposition in this project ──
+   A project accumulates many of these, and the owner comes back for the one
+   from Tuesday — so the strip is a list with a real title and a take count, not
+   a row of anonymous thumbnails. */
+.swap-hist { margin-top: var(--s-7); border-top: 1px solid var(--line); padding-top: var(--s-4); }
+.swap-hist__list { display: grid; gap: 2px; margin-top: var(--s-3); }
+.swap-hist__item { display: grid; grid-template-columns: 1fr 26px; align-items: stretch; border-radius: var(--r-2); }
+.swap-hist__item:hover { background: var(--field-bg); }
+.swap-hist__item.is-open { background: var(--field-bg); box-shadow: inset 2px 0 0 var(--accent); }
+.swap-hist__open {
+  display: grid; grid-template-columns: 44px 1fr; gap: var(--s-3); align-items: center;
+  background: none; border: 0; padding: var(--s-2); text-align: start; cursor: pointer; min-width: 0;
+}
+.swap-hist__open img { width: 44px; height: 32px; object-fit: cover; border-radius: var(--r-1); border: 1px solid var(--line); }
+.swap-hist__meta { display: grid; gap: 1px; min-width: 0; }
+.swap-hist__title {
+  font-size: 12px; color: var(--ink); line-height: 1.3;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.swap-hist__sub {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px; letter-spacing: .04em; color: var(--ink-dim);
+}
+.swap-hist__del {
+  background: none; border: 0; color: var(--ink-dim); font-size: 16px; line-height: 1;
+  cursor: pointer; opacity: 0; transition: opacity var(--t-fast), color var(--t-fast);
+}
+.swap-hist__item:hover .swap-hist__del { opacity: 1; }
+.swap-hist__del:hover { color: var(--ink); }
+
+/* ── notes ── */
+.swap-note {
+  font-size: var(--t-meta); line-height: 1.5; margin-top: var(--s-3);
+  padding: var(--s-3) var(--s-3); border-radius: var(--r-2);
+  border: 1px solid var(--line); color: var(--ink-muted);
+}
+.swap-note--work { border-style: dashed; }
+.swap-note--bad { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); color: var(--ink); }
+.swap-note--warn { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+
+/* ── the slot rows ── */
+.swap-slots { display: grid; gap: var(--s-2); margin-top: var(--s-4); }
+.swap-row {
+  display: grid; grid-template-columns: 84px 1fr; gap: var(--s-3);
+  padding: var(--s-3); border: 1px solid var(--line); border-radius: var(--r-2);
+  background: var(--field-bg);
+  transition: border-color var(--t-fast), opacity var(--t-fast);
+}
+.swap-row.is-swap { border-color: var(--accent); }
+.swap-row.is-follow { border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); border-style: dashed; }
+.swap-row.is-pinned { border-color: color-mix(in srgb, var(--accent) 70%, var(--line)); }
+.swap-row.is-thin { opacity: .5; }
+
+.swap-row__ctrl { align-self: start; display: grid; gap: 3px; }
+/* Pinning is a deliberate act, so it gets its own quiet control — never the
+   side effect of clicking the state chip. */
+.swap-row__pinbtn {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 9px; letter-spacing: .05em; color: var(--ink-dim);
+  transition: color var(--t-fast);
+}
+.swap-row__pinbtn:hover { color: var(--ink); text-decoration: underline; }
+.swap-row__file {
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-size: 11px; color: var(--ink-dim); text-decoration: underline;
+  text-underline-offset: 2px; transition: color var(--t-fast);
+}
+.swap-row__file:hover { color: var(--ink); }
+.swap-src__file { display: block; margin-top: var(--s-3); }
+.swap-row__thin {
+  font-size: 11px; line-height: 1.45; color: var(--ink-muted);
+  padding-left: var(--s-3); border-left: 2px solid var(--line);
+}
+.ang-drop__sub {
+  display: block; margin-top: 4px;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px; letter-spacing: .04em; color: var(--ink-dim);
+}
+
+.swap-row__state {
+  align-self: start;
+  background: transparent; border: 1px solid var(--line); color: var(--ink-dim);
+  border-radius: var(--r-1); padding: 5px 0; width: 100%;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px; letter-spacing: .09em; font-weight: 700; cursor: pointer;
+  transition: border-color var(--t-fast), color var(--t-fast), background var(--t-fast);
+}
+.swap-row__state:hover { border-color: var(--line-strong); color: var(--ink); }
+.swap-row.is-swap .swap-row__state { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.swap-row.is-follow .swap-row__state { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+.swap-row.is-pinned .swap-row__state { color: var(--accent); border-style: dashed; }
+
+.swap-row__body { min-width: 0; }
+.swap-row__head { display: flex; align-items: baseline; gap: var(--s-2); flex-wrap: wrap; }
+.swap-row__name { font-size: 13px; font-weight: 650; }
+.swap-row__hint { font-size: 11px; color: var(--ink-dim); }
+.swap-row__now, .swap-row__follow, .swap-row__pin {
+  font-size: var(--t-meta); line-height: 1.5; color: var(--ink-muted); margin-top: 3px;
+}
+.swap-row__now em { color: var(--ink-dim); }
+.swap-row__because {
+  display: inline-block; margin-right: var(--s-2);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent);
+}
+.swap-row__pin { color: var(--ink); }
+
+.swap-row__edit { margin-top: var(--s-2); display: grid; gap: var(--s-2); }
+.swap-row__edit textarea {
+  width: 100%; resize: vertical;
+  background: var(--bg); border: 1px solid var(--line); color: var(--ink);
+  border-radius: var(--r-2); padding: 8px 10px;
+  font-family: inherit; font-size: 13px; line-height: 1.45;
+}
+.swap-row__edit textarea:focus { outline: none; border-color: var(--accent); }
+.swap-row__refs { display: flex; align-items: center; gap: var(--s-2); }
+.swap-row__ref {
+  width: 44px; height: 44px; object-fit: cover;
+  border-radius: var(--r-1); border: 1px solid var(--line);
+}
+
+/* ── the change ledger ── */
+.swap-req {
+  display: grid; grid-template-columns: 34px 1fr; gap: var(--s-3);
+  padding: var(--s-3) 0; border-bottom: 1px solid var(--line);
+}
+.swap-req__id {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 12px; font-weight: 700; color: var(--accent);
+}
+.swap-req__what { font-size: 13px; line-height: 1.45; }
+.swap-req__test {
+  font-size: var(--t-meta); line-height: 1.45; color: var(--ink-muted); margin-top: 3px;
+  padding-left: var(--s-3); border-left: 2px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+}
+.swap-req.is-vague .swap-req__id { opacity: .5; }
+.swap-req__vague { font-size: var(--t-meta); line-height: 1.45; color: var(--ink); margin-top: 4px; }
+
+/* ── the runs ── */
+.swap-runs__label { margin-top: var(--s-6); }
+.swap-run { margin-top: var(--s-4); }
+.swap-run__head {
+  font-size: 12px; font-weight: 650; line-height: 1.4;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.swap-run__meta {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px; letter-spacing: .05em; color: var(--ink-dim); font-weight: 500;
+}
+.swap-run__takes { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--s-3); margin-top: var(--s-3); }
+.swap-take { border: 1px solid var(--line); border-radius: var(--r-2); overflow: hidden; background: var(--field-bg); }
+.swap-take__img { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
+.swap-take__img img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+.swap-take__work, .swap-take__bad, .swap-take__unresolved {
+  padding: var(--s-3); font-size: 11px; line-height: 1.45; color: var(--ink-muted);
+}
+.swap-take__work { font-family: var(--font-mono, ui-monospace, monospace); letter-spacing: .02em; }
+.swap-take__bad { color: var(--ink); }
+.swap-take__unresolved { border-top: 1px solid var(--line); color: var(--ink); }
+
+/* Verdict chips. Three states have to be readable as states at a glance, so
+   these are the one place this stylesheet mixes its own colours — from the
+   theme's own accent and ink, never from a literal palette. */
+.swap-take__verdicts { display: flex; flex-wrap: wrap; gap: 4px; padding: var(--s-2) var(--s-3) var(--s-3); }
+.swap-v {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10px; font-weight: 700; letter-spacing: .04em;
+  padding: 3px 6px; border-radius: var(--r-1); border: 1px solid var(--line); color: var(--ink-dim);
+  cursor: default;
+}
+.swap-v.is-landed { border-color: color-mix(in srgb, var(--accent) 60%, var(--line)); color: var(--ink); }
+.swap-v.is-partial { border-style: dashed; border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); color: var(--ink-muted); }
+.swap-v.is-missed { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.swap-v.is-rounds { opacity: .7; }

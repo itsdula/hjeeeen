@@ -1,0 +1,20 @@
+{
+  "id": "saturation-introduce-a-single-simple-visual",
+  "craft": "saturation",
+  "principle": "Introduce a single, simple visual element in small quantities, then progressively flood the frame with it until it becomes a moving environment the viewer feels immersed in.",
+  "when_it_works": {
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Make the audience feel like they’ve been swept inside a mood or sensation rather than just watching it from the outside.",
+  "evidence": [
+    "f06-sony — turbulence register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f06-sony"
+}

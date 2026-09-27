@@ -1,0 +1,151 @@
+/* The References dock — host for the Mood Board and the Timeline.
+   Namespace .rd- (dock) and .pw- (detached panel window). Tokens only. */
+
+/* ─── the dock inside References ──────────────────────────── */
+/* absolute, not fixed: it must sit INSIDE the .pp view root so KeepAlivePane's
+   visibility:hidden reaches it when the tab is switched away. z-index sits
+   above the board and its action bar, below the app's modal layer (100) so the
+   command palette and any confirm sheet still win. */
+.rd-dock {
+  position: absolute; inset: 0; z-index: 20;
+  display: flex; flex-direction: column;
+  background: var(--bg);
+  min-height: 0;
+}
+
+.rd-bar {
+  flex: 0 0 auto;
+  height: 48px;
+  display: flex; align-items: center; gap: var(--s-2);
+  padding-inline: var(--s-4);
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--line);
+}
+.rd-bar__spacer { flex: 1 1 auto; }
+
+.rd-tabs { display: flex; gap: var(--s-1); }
+.rd-tab {
+  appearance: none; border: 0; cursor: pointer;
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--ink-muted);
+  font-family: var(--font-sans); font-size: var(--t-meta);
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.rd-tab:hover { color: var(--ink-dim); background: var(--field-bg); }
+.rd-tab.is-on { color: var(--ink); background: var(--field-bg); box-shadow: inset 0 0 0 1px var(--line-strong); }
+
+.rd-body { flex: 1 1 auto; display: flex; min-height: 0; }
+
+/* ─── the document rail ───────────────────────────────────── */
+.rd-rail {
+  flex: 0 0 232px;
+  display: flex; flex-direction: column; gap: var(--s-2);
+  padding: var(--s-3);
+  background: var(--bg-elev);
+  border-inline-end: 1px solid var(--line);
+  min-height: 0;
+}
+.rd-rail__new { width: 100%; }
+.rd-rail__list { flex: 1 1 auto; overflow-y: auto; display: flex; flex-direction: column; gap: var(--s-1); }
+.rd-rail__blank { color: var(--ink-faint); font-size: var(--t-meta); padding: var(--s-2); }
+
+.rd-card {
+  position: relative;
+  display: flex; align-items: center; gap: var(--s-2);
+  padding: var(--s-1);
+  border-radius: var(--r-2);
+  cursor: pointer;
+  background: transparent;
+  transition: background var(--t-fast) var(--ease);
+}
+.rd-card:hover { background: var(--field-bg); }
+.rd-card.is-on { background: var(--field-bg); box-shadow: inset 0 0 0 1px var(--accent); }
+.rd-card.is-out { opacity: .62; }
+.rd-card__thumb {
+  flex: 0 0 auto; width: 52px; height: 34px;
+  border-radius: var(--r-1); overflow: hidden;
+  background: var(--bg-elev-2);
+}
+.rd-card__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rd-card__meta { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.rd-card__name {
+  font-size: var(--t-meta); color: var(--ink-dim);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.rd-card.is-on .rd-card__name { color: var(--ink); }
+.rd-card__count { color: var(--ink-faint); }
+.rd-card__del {
+  flex: 0 0 auto;
+  appearance: none; border: 0; background: transparent; cursor: pointer;
+  width: 22px; height: 22px; border-radius: var(--r-1);
+  color: var(--ink-faint); font-size: 15px; line-height: 1;
+  opacity: 0; transition: opacity var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.rd-card:hover .rd-card__del { opacity: 1; }
+.rd-card__del:hover { color: var(--flash); background: var(--field-bg); }
+
+/* ─── the stage ───────────────────────────────────────────── */
+.rd-stage { position: relative; flex: 1 1 auto; min-width: 0; min-height: 0; }
+
+.rd-empty {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: var(--s-3);
+  text-align: center; padding: var(--s-6);
+}
+.rd-empty__eyebrow { color: var(--ink-faint); }
+.rd-empty__p { color: var(--ink-muted); font-size: var(--t-meta); max-width: 44ch; user-select: text; }
+.rd-empty__row { display: flex; gap: var(--s-2); }
+
+/* Somebody else wrote this document while it was open. */
+.rd-reloaded {
+  position: absolute; top: var(--s-3); left: 50%; transform: translateX(-50%);
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-pill);
+  background: var(--bg-elev-2); color: var(--ink-muted);
+  box-shadow: var(--shadow-1);
+  pointer-events: none;
+  z-index: 30;
+}
+.rd-toast { z-index: 40; }
+
+/* ─── remove confirm ──────────────────────────────────────── */
+.rd-confirm__body { padding: var(--s-5); display: flex; flex-direction: column; gap: var(--s-2); }
+.rd-confirm__eyebrow { color: var(--ink-faint); }
+.rd-confirm__h { font-family: var(--font-serif); font-size: var(--t-h3); color: var(--ink); margin: 0; }
+.rd-confirm__p { color: var(--ink-muted); font-size: var(--t-meta); margin: 0; user-select: text; }
+.rd-confirm__foot {
+  display: flex; justify-content: flex-end; gap: var(--s-2);
+  padding: var(--s-3) var(--s-5) var(--s-5);
+}
+.rd-confirm__yes {
+  appearance: none; border: 0; cursor: pointer;
+  padding: var(--s-2) var(--s-4);
+  border-radius: var(--r-2);
+  background: var(--flash); color: var(--whiteout);
+  font-family: var(--font-sans); font-size: var(--t-meta);
+}
+
+/* ─── the detached window ─────────────────────────────────── */
+.pw-root {
+  position: fixed; inset: 0;
+  display: flex; flex-direction: column;
+  background: var(--bg); color: var(--ink);
+}
+.pw-bar {
+  flex: 0 0 auto;
+  height: 38px;
+  display: flex; align-items: center; gap: var(--s-3);
+  padding-inline: var(--s-4);
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--line);
+}
+/* macOS traffic-light gutter — the same law the studio top bar follows. */
+[data-traffic-lights="left"]  .pw-bar { padding-left: 84px; }
+[data-traffic-lights="right"] .pw-bar { padding-right: 84px; }
+.pw-bar__name { font-size: var(--t-meta); color: var(--ink-dim); user-select: text; }
+.pw-bar__spacer { flex: 1 1 auto; }
+.pw-bar__kind { color: var(--ink-faint); }
+.pw-body { position: relative; flex: 1 1 auto; min-height: 0; }

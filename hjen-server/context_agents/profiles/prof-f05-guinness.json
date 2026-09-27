@@ -1,0 +1,16 @@
+{
+  "id": "prof-f05-guinness",
+  "name": "prof-f05-guinness — extracted from f05-guinness",
+  "palette": "High-contrast black-and-white with deep blacks, bright whites, and minimal midtones to emphasize texture and elemental forces.",
+  "light_logic": "Harsh, directional natural light on faces and water; underwater glow from above; occasional near-dark frames to punctuate the journey.",
+  "lens": "Tight portrait lenses for facial close-ups, wider lenses in the water for dynamic wave and body distortion, with stable, deliberate framing.",
+  "texture": "Emphasis on skin pores, wrinkles, spray, bubbles, and foam; grainy, tactile surfaces that make water and weather feel physically present.",
+  "world": "A stripped-back, almost mythic seascape where a lone figure and the ocean are the only characters, existing outside specific time or place.",
+  "forbidden": [
+    "bright, saturated color palettes",
+    "busy backgrounds or visible crowds",
+    "fast-cut montage of many different people",
+    "overt product shots or UI overlays",
+    "comedic or flippant performance"
+  ]
+}

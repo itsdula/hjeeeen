@@ -1,0 +1,58 @@
+[
+  {
+    "expression": "该起床喽",
+    "meaning": "It’s time to get up / time to wake up now; a gentle prompt from an elder or caregiver to a child or junior.",
+    "register": "Mandarin, casual family/home context",
+    "usage": "Used as a soft, everyday wake-up call, often spoken by a parent or older family member to children in the morning; typically comes at the very start of an interaction or scene to signal the transition from sleep to activity.",
+    "example": "妈妈轻轻推开门，说：\"该起床喽，今天要去郊游呢。\"",
+    "confidence": "high",
+    "verify": "real",
+    "verify_why": "Natural colloquial Mandarin phrase meaning ‘time to get up now’; structure 该+V+喽 is common and idiomatic.",
+    "status": "trusted",
+    "seen_in": [
+      "f09-p-g"
+    ]
+  },
+  {
+    "expression": "What's up?",
+    "meaning": "A casual greeting meaning “How are you?” or “What are you doing right now?”; here it also functions as a playful call sign among friends.",
+    "register": "American English, informal urban speech among friends",
+    "usage": "Used at the start of a phone call or encounter; can be repeated and exaggerated for comic effect or camaraderie.",
+    "example": "He called his friend and just said, “What’s up?” to see if he wanted to hang out.",
+    "confidence": "high",
+    "verify": "real",
+    "verify_why": "Common colloquial English greeting meaning “how are you/what’s going on?”",
+    "status": "trusted",
+    "seen_in": [
+      "f13-budweiser"
+    ]
+  },
+  {
+    "expression": "Nothin', just watching the game, having a bud.",
+    "meaning": "A relaxed way of saying “I’m not doing anything special, just watching a sports game and drinking a Budweiser beer.”",
+    "register": "American English, casual conversational slang",
+    "usage": "Answer to a casual “What’s up?” when you want to emphasize you’re just chilling; can be used as a stock phrase to signal low-key relaxation.",
+    "example": "When she asked what he was up to, he said, “Nothin’, just watching the game, having a bud.”",
+    "confidence": "high",
+    "verify": "real",
+    "verify_why": "Natural conversational English response describing current activity; fits beer‑ad context (Budweiser).",
+    "status": "trusted",
+    "seen_in": [
+      "f13-budweiser"
+    ]
+  },
+  {
+    "expression": "True, true.",
+    "meaning": "An affirmation meaning “Yeah, that’s right” or “I feel you”; repeating it adds emphasis and rhythm.",
+    "register": "American English, informal urban/hip-hop-influenced speech",
+    "usage": "Used to agree with someone’s statement in a laid-back way; often follows a friend’s description or opinion.",
+    "example": "“Man, it’s been a long week.” “True, true.”",
+    "confidence": "high",
+    "verify": "real",
+    "verify_why": "Colloquial affirmation in English meaning “that’s right / I agree,” often repeated for emphasis.",
+    "status": "trusted",
+    "seen_in": [
+      "f13-budweiser"
+    ]
+  }
+]

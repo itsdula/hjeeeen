@@ -1,0 +1,21 @@
+{
+  "id": "juxtaposition-pair-visually-extreme-high-sta",
+  "craft": "juxtaposition",
+  "principle": "Pair visually extreme, high-stakes actions with calm, reflective narration to suggest that what looks impossible is simply the logical expression of a mindset.",
+  "when_it_works": {
+    "beat": [
+      "setup"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Normalize extraordinary behavior by presenting it as the natural outcome of an internal belief rather than a rare exception.",
+  "evidence": [
+    "f01-nike — resolve register",
+    "f08-volvo-trucks — resolve register"
+  ],
+  "weight": 3,
+  "status": "candidate",
+  "source": "auto:f01-nike"
+}

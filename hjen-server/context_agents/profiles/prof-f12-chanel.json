@@ -1,0 +1,15 @@
+{
+  "id": "prof-f12-chanel",
+  "name": "prof-f12-chanel — extracted from f12-chanel",
+  "palette": "Soft, desaturated greens and greys for introspection; harsh black‑and‑white for media chaos; saturated neons and taxi yellows for public glamour; pastel pinks and silvers for surreal escape; warm browns and low light for intimate interiors.",
+  "light_logic": "Use gentle, diffused dusk light for solitude; strobing, overexposed flashes for fame; glossy night reflections for street iconography; creamy, glowing close‑ups for vulnerability; dim, directional interior light for secrecy and memory.",
+  "lens": "Mix wide city vistas with tight, shallow‑focus close‑ups; occasional tilted or off‑axis frames in intimate moments to suggest emotional imbalance; long lenses to compress paparazzi crowds and heighten pressure.",
+  "texture": "Wet streets and reflective surfaces for glamour; soft skin and feathered fabrics for sensuality; misty atmospheric haze on rooftops for dreaminess; grain or noise in monochrome crowd shots to feel hectic and documentary‑like.",
+  "world": "A heightened, cinematic metropolis where celebrity, fantasy sets, and private rooms coexist; reality is constantly slipping into dream logic, and public spectacle is always pressing in on fragile, stolen moments of intimacy.",
+  "forbidden": [
+    "Flat, evenly lit daytime realism that removes the dreamlike contrast between worlds",
+    "Overt comedy or slapstick that undercuts the aching, romantic tone",
+    "Busy, information‑heavy graphics that break the illusion of a remembered story",
+    "Naturalistic, handheld docu‑style that would collapse the sense of constructed fantasy"
+  ]
+}

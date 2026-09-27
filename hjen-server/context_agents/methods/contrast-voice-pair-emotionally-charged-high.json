@@ -1,0 +1,20 @@
+{
+  "id": "contrast-voice-pair-emotionally-charged-high",
+  "craft": "contrast-voice",
+  "principle": "Pair emotionally charged, high-contrast imagery with a calm, reflective voiceover that speaks in complete, measured sentences about what those images mean.",
+  "when_it_works": {
+    "beat": [
+      "desire"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Makes bold claims feel thoughtful and credible rather than loud or self-congratulatory.",
+  "evidence": [
+    "f03-apple — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f03-apple"
+}

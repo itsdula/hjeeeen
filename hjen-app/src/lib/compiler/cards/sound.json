@@ -1,0 +1,26 @@
+[
+  {
+    "id": "sound.frame-sound.001",
+    "dimension": "sound",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["صوت", "sound", "ambience", "بيئة", "video"],
+    "ar": "صوت الكادر ينضبط به التكوين حتى في الصورة الثابتة: أزيز مكيف، رنة دلة على فنجال، أذان بعيد، عجلات شنطة على بلاط، هدأة عائلية. للفيديو: اكتب طبقة الصوت البيئي الصادقة في البرومبت — Seedance يولّد صوتاً.",
+    "en": "The sound of the frame disciplines composition even for stills: AC hum, dallah clinking on a finjan, a distant athan, suitcase wheels on tile, soft family hush. For video prompts: write the honest ambient layer explicitly — 'quiet street, far athan, AC hum' — the video model renders audio.",
+    "negatives": ["generic upbeat corporate music implied by the visuals", "silent sterile rooms"],
+    "sources": ["seed:kv_craft"],
+    "weight": 2
+  },
+  {
+    "id": "sound.vo-music-identity.002",
+    "dimension": "sound",
+    "region": "ksa",
+    "era": "2020s",
+    "tags": ["تعليق", "vo", "موسيقى", "music", "معلق", "عود"],
+    "ar": "هوية الصوت السعودي: المعلق الفخم الكلاسيكي للوطني والفخر؛ الصوت الشبابي القريب للتقنية والأكل؛ الأنثوي الدافئ للعائلي. الموسيقى: عود وإيقاع خليجي يتصالحان مع إنتاج حديث — لا أوركسترا هوليودية مجانية، والصمت قرار مشروع.",
+    "en": "Saudi sonic identity: the classic deep announcer for national pride; a close young voice for tech and food; warm female VO for family. Music: oud and khaleeji rhythm at peace with modern production — no free Hollywood orchestra; silence is a legitimate choice.",
+    "negatives": ["epic-trailer score on a bakery ad", "generic royalty-free corporate track"],
+    "sources": ["seed:narrative"],
+    "weight": 1
+  }
+]

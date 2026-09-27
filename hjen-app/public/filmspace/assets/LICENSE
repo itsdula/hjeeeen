@@ -1,0 +1,40 @@
+HJEN Studio — Film Space stand-in mannequin asset
+==================================================
+
+ASSET      HjenStandIn.glb  (rigged, skinned adult humanoid — geometry + skeleton)
+           HjenStandIn.glb.js  — disk-loadable base64 encoding of HjenStandIn.glb,
+           generated from the .glb above so the model loads offline over the
+           file:// protocol (Chromium blocks fetch()/XHR of file:// URLs, but
+           allows ES-module imports). The .glb is the source of truth.
+
+SOURCE     Quaternius — "Universal Base Characters" (Standard/free kit).
+           https://quaternius.com   ·   https://quaternius.itch.io/universal-base-characters
+           Base model: Superhero_Male_FullBody  (full 65-joint Unreal/Epic-mannequin
+           rig incl. fingers; ~14.3k triangles).
+           Retrieved: 2026-07-20
+
+AUTHOR     @Quaternius
+
+LICENSE    CC0 1.0 Universal (CC0 1.0) — Public Domain Dedication.
+           NO attribution required. NO trademark limitation.
+           https://creativecommons.org/publicdomain/zero/1.0/
+           The CC0 dedication is stated on the source store page AND shipped inside
+           the download as License_Standard.txt (verbatim: "CC0 1.0 Universal
+           (CC0 1.0) Public Domain Dedication").
+
+PREPARATION
+           The distributed kit ships the model with skin / eye / hair PNG textures
+           embedded (~15.5 MB). HJEN Studio renders the stand-in as NEUTRAL CLAY, so
+           at vendor time every material, texture, image and sampler was STRIPPED and
+           the mesh + skeleton were repacked into a lean self-contained GLB (~0.74 MB).
+           At load, each SkinnedMesh material is (re)set to a neutral clay
+           MeshStandardMaterial — realism comes from mesh SHAPE + adult proportions;
+           photoreal skin / cast face are a later stage.
+
+USAGE      Loaded read-only as the human stand-in in Film Space. The Epic-mannequin
+           rig is retargeted onto the app's COCO-17 joint graph (role-based, so
+           cocoWorld() reads real bone WORLD positions) for the exact, offline
+           pose.png export. Multiple independent instances are supported.
+
+NOTE       This CC0 asset REPLACES the former CesiumMan stand-in (CC-BY 4.0, which
+           required attribution). No attribution obligation remains for Film Space.

@@ -1,0 +1,22 @@
+{
+  "id": "ordinary-stage-open-on-a-plain-observational",
+  "craft": "ordinary-stage",
+  "principle": "Open on a plain, observational view of an everyday environment and hold it long enough that its normalcy is felt, so later transformation reads as magical rather than random.",
+  "when_it_works": {
+    "beat": [
+      "setup"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Heighten the perceived impact of your ‘event’ by contrasting it against a clearly established baseline of mundane reality.",
+  "evidence": [
+    "f06-sony — turbulence register",
+    "f09-p-g — resolve register",
+    "CONFIRMED-TRANSFERABLE: turbulence+resolve"
+  ],
+  "weight": 3,
+  "status": "candidate",
+  "source": "auto:f06-sony"
+}

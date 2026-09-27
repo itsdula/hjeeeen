@@ -1,0 +1,26 @@
+[
+  {
+    "id": "comedy.deadpan-register.001",
+    "dimension": "comedy",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["نكتة", "كوميديا", "comedy", "deadpan", "فوضى", "humor"],
+    "ar": "النكتة السعودية الأصيلة جافة: وجه محايد أمام موقف عبثي — واقف جنب سيارته المعطلة ومشروبه المثلج على الرفرف، يسأل الكون. الفوضى الجميلة: إسعاف جنب ميني كوبر، مكتب غارق بورق مكرمش. العبث يُلعب بجدية تامة.",
+    "en": "Authentic Saudi comedy is DRY: a neutral face against an absurd situation — standing by the broken-down car, iced drink on the fender, asking the universe. Beautiful chaos: an ambulance beside a Mini Cooper, an office drowning in crumpled paper. The surreal is played completely straight.",
+    "negatives": ["slapstick mugging at camera", "laugh-track energy", "explaining the joke"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  },
+  {
+    "id": "comedy.setup-punch.002",
+    "dimension": "comedy",
+    "region": "ksa",
+    "era": "2020s",
+    "tags": ["توقيت", "timing", "setup", "punch", "قفلة"],
+    "ar": "توقيت النكتة الإعلانية: زرع هادئ يبني توقعاً ← لقطة صبر (اللحظة الميتة هي الضحكة) ← قلب التوقع بقفلة قصيرة — غالباً كلمة واحدة أو نظرة. القفلة السعودية تحب الاستسلام المهذب: «خلاص… عادي».",
+    "en": "Ad comedy timing: a calm setup building expectation → the patience beat (the dead moment IS the laugh) → flip with a short punch — often one word or one look. The Saudi punchline loves polite surrender: 'خلاص… عادي'. Cut immediately after the punch; don't linger.",
+    "negatives": ["holding the shot after the punchline", "double punchlines diluting each other"],
+    "sources": ["seed:narrative"],
+    "weight": 2
+  }
+]

@@ -1,0 +1,139 @@
+/* ── THE TOOL WHEEL ────────────────────────────────────────────────────────
+   Every HJEN tool on a dial sunk below the board's floor. Geometry lives in
+   ToolWheel.tsx (the numbers Anwar signed off in the lab); this file is the
+   skin only — nothing here decides an angle or a radius. */
+
+.tw { position: absolute; inset: 0; z-index: 40; }
+
+/* Darkens the board toward the bottom so the dial reads as lit from below,
+   and catches the click that closes the wheel. */
+.tw__scrim {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top,
+    rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.34) 34%, transparent 62%);
+  animation: tw-fade 0.2s ease both;
+}
+@keyframes tw-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── the dial ── */
+.tw__dial {
+  position: absolute; left: 50%;
+  border-radius: 50%;
+  cursor: grab;
+  animation: tw-rise 0.22s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+@keyframes tw-rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+/* A centred element must keep its translateX(-50%) through the animation — a
+   keyframe that lands on `transform: none` silently un-centres it, which is
+   exactly what threw the search field off the dial's axis. */
+@keyframes tw-rise-x {
+  from { opacity: 0; transform: translateX(-50%) translateY(26px); }
+  to { opacity: 1; transform: translateX(-50%); }
+}
+.tw__dial--grabbing { cursor: grabbing; }
+/* Hub ring — the rim of the dial, so the arc reads as one wheel and not as a
+   row of discs that happen to curve. */
+.tw__dial--hub::before {
+  content: ''; position: absolute; inset: 0; border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  pointer-events: none;
+}
+
+/* ── one tool ── */
+.tw__item {
+  position: absolute; left: 50%; top: 50%; transform-origin: 0 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  gap: 6px; padding: 0; margin: 0;
+  background: none; border: 0; color: inherit; font: inherit;
+  cursor: pointer;
+}
+.tw__disc {
+  display: grid; place-items: center;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--bg-elev) 96%, transparent);
+  border: 1px solid var(--line-strong);
+  color: var(--ink-muted);
+  transition: color var(--t-fast), border-color var(--t-fast),
+              background var(--t-fast), box-shadow var(--t-fast);
+}
+.tw__disc svg { width: 56%; height: 56%; }
+.tw__cap {
+  font-size: 10.5px; line-height: 1.15; letter-spacing: 0.01em;
+  color: var(--ink-faint); white-space: nowrap;
+  max-width: 104px; overflow: hidden; text-overflow: ellipsis;
+  transition: color var(--t-fast);
+}
+
+.tw__item:hover .tw__disc { color: var(--tw-c); border-color: var(--tw-c); }
+
+/* The tool at the top slot. Its own brand colour carries it — the wheel is the
+   one place in the app where every product's accent is legitimately on screen
+   at once, so exactly ONE of them is allowed to be filled at a time. */
+.tw__item--on .tw__disc {
+  color: var(--bg);
+  background: var(--tw-c);
+  border-color: var(--tw-c);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--tw-c) 22%, transparent);
+}
+.tw__item--on:hover .tw__disc { color: var(--bg); }
+.tw__item--on .tw__cap { color: var(--ink); font-weight: 600; }
+
+/* You are already here — a quiet ring, not a second highlight. */
+.tw__item--here .tw__disc { border-color: color-mix(in srgb, var(--tw-c) 60%, var(--line-strong)); }
+.tw__item--here .tw__cap::after { content: ' ·'; color: var(--tw-c); }
+
+/* ── search ── */
+.tw__search {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 9px;
+  width: min(400px, 74%); height: 40px; padding: 0 14px;
+  background: color-mix(in srgb, var(--bg-elev) 96%, transparent);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line-strong); border-radius: 11px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: tw-rise-x 0.22s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+.tw__search:focus-within { border-color: var(--accent); }
+.tw__search > svg { color: var(--ink-faint); flex: 0 0 auto; }
+.tw__search input {
+  flex: 1; min-width: 0;
+  background: none; border: 0; outline: 0;
+  color: var(--ink); font: inherit; font-size: 13.5px;
+}
+.tw__search input::placeholder { color: var(--ink-faint); }
+.tw__count { color: var(--ink-faint); }
+.tw__esc {
+  font-size: 10px; color: var(--ink-faint);
+  border: 1px solid var(--line-strong); border-radius: 4px; padding: 1px 5px;
+}
+
+.tw__empty {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  color: var(--ink-faint); font-size: 13px;
+}
+
+/* ── the trigger that opens it — lives in the board, not in this overlay ── */
+.tw-trigger {
+  position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%);
+  z-index: 6;
+  display: flex; align-items: center; gap: 9px;
+  height: 40px; padding: 0 16px 0 13px;
+  background: color-mix(in srgb, var(--bg-elev) 94%, transparent);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line-strong); border-radius: 999px;
+  color: var(--ink); font: inherit; font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  transition: border-color var(--t-fast), color var(--t-fast);
+}
+.tw-trigger:hover { border-color: var(--accent); }
+.tw-trigger svg { width: 17px; height: 17px; }
+.tw-trigger kbd {
+  font: inherit; font-size: 10.5px; color: var(--ink-faint);
+  border: 1px solid var(--line-strong); border-radius: 4px; padding: 1px 5px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tw__scrim, .tw__dial, .tw__search { animation: none; }
+  .tw__disc, .tw__cap, .tw-trigger { transition: none; }
+}

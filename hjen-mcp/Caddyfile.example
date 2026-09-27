@@ -1,0 +1,15 @@
+# HJEN MCP — public HTTPS via Caddy auto-TLS (Let's Encrypt). Zero manual certs.
+#
+# Deploy:
+#   1) Point your domain's A/AAAA record at this box.
+#   2) In mcp/.env set:  PUBLIC_BASE_URL=https://mcp.yourdomain.com
+#                        HOST=127.0.0.1  PORT=8788  ALLOWED_HOSTS=mcp.yourdomain.com
+#   3) Start the MCP:    ./serve-http.sh        (binds 127.0.0.1:8788)
+#   4) Start Caddy:      caddy run --config Caddyfile
+#
+# Clients then add:  https://mcp.yourdomain.com/mcp
+
+mcp.yourdomain.com {
+	encode zstd gzip
+	reverse_proxy 127.0.0.1:8788
+}

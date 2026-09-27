@@ -1,0 +1,107 @@
+/* ============================================================================
+   HJEN Studio — "Pro" appearance re-skin  ·  STRUCTURE ONLY.
+
+   Anwar's model: Pro gives the professional-tool FEEL — density, hard corners,
+   flat industrial controls, recessed inputs, a faint bevel — but it NEVER locks
+   colour. Every surface / button / selection is tinted by the LIVE theme +
+   colour-editor + background-shade tokens (--bg, --accent, --line, …). So the
+   colour editor (DUPLICATE TO EDIT) and the Background-shade control are seen
+   directly in Pro; the accent is not pinned to any fixed value.
+
+   Everything here is either a NON-colour token (spacing, radii, type) or a
+   colour-AGNOSTIC treatment (rgba white/black bevels, `background-image:none`
+   to kill gradient candy, `border-radius` to harden shape). No hex, no hue.
+
+   Classic = every selector here is inert.
+   ========================================================================== */
+
+:root[data-appearance="pro"] {
+  /* — Density —  trim the 8pt rhythm ~18%. */
+  --s-1: 3px;
+  --s-2: 7px;
+  --s-3: 10px;
+  --s-4: 13px;
+  --s-5: 19px;
+  --s-6: 26px;
+  --s-7: 38px;
+  --s-8: 52px;
+  --s-9: 78px;
+
+  /* — Sharp geometry —  hard 0–2px corners. --r-pill left alone so avatars /
+     status dots / round toggles stay round. --r-3 (cards) set inline (apply.ts). */
+  --r-1: 2px;
+  --r-2: 2px;
+  --r-4: 3px;
+
+  /* — Denser headings —  body (14) holds for legibility. */
+  --t-h2: 22px;
+  --t-h3: 17px;
+  --t-meta: 11px;
+}
+
+/* Narrower scrollbars — the dense tool register. */
+:root[data-appearance="pro"] *::-webkit-scrollbar { width: 9px; height: 9px; }
+
+/* ── Flat industrial controls — HARD shape + faint bevel, COLOUR untouched.
+   `background-image:none` kills any gradient candy; the button keeps its solid
+   theme/accent `background-color`. The bevel is rgba white/black — hue-neutral,
+   reads on any accent. */
+:root[data-appearance="pro"] :is(
+  .btn-primary, .btn-secondary, .btn-ghost,
+  .pp-btn, .pp-btn--accent, .pp-btn--ghost
+) {
+  border-radius: var(--r-2) !important;
+  background-image: none !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 1px 0 rgba(0, 0, 0, 0.28);
+}
+
+/* Recessed inputs — hard shape + a hue-neutral inset well. */
+:root[data-appearance="pro"] :is(.setting-input, .pp-input, .pp-textarea, .pp-select) {
+  border-radius: var(--r-2) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.22);
+}
+
+/* Milled-plate sheen on the primary raised surfaces — a hairline top light + a
+   1px inset dark ring. rgba only, so the theme's own --bg-elev colour shows through. */
+:root[data-appearance="pro"] :is(
+  .pp-panel, .pp-card, .hub-card, .settings-account-card, .dop-sidebar,
+  .appearance__preview-card, .appearance-mode, .cmdk-panel
+) {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), inset 0 0 0 1px rgba(0, 0, 0, 0.16);
+}
+
+/* Titlebar — a crisper structural hairline (colour = the theme's --line-strong). */
+:root[data-appearance="pro"] .top-chrome { border-bottom-color: var(--line-strong); }
+
+/* Cuts Engine — the same structural pass. Colour stays token-driven (the
+   "Detect cuts" button follows --accent); only the shape hardens + a faint
+   bevel so it reads as a flat industrial control. */
+:root[data-appearance="pro"] :is(
+  .cut-btn, .cut-url, .cut-sessions, .cut-name, .cut-icon, .cut-tool,
+  .cut-inspect, .cut-percept, .cut-monitor video, .cut-monitor__empty
+) {
+  border-radius: var(--r-2) !important;
+}
+:root[data-appearance="pro"] :is(.cut-btn, .cut-icon, .cut-tool) {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+:root[data-appearance="pro"] :is(.cut-url, .cut-name) {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.22);
+}
+
+/* Film Space — the same structural pass. Colour stays token-driven (Lock Angle
+   follows --accent); shape hardens + a hue-neutral bevel so the controls read as
+   flat industrial plates, never warm candy buttons. */
+:root[data-appearance="pro"] :is(
+  .fs-chip, .fs-lock, .fs-btn, .fs__tier, .fs__readout, .fs__pack, .fs__gal-item,
+  .fs__objsel, .fs__objdel, .fs__seg, .fs-preset__thumb, .fs-presets__panel
+) {
+  border-radius: var(--r-2) !important;
+  background-image: none !important;
+}
+:root[data-appearance="pro"] :is(.fs-chip, .fs-lock, .fs-btn, .fs__objsel, .fs__objdel) {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 1px 0 rgba(0, 0, 0, 0.25);
+}
+:root[data-appearance="pro"] :is(.fs__readout, .fs__seg) {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.22);
+}

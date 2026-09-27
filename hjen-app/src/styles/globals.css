@@ -1,0 +1,94 @@
+@import './tokens.css';
+
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; padding: 0; height: 100%; width: 100%; background: var(--bg); color: var(--ink); }
+body {
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  user-select: none;
+}
+button, input, textarea { font-family: inherit; color: inherit; }
+button { background: none; border: none; cursor: pointer; padding: 0; }
+input, textarea { background: none; border: none; outline: none; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ink-muted); }
+
+/* Letter-spacing utility for mono labels (compact mono-label style) */
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* Window drag region (titleBarStyle: hiddenInset) */
+.drag-region { -webkit-app-region: drag; }
+.no-drag { -webkit-app-region: no-drag; }
+
+/*
+ * Selectable text allowlist.
+ *
+ * The body sets `user-select: none` so chrome (sidebars, buttons, mono
+ * labels) doesn't pick up drag-selection — standard for native-feel
+ * desktop apps. The list below re-enables selection on regions that
+ * carry actual *content* the user may want to copy: error messages,
+ * assembled prompts, prompt textareas, reference names, code blocks,
+ * inspector body text. Add a class here rather than reaching into JSX.
+ */
+.selectable,
+input,
+textarea,
+pre,
+code,
+/* Error banner + failed-job inspector */
+.error-bar__text,
+.fji-error,
+.fji-prompt,
+.fji-row span:not(.mono-label),
+.fji-ref__name,
+.fji-ref__parent,
+/* Generation preview / lightbox */
+.lightbox__title,
+.lightbox__ref-name,
+.lightbox__ref-parent,
+.lightbox__caption,
+.lightbox__body p,
+/* Library / projects / usage page bodies */
+.library-card__title,
+.library-card__desc,
+.project-card__title,
+.project-card__desc,
+.usage-page p,
+/* MCP drawer / Assistant — chat bubbles + connect fields are real content:
+   select with the mouse, then ⌘C/⌘X/⌘V work via the app Edit menu. */
+.assistant-text,
+.assistant-text *,
+.mcp-field,
+.mcp-connect,
+.mcp-connect *,
+/* Generic prose */
+p, blockquote {
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: text;
+}
+
+/* Buttons override cursor:text from the allowlist above */
+button, button * { cursor: pointer; }
+
+/* Content-heavy workspaces opt into real desktop text selection. Their chrome
+   still behaves as buttons, but any written value, label, note or finding can
+   be dragged over and copied with the native Edit menu / ⌘C. */
+.copyable-surface,
+.copyable-surface :where(h1, h2, h3, h4, h5, h6, p, span, strong, small, em, li, dt, dd, figcaption, label, pre, code) {
+  -webkit-user-select: text;
+  user-select: text;
+}

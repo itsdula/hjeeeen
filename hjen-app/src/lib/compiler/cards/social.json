@@ -1,0 +1,38 @@
+[
+  {
+    "id": "social.majlis-blocking.001",
+    "dimension": "social",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["مجلس", "majlis", "جلسة", "ضيوف", "بلوكينج", "seating"],
+    "ar": "إخراج المجلس: الكبير في الصدر (أبعد نقطة عن الباب)، الضيف يُجلس يمينه، الأصغر قرب الباب يخدم. الجلوس أرضي على مساند أو كنب محيطي — لا أحد يعطي ظهره للكبير. البلوكينج الغلط يفضح الكادر عند أي عين سعودية.",
+    "en": "Majlis staging: the eldest sits at the sadr (farthest point from the door), the guest of honor to his right, the youngest near the door serving. Floor seating on cushions or perimeter sofas — no one turns their back to the elder. Wrong blocking betrays the frame instantly to any Saudi eye.",
+    "negatives": ["random Western living-room scatter seating", "youngest lounging at the sadr"],
+    "sources": ["seed:kv_social"],
+    "weight": 2
+  },
+  {
+    "id": "social.greetings-gestures.002",
+    "dimension": "social",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["تحية", "سلام", "إيماءة", "greeting", "gesture", "خشم"],
+    "ar": "الإيماءات الحقيقية: سلام الخشم (أنف-أنف) بين الرجال الأقارب، تقبيل رأس الوالد أو الجد احتراماً، اليد على الصدر بعد المصافحة، العناق الجانبي في العيد. الفرح المتحفظ: يد على الكتف وضحكة مضبوطة — لا هاي فايف تسويقي.",
+    "en": "Real Saudi gestures: nose-to-nose khashm greeting between close men, kissing the father's or grandfather's head in respect, hand to chest after a handshake, side-embrace at Eid. Restrained joy: a hand on the shoulder and a measured laugh — never the marketing high-five.",
+    "negatives": ["stock high-fives and fist bumps as default celebration", "over-choreographed group cheering"],
+    "sources": ["seed:kv_social"],
+    "weight": 2
+  },
+  {
+    "id": "social.family-space.003",
+    "dimension": "social",
+    "region": "ksa",
+    "era": "2020s",
+    "tags": ["عائلة", "family", "نساء", "رجال", "مساحة", "space", "اختلاط"],
+    "ar": "المساحة العائلية بصدق اليوم: العائلة الواحدة تجتمع كاملة — جدّات وبنات وأولاد حول سفرة أرضية أو طاولة؛ في العام تتجاور مجموعات عائلية باستقلالية مريحة. لا فصل كاريكاتيري ولا اختلاط إعلاني غربي مفروض.",
+    "en": "Family space, truthfully current: one family gathers whole — grandmothers, daughters, sons around a floor sufrah or table; in public, family groups sit adjacent with easy autonomy. Neither caricatured segregation nor imported Western-ad mingling — the register is relaxed, real, 2020s Saudi.",
+    "negatives": ["forced Western dinner-party staging", "outdated caricature of separation in a contemporary family scene"],
+    "sources": ["seed:kv_social"],
+    "weight": 2
+  }
+]

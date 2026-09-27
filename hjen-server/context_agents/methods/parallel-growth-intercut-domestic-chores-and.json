@@ -1,0 +1,23 @@
+{
+  "id": "parallel-growth-intercut-domestic-chores-and",
+  "craft": "parallel-growth",
+  "principle": "Intercut domestic chores and play with more formal training or performance in the same age group to imply that ordinary care and practice accumulate into skill and discipline.",
+  "when_it_works": {
+    "register": [
+      "groundedness"
+    ],
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Reframe mundane routines as meaningful investments in future capability or success.",
+  "evidence": [
+    "f09-p-g — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f09-p-g"
+}

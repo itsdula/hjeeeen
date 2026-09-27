@@ -1,0 +1,23 @@
+{
+  "id": "distributed-hang-cross-cut-between-different",
+  "craft": "distributed-hang",
+  "principle": "Cross-cut between different people in separate locations all doing the same simple activity to turn isolated moments into one shared social experience.",
+  "when_it_works": {
+    "register": [
+      "groundedness"
+    ],
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Transform an ordinary solo behavior into a sense of belonging by showing it mirrored across multiple everyday spaces.",
+  "evidence": [
+    "f13-budweiser — groundedness register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f13-budweiser"
+}

@@ -1,0 +1,15 @@
+# Copy to terraform.tfvars and fill. terraform.tfvars is gitignored — no ids,
+# hostnames or account numbers go through chat or into the repo.
+
+project_id = "hjen-platform"      # the project inside the CNTXT billing account
+region     = "me-central2"        # Dammam
+zone       = "me-central2-a"
+
+mode   = "vm"                     # "vm" first. Read README.md §3 before "run".
+domain = "app.hjen.ai"
+
+# Immutable ref — a digest, or a tag that is never moved. Never :latest.
+container_image = "me-central2-docker.pkg.dev/hjen-platform/hjen/server:2026-08-27-a1b2c3d"
+
+machine_type = "e2-standard-4"
+data_disk_gb = 200

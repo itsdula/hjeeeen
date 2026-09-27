@@ -1,0 +1,22 @@
+{
+  "id": "lyric-sync-map-your-visual-escalation-to",
+  "craft": "lyric-sync",
+  "principle": "Map your visual escalation to the emotional arc of an existing song or voiceover, timing key visual peaks to refrains or repeated lines so image and sound feel like one rising wave.",
+  "when_it_works": {
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Make the emotional build feel inevitable and musical, as if the visuals are the physical form of the soundtrack’s feelings.",
+  "evidence": [
+    "f06-sony — turbulence register",
+    "f16-android — joy register",
+    "CONFIRMED-TRANSFERABLE: turbulence+joy"
+  ],
+  "weight": 3,
+  "status": "candidate",
+  "source": "auto:f06-sony"
+}

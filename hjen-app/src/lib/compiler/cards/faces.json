@@ -1,0 +1,38 @@
+[
+  {
+    "id": "faces.skin-truth.001",
+    "dimension": "faces",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["بشرة", "skin", "وجه", "face", "texture", "ملامح"],
+    "ar": "البشرة السعودية طيف حقيقي: زيتوني فاتح إلى بني عميق، بدرجات دافئة عنبرية. المسام والخطوط الدقيقة وشعيرات اللحية تُحفظ — بشرة بلاستيك ناعمة = كذبة فورية. كبار السن وجوههم تحمل عقودها بكرامة.",
+    "en": "Saudi skin is a real spectrum: light olive to deep brown, always warm amber-touched undertones. Preserve pores, fine lines, beard stubble micro-texture — plastic-smooth skin is an instant lie. Elders' faces carry their decades with dignity: deep smile lines, sun-weathered texture, alive eyes.",
+    "negatives": ["airbrushed poreless skin", "uniform single 'Arab tan' on every character", "youth-lifted elders"],
+    "sources": ["seed:clay_basil", "seed:kv_retouch"],
+    "weight": 3
+  },
+  {
+    "id": "faces.casting-specificity.002",
+    "dimension": "faces",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["كاستنج", "casting", "شخصية", "archetype", "ملامح", "features"],
+    "ar": "الكاستنج شخصية لا نوع: ليس «رجل أعمال» بل «مصرفي نجدي واحد وأربعين سنة يمشي في الصالة كأنه مشاها مئة مرة». الملامح تتنوع بالمنطقة، والوجه العادي الصادق يغلب الوجه الإعلاني الجميل.",
+    "en": "Cast a character, not a type: not 'businessman' but 'a 41-year-old Najdi banker who has walked this concourse a hundred times.' Features vary by region and family history; an honest ordinary face beats a commercial-pretty face. Resting expression carries the inner state.",
+    "negatives": ["catalog-model beauty as default", "identical face repeated across a crowd"],
+    "sources": ["seed:kv_casting"],
+    "weight": 2
+  },
+  {
+    "id": "faces.expression-register.003",
+    "dimension": "faces",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["تعبير", "expression", "ضحكة", "smile", "انفعال"],
+    "ar": "سجل التعبير: الكرامة الهادئة أساس — حضور داخلي لا ابتسامة مفروضة. والطرب الحقيقي انفجار كامل: ضحكة سوق بفم مفتوح، صراخ فرح في وجه الكاميرا. الممنوع: الابتسامة التسويقية الفاترة في المنتصف.",
+    "en": "Expression register: quiet dignity is the baseline — inward presence, composed warmth, not a forced smile. And real TARAB is a full eruption: open-mouth market laugh, a shout of joy straight into the lens. Forbidden: the lukewarm marketing half-smile in between.",
+    "negatives": ["stock-photo customer-service smile", "everyone grinning at nothing"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  }
+]

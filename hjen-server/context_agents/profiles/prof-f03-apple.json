@@ -1,0 +1,16 @@
+{
+  "id": "prof-f03-apple",
+  "name": "prof-f03-apple — extracted from f03-apple",
+  "palette": "Pure black-and-white with high contrast; occasional grain and low contrast in documentary shots to signal authenticity; white text on black for titles.",
+  "light_logic": "Simple, directional key light for portraits; natural daylight for outdoor faces; minimal fill to preserve shadows; strong separation of subject from dark backgrounds.",
+  "lens": "Mostly close and extreme close-up portraits with occasional medium shots; slightly longer focal lengths for intimate faces; stable, composed frames with archival feel.",
+  "texture": "Film grain, slight softness, and archival imperfections; clean, uncluttered compositions; minimal graphic elements beyond logo and tagline.",
+  "world": "A timeless, placeless black-and-white world where historical figures and everyday streets coexist; spaces are implied rather than showcased, keeping focus on human faces and gestures.",
+  "forbidden": [
+    "full-color, glossy commercial lighting",
+    "busy on-screen graphics or kinetic typography",
+    "rapid, flashy cutting or camera moves",
+    "overt product shots or UI demos",
+    "noisy sound design that competes with the voiceover"
+  ]
+}

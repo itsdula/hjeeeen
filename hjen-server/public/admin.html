@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>HJEN Studio — Owner Console</title>
+<style>
+  :root { --midnight:#0d1117; --panel:#161b22; --line:#2a313c; --ink:#e8eaed; --muted:#9aa4b2; --accent:#e0a449; --green:#56b87f; --red:#f0816a; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--midnight); color:var(--ink); font-family:-apple-system,"Segoe UI",Tahoma,sans-serif; }
+  header { padding:16px 24px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; }
+  .brand { font-weight:700; }
+  main { max-width:1200px; margin:0 auto; padding:24px; }
+  .totals { color:var(--muted); margin-bottom:18px; }
+  .totals b { color:var(--accent); }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:22px; }
+  input, select { background:var(--midnight); color:var(--ink); border:1px solid var(--line); border-radius:8px; padding:8px; font-family:inherit; }
+  button { background:var(--accent); color:#1a1205; border:none; border-radius:8px; padding:8px 14px; font-weight:700; cursor:pointer; }
+  button.ghost { background:transparent; color:var(--ink); border:1px solid var(--line); font-weight:500; padding:6px 10px; font-size:12px; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th, td { text-align:left; padding:10px 8px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  th { color:var(--muted); font-weight:500; }
+  .pill { padding:2px 8px; border-radius:99px; font-size:11px; }
+  .open { background:rgba(86,184,127,.15); color:var(--green); }
+  .closed { background:rgba(240,129,106,.15); color:var(--red); }
+  .link { color:var(--muted); cursor:pointer; text-decoration:underline; }
+  .bar { height:6px; background:var(--line); border-radius:4px; overflow:hidden; width:90px; display:inline-block; vertical-align:middle; }
+  .bar > i { display:block; height:100%; background:var(--accent); }
+  .gateRow { display:flex; gap:8px; align-items:center; margin-bottom:14px; }
+</style>
+</head>
+<body>
+<header><div class="brand">HJEN STUDIO · Owner Console</div><div style="display:flex;align-items:center;gap:16px"><div id="totals" class="totals"></div><span id="lockBtn" style="display:none;cursor:pointer;color:var(--muted);font-size:12px">Lock 🔒</span></div></header>
+<main>
+  <div id="auth" class="panel">
+    <div class="gateRow">
+      <input id="adminToken" type="password" placeholder="ADMIN_TOKEN" style="flex:1" />
+      <button id="loginBtn">Enter</button>
+    </div>
+    <div id="authErr" style="color:var(--red);font-size:13px"></div>
+  </div>
+
+  <div id="dash" style="display:none">
+    <div class="panel" id="govSummary" style="display:none"></div>
+
+    <div class="panel" id="pendingPanel" style="display:none;border-color:var(--accent)">
+      <div style="margin-bottom:10px;font-weight:700">Access requests — Early Access <span id="pendCount" style="color:var(--accent)"></span></div>
+      <table>
+        <thead><tr><th>Name / Email</th><th>Country</th><th>What they want</th><th>When</th><th>Cap</th><th>Days</th><th>Decision</th></tr></thead>
+        <tbody id="pendingRows"></tbody>
+      </table>
+    </div>
+
+    <div class="panel">
+      <div style="margin-bottom:10px;font-weight:700">New invite</div>
+      <div class="gateRow" style="flex-wrap:wrap">
+        <input id="cEmail" placeholder="Email" style="width:200px" />
+        <input id="cName" placeholder="Name" style="width:140px" />
+        <input id="cLimit" type="number" value="40" title="Shot cap" style="width:90px" />
+        <input id="cDays" type="number" value="15" title="Days" style="width:80px" />
+        <select id="cWave"><option value="1">Wave 1 — colleagues</option><option value="2">Wave 2 — clients</option></select>
+        <button id="createBtn">Create + link</button>
+      </div>
+      <div id="newLink" style="font-size:13px;color:var(--accent);margin-top:8px"></div>
+    </div>
+
+    <div class="panel">
+      <div style="margin-bottom:10px;font-weight:700">Bulk invites — launch waves</div>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Spread the 100 across waves (25 every two hours) to stay under the 5 images/minute limit. Wave 1 opens immediately; later waves are created closed and opened on schedule.</div>
+      <div class="gateRow" style="flex-wrap:wrap">
+        <input id="bCount" type="number" value="25" title="Count" style="width:80px" />
+        <select id="bWave"><option value="1">Wave 1</option><option value="2">Wave 2</option><option value="3">Wave 3</option><option value="4">Wave 4</option></select>
+        <input id="bLimit" type="number" value="40" title="Shot cap" style="width:90px" />
+        <input id="bDays" type="number" value="15" title="Days" style="width:80px" />
+        <label style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px"><input id="bActive" type="checkbox" /> Open on create</label>
+        <button id="bulkBtn">Create wave</button>
+      </div>
+      <div class="gateRow" style="flex-wrap:wrap;margin-top:4px">
+        <span style="font-size:12px;color:var(--muted)">Wave control:</span>
+        <select id="wCtrl"><option value="1">Wave 1</option><option value="2">Wave 2</option><option value="3">Wave 3</option><option value="4">Wave 4</option></select>
+        <button class="ghost" id="waveOpenBtn">Open wave ✅</button>
+        <button class="ghost" id="waveCloseBtn">Close wave ⏸</button>
+      </div>
+      <div id="bulkResult" style="margin-top:10px"></div>
+    </div>
+
+    <div class="panel">
+      <table>
+        <thead><tr><th>Name</th><th>Plan</th><th>Usage</th><th>Days</th><th>Status</th><th>Used?</th><th>$</th><th>Actions</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+
+    <div class="panel" id="activityPanel" style="display:none">
+      <div style="margin-bottom:12px;font-weight:700">Activity <span id="actTotals" style="color:var(--muted);font-weight:400;font-size:13px"></span></div>
+      <div id="actDays" style="display:flex;align-items:flex-end;gap:4px;height:70px;margin-bottom:6px"></div>
+      <div id="actDaysLbl" style="display:flex;gap:4px;font-size:9px;color:var(--muted);margin-bottom:16px"></div>
+      <div style="display:flex;gap:32px;flex-wrap:wrap">
+        <div style="flex:1;min-width:200px"><div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">By model</div><div id="actModels"></div></div>
+        <div style="flex:2;min-width:280px"><div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Recent</div><div id="actRecent" style="font-size:12px;line-height:1.9"></div></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+let TOKEN = '';
+const $ = (id) => document.getElementById(id);
+const AH = () => ({ 'Authorization': 'Bearer ' + TOKEN });
+
+async function api(path, opts={}) {
+  const res = await fetch(path, { ...opts, headers: { ...AH(), ...(opts.headers||{}) } });
+  return { status: res.status, data: await res.json().catch(()=>({})) };
+}
+
+async function tryLogin(token) {
+  TOKEN = token;
+  const { status } = await api('/api/admin/invitees');
+  if (status === 200) {
+    localStorage.setItem('hjen_admin_token', token); // stay signed in across refreshes
+    $('auth').style.display = 'none'; $('dash').style.display = 'block'; $('lockBtn').style.display = 'inline';
+    load();
+    return true;
+  }
+  return false;
+}
+$('loginBtn').onclick = async () => {
+  if (!(await tryLogin($('adminToken').value.trim()))) $('authErr').textContent = 'Wrong token.';
+};
+$('adminToken').addEventListener('keydown', e => { if (e.key === 'Enter') $('loginBtn').click(); });
+$('lockBtn').onclick = () => { localStorage.removeItem('hjen_admin_token'); location.reload(); };
+// Auto-restore a saved admin session so a refresh never re-prompts.
+(function () { const t = localStorage.getItem('hjen_admin_token'); if (t) tryLogin(t); })();
+
+function fmtWhen(ts) { if (!ts) return '—'; const d = Date.now()-ts, h = Math.floor(d/3.6e6); return h < 1 ? 'just now' : h < 24 ? `${h}h ago` : `${Math.floor(h/24)}d ago`; }
+
+async function load() {
+  const { data } = await api('/api/admin/invitees');
+  if (!data.ok) return;
+  $('totals').innerHTML = `<b>${data.totals.count}</b> invited · spent <b>$${data.totals.totalSpentUsd}</b>`;
+
+  // ---- governance control tower: everyone, by category, at a glance ----
+  const all = data.invitees;
+  const active = all.filter(i => i.gateOpen).length;
+  const pend = all.filter(i => i.pending).length;
+  const orgs = all.filter(i => i.isOrg).length;
+  const clerk = all.filter(i => i.clerkUserId || i.clerkOrgId).length;
+  const byPlan = { trial:0, pro:0, team:0, enterprise:0 };
+  for (const i of all) byPlan[i.plan || 'trial'] = (byPlan[i.plan || 'trial'] || 0) + 1;
+  const cell = (n, l, c) => `<div style="min-width:92px"><div style="font-size:24px;font-weight:700;color:${c||'var(--ink)'}">${n}</div><div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">${l}</div></div>`;
+  $('govSummary').style.display = 'flex';
+  $('govSummary').style.cssText = 'display:flex;flex-wrap:wrap;gap:26px;align-items:flex-end';
+  $('govSummary').innerHTML =
+    cell(all.length, 'Accounts') +
+    cell(active, 'Active', 'var(--green)') +
+    cell(pend, 'Pending', pend ? 'var(--accent)' : 'var(--muted)') +
+    cell(orgs, 'Teams', 'var(--green)') +
+    cell(clerk, 'Clerk') +
+    `<div style="width:1px;align-self:stretch;background:var(--line)"></div>` +
+    cell(byPlan.trial, 'Trial') + cell(byPlan.pro, 'Pro', 'var(--accent)') +
+    cell(byPlan.team, 'Team', 'var(--accent)') + cell(byPlan.enterprise, 'Enterprise', 'var(--accent)') +
+    `<div style="width:1px;align-self:stretch;background:var(--line)"></div>` +
+    cell('$'+data.totals.totalSpentUsd, 'Spend', 'var(--accent)') +
+    `<div style="width:1px;align-self:stretch;background:var(--line)"></div>` +
+    `<div><div style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">New Clerk sign-ups</div><button class="ghost" id="signupToggle">…</button></div>`;
+  // wire the sign-up governance toggle (auto-fund ↔ require approval)
+  try {
+    const st = await api('/api/admin/settings');
+    const approval = !!(st.data.settings && st.data.settings.clerkSignupApproval);
+    const tgl = document.getElementById('signupToggle');
+    if (tgl) {
+      tgl.textContent = approval ? '🔒 Require approval' : '⚡ Auto-fund';
+      tgl.onclick = async () => {
+        await api('/api/admin/settings', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ clerkSignupApproval: !approval }) });
+        load();
+      };
+    }
+  } catch {}
+
+  // ---- pending Early-Access requests ----
+  const pending = data.invitees.filter(i => i.pending).sort((a,b) => (a.requestedAt||0)-(b.requestedAt||0));
+  $('pendingPanel').style.display = pending.length ? 'block' : 'none';
+  $('pendCount').textContent = pending.length ? `(${pending.length})` : '';
+  $('pendingRows').innerHTML = '';
+  for (const inv of pending) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${inv.name}<br><span style="color:var(--muted);font-size:11px">${inv.email}</span></td>
+      <td>${inv.country||'—'}</td>
+      <td style="white-space:normal;max-width:240px;color:var(--muted)">${(inv.note||'—')}</td>
+      <td>${fmtWhen(inv.requestedAt)}</td>
+      <td><input type="number" value="40" data-lim="${inv.id}" style="width:64px" /></td>
+      <td><input type="number" value="15" data-day="${inv.id}" style="width:56px" /></td>
+      <td>
+        <button data-approve="${inv.id}">Approve</button>
+        <button class="ghost" data-reject="${inv.id}">Reject</button>
+      </td>`;
+    $('pendingRows').appendChild(tr);
+  }
+  $('pendingRows').querySelectorAll('[data-approve]').forEach(b => b.onclick = async () => {
+    const id = b.dataset.approve;
+    const genLimit = Number(document.querySelector(`[data-lim="${id}"]`).value) || 40;
+    const durationDays = Number(document.querySelector(`[data-day="${id}"]`).value) || 15;
+    b.disabled = true;
+    await api('/api/admin/approve', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ id, genLimit, durationDays }) });
+    load();
+  });
+  $('pendingRows').querySelectorAll('[data-reject]').forEach(b => b.onclick = async () => {
+    await api('/api/admin/reject', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ id: b.dataset.reject }) });
+    load();
+  });
+
+  $('rows').innerHTML = '';
+  for (const inv of data.invitees) {
+    if (inv.pending) continue;
+    const pct = Math.min(100, Math.round(inv.genUsed / inv.genLimit * 100));
+    const state = inv.rejected ? '<span class="pill closed">rejected</span>'
+      : inv.gateOpen ? '<span class="pill open">open</span>'
+      : !inv.active ? '<span class="pill closed">stopped</span>'
+      : inv.daysLeft===0 ? '<span class="pill closed">expired</span>'
+      : '<span class="pill closed">complete</span>';
+    const badge = inv.isOrg
+      ? '<span class="pill" style="background:rgba(86,184,127,.15);color:var(--green);margin-inline-end:6px">TEAM</span>'
+      : (inv.clerkUserId ? '<span class="pill" style="background:rgba(224,164,73,.15);color:var(--accent);margin-inline-end:6px">CLERK</span>' : '');
+    const plan = inv.plan || 'trial';
+    const planSel = `<select data-plan-id="${inv.id}">${['trial','pro','team','enterprise'].map(p =>
+      `<option value="${p}" ${p===plan?'selected':''}>${p[0].toUpperCase()+p.slice(1)}</option>`).join('')}</select>`;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${badge}${inv.name}<br><span class="link" data-link="${inv.magicLink}">Copy link</span>${inv.isOrg ? ` · <span class="link" data-org="${inv.clerkOrgId}">▸ members</span>` : ''}</td>
+      <td>${planSel}</td>
+      <td>${inv.genUsed}/${inv.genLimit} <span class="bar"><i style="width:${pct}%"></i></span></td>
+      <td>${inv.daysLeft}</td>
+      <td>${state}</td>
+      <td>${inv.activated ? '✓' : '—'}</td>
+      <td>$${inv.spentUsd}</td>
+      <td>
+        <button class="ghost" data-act="extend" data-id="${inv.id}">+7 days</button>
+        <button class="ghost" data-act="bump" data-id="${inv.id}">+10 shots</button>
+        ${inv.active
+          ? `<button class="ghost" data-act="stop" data-id="${inv.id}">Stop</button>`
+          : `<button class="ghost" data-act="activate" data-id="${inv.id}">Activate</button>`}
+      </td>`;
+    $('rows').appendChild(tr);
+  }
+  document.querySelectorAll('[data-link]').forEach(el => el.onclick = () => { navigator.clipboard.writeText(el.dataset.link); el.textContent='✓ Copied'; setTimeout(()=>el.textContent='Copy link',1200); });
+  document.querySelectorAll('[data-act]').forEach(b => b.onclick = async () => {
+    const act = b.dataset.act, id = b.dataset.id;
+    const body = act==='extend' ? {id,days:7} : act==='bump' ? {id,makes:10} : {id};
+    await api('/api/admin/'+act, { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body) });
+    load();
+  });
+  document.querySelectorAll('[data-plan-id]').forEach(sel => sel.onchange = async () => {
+    await api('/api/admin/plan', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ id: sel.dataset.planId, plan: sel.value }) });
+    load();
+  });
+  document.querySelectorAll('[data-org]').forEach(el => el.onclick = async () => {
+    const tr = el.closest('tr');
+    const nxt = tr.nextElementSibling;
+    if (nxt && nxt.classList.contains('org-detail')) { nxt.remove(); return; }  // toggle off
+    el.textContent = '… loading';
+    const { data } = await api('/api/admin/org?orgId=' + encodeURIComponent(el.dataset.org));
+    el.textContent = '▾ members';
+    const members = data.members || [];
+    const body = members.length
+      ? members.map(m => `<b>${m.name}</b> · <span style="color:var(--muted)">${m.email||''}</span> · <span class="pill open">${m.role||'member'}</span>`).join('<br>')
+      : '<span style="color:var(--muted)">No members yet</span>';
+    const dtr = document.createElement('tr'); dtr.className = 'org-detail';
+    dtr.innerHTML = `<td colspan="8" style="background:var(--midnight);padding:12px 18px;font-size:12.5px;line-height:2.1">${body}</td>`;
+    tr.after(dtr);
+  });
+  loadActivity();
+}
+
+async function loadActivity() {
+  const { data } = await api('/api/admin/activity');
+  if (!data.ok) return;
+  $('activityPanel').style.display = 'block';
+  $('actTotals').textContent = `· ${data.totalMakes} makes · $${data.totalSpend} spent`;
+  const max = Math.max(1, ...data.days.map(d => d.makes));
+  $('actDays').innerHTML = data.days.map(d =>
+    `<div title="${d.day}: ${d.makes} makes · $${d.spend}" style="flex:1;background:var(--accent);opacity:${d.makes?0.85:0.15};height:${Math.round(d.makes/max*100)||3}%;min-height:3px;border-radius:2px 2px 0 0"></div>`).join('');
+  $('actDaysLbl').innerHTML = data.days.map((d,i) => `<div style="flex:1;text-align:center">${i%2===0?d.day:''}</div>`).join('');
+  const models = Object.entries(data.byModel).sort((a,b)=>b[1]-a[1]);
+  $('actModels').innerHTML = models.length ? models.map(([m,n]) =>
+    `<div style="display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0"><span>${m}</span><b style="color:var(--accent)">${n}</b></div>`).join('') : '<span style="color:var(--muted);font-size:12px">No makes yet</span>';
+  const fmtT = ts => { const h=Math.floor((Date.now()-ts)/3.6e6); return h<1?'now':h<24?`${h}h`:`${Math.floor(h/24)}d`; };
+  $('actRecent').innerHTML = data.recent.length ? data.recent.map(e =>
+    `<div style="display:flex;gap:10px;color:var(--muted)"><span style="width:32px;color:var(--muted)">${fmtT(e.ts)}</span><span style="flex:1;color:var(--ink)">${e.email||''}</span><span>${e.kind}${e.model?' · '+e.model:''}</span>${e.usd?`<span style="color:var(--accent)">$${e.usd}</span>`:''}</div>`).join('') : '<span style="color:var(--muted)">No activity yet</span>';
+}
+
+$('createBtn').onclick = async () => {
+  const body = { email:$('cEmail').value.trim(), name:$('cName').value.trim(), genLimit:Number($('cLimit').value), durationDays:Number($('cDays').value), wave:Number($('cWave').value) };
+  if (!body.email) return;
+  const { data } = await api('/api/admin/create', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body) });
+  if (data.ok) { $('newLink').textContent = 'Link: ' + data.magicLink; $('cEmail').value=''; $('cName').value=''; load(); }
+};
+
+$('bulkBtn').onclick = async () => {
+  const body = { count:Number($('bCount').value), wave:Number($('bWave').value), genLimit:Number($('bLimit').value), durationDays:Number($('bDays').value), active:$('bActive').checked };
+  const b = $('bulkBtn'); b.disabled = true; b.textContent = '…';
+  const { data } = await api('/api/admin/bulk', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body) });
+  b.disabled = false; b.textContent = 'Create wave';
+  if (data.ok) {
+    const links = data.links.map(l => l.magicLink).join('\n');
+    $('bulkResult').innerHTML =
+      `<div style="font-size:13px;color:var(--green);margin-bottom:8px">Created <b>${data.count}</b> invites for wave ${data.wave} ${body.active?'(open)':'(closed — open it on schedule)'}.</div>
+       <button class="ghost" id="copyLinks">📋 Copy all wave links (${data.count})</button>
+       <textarea id="linksBox" style="width:100%;height:120px;margin-top:8px;background:var(--midnight);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px;font-size:12px;direction:ltr">${links}</textarea>`;
+    $('copyLinks').onclick = () => { navigator.clipboard.writeText(links); $('copyLinks').textContent='✓ Copied'; setTimeout(()=>$('copyLinks').textContent=`📋 Copy all wave links (${data.count})`,1400); };
+    load();
+  } else $('bulkResult').innerHTML = `<span style="color:var(--red)">Failed: ${data.message||''}</span>`;
+};
+
+async function setWave(active) {
+  const wave = Number($('wCtrl').value);
+  const { data } = await api('/api/admin/wave', { method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify({ wave, active }) });
+  if (data.ok) { $('bulkResult').innerHTML = `<span style="color:${active?'var(--green)':'var(--red)'}">Wave ${wave}: ${active?'opened':'closed'} — ${data.changed} invited.</span>`; load(); }
+}
+$('waveOpenBtn').onclick = () => setWave(true);
+$('waveCloseBtn').onclick = () => setWave(false);
+</script>
+</body>
+</html>

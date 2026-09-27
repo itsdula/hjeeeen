@@ -1,0 +1,20 @@
+{
+  "id": "ritual-process-intercut-small-tactile-ritual",
+  "craft": "ritual-process",
+  "principle": "Intercut small, tactile rituals (pouring tea, adjusting clothes, handling tools) with the main narrative to give viewers breathing room and to symbolize internal processing without extra exposition.",
+  "when_it_works": {
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Soften heavy emotional beats and make the story feel lived-in by grounding it in everyday gestures that mirror the character’s inner shift.",
+  "evidence": [
+    "f14-dove — unknown register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f14-dove"
+}

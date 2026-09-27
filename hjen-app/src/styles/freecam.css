@@ -1,0 +1,39 @@
+/* Free Camera — "After dark" pairing: Midnight ground · Whiteout ink · Sunflare accent. */
+.freecam{ position:absolute; inset:0; display:flex; flex-direction:column;
+  background:#000; color:#F5F5F5; font-family:'Inter',system-ui,sans-serif; }
+
+.freecam__bar{ display:flex; align-items:center; gap:16px; padding:0 18px; height:54px;
+  border-bottom:1px solid rgba(245,245,245,.14); flex:0 0 auto; }
+.freecam__back{ background:transparent; border:1px solid rgba(245,245,245,.22); color:#F5F5F5;
+  border-radius:5px; padding:7px 13px; font:600 13px Inter,sans-serif; cursor:pointer; }
+.freecam__back:hover{ border-color:#F5F5F5; }
+.freecam__title{ display:flex; align-items:center; gap:9px; font:700 16px Inter,sans-serif; letter-spacing:-.01em; }
+.freecam__title small{ color:rgba(245,245,245,.42); font-weight:400; font-size:12px; margin-left:4px; }
+.freecam__pip{ width:8px; height:8px; border-radius:50%; background:#D1B310; box-shadow:0 0 0 4px rgba(209,179,16,.18); }
+.freecam__tag{ margin-left:auto; color:rgba(245,245,245,.4); font-family:ui-monospace,Menlo,monospace;
+  font-size:11px; letter-spacing:.1em; text-transform:uppercase; }
+
+.freecam__body{ flex:1 1 auto; display:flex; min-height:0; }
+.freecam__stage{ position:relative; flex:1 1 auto; min-width:0; background:#050505; }
+.freecam__viewer{ width:100%; height:100%; border:0; display:block; }
+.freecam__capture{ position:absolute; bottom:18px; left:50%; transform:translateX(-50%);
+  background:#D1B310; color:#000; border:0; border-radius:6px; padding:11px 20px;
+  font:700 14px Inter,sans-serif; cursor:pointer; box-shadow:0 8px 28px rgba(0,0,0,.5); }
+.freecam__capture:hover{ transform:translateX(-50%) translateY(-1px); }
+
+.freecam__side{ flex:0 0 360px; border-left:1px solid rgba(245,245,245,.14);
+  padding:22px; overflow-y:auto; }
+.freecam__side h3{ font:700 14px Inter,sans-serif; text-transform:uppercase; letter-spacing:.06em;
+  color:rgba(245,245,245,.55); margin-bottom:18px; }
+.freecam__step{ display:flex; gap:14px; margin-bottom:22px; }
+.freecam__no{ font-family:ui-monospace,Menlo,monospace; font-size:13px; color:#D1B310; flex:0 0 auto; padding-top:2px; }
+.freecam__step b{ font-size:15px; }
+.freecam__step p{ color:rgba(245,245,245,.6); font-size:13.5px; margin:4px 0 8px; line-height:1.55; }
+.freecam__step code{ font-family:ui-monospace,Menlo,monospace; font-size:12px;
+  background:rgba(255,255,255,.08); padding:1px 5px; border-radius:3px; }
+.freecam__step pre{ font-family:ui-monospace,Menlo,monospace; font-size:11.5px; color:rgba(245,245,245,.78);
+  background:rgba(255,255,255,.05); border:1px solid rgba(245,245,245,.12); border-radius:5px;
+  padding:9px 11px; overflow-x:auto; white-space:pre-wrap; word-break:break-all; }
+.freecam__note{ margin-top:8px; font-size:12px; color:rgba(245,245,245,.4); line-height:1.6;
+  border-top:1px solid rgba(245,245,245,.12); padding-top:14px; }
+.freecam__note code{ font-family:ui-monospace,Menlo,monospace; font-size:11px; color:rgba(245,245,245,.6); }

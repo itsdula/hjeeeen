@@ -1,0 +1,36 @@
+flowchart TD
+    A["1. User sets Frame controls"] --> B["2. Make snapshots the job"]
+    B --> C{"3. Active skill?"}
+
+    C -- "Yes" --> D["4A. Load selected SKILL.md"]
+    D --> E["5A. Claude transforms the brief"]
+    E --> F["6A. Master Prompt"]
+
+    C -- "No" --> G{"4B. Saudi DNA layer on?"}
+    G -- "Yes" --> H["5B. Compile Saudi DNA"]
+    G -- "No" --> I["5C. Raw user prompt"]
+
+    F --> J["7. Master Prompt becomes scene prompt"]
+    H --> J
+    I --> J
+
+    J --> K["8. Add technical controls"]
+    K --> L{"9. Provider route"}
+    L -- "Gateway / OpenAI" --> M["10A. Server recipe, then GPT Image"]
+    L -- "Direct OpenAI / Google" --> N["10B. Local recipe, then image API"]
+    M --> O["11. Crop to exact aspect"]
+    N --> O
+    O --> P["12. Save image and audit record"]
+    P --> Q["13. Show delivered frame"]
+    P --> R["Audit: skill + before/after prompts + run log"]
+
+    X["Bypass: NODE Frame / Cuts / helpers"] -. "no active skill" .-> K
+
+    classDef skill fill:#E5AAD8,stroke:#000,color:#000,stroke-width:2px;
+    classDef model fill:#1095ED,stroke:#000,color:#000,stroke-width:2px;
+    classDef proof fill:#B2D08D,stroke:#000,color:#000,stroke-width:2px;
+    classDef warning fill:#E41A2F,stroke:#000,color:#fff,stroke-width:2px;
+    class D,E,F,J skill;
+    class M,N model;
+    class R proof;
+    class X warning;

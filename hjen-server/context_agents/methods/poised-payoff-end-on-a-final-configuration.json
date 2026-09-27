@@ -1,0 +1,20 @@
+{
+  "id": "poised-payoff-end-on-a-final-configuration",
+  "craft": "poised-payoff",
+  "principle": "End on a final configuration that is visibly balanced on the edge of action, implying a satisfying payoff without actually showing it, so the audience mentally completes the sequence.",
+  "when_it_works": {
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Make the viewer feel a quiet, confident anticipation that the system will deliver, reinforcing trust in the brand’s promise.",
+  "evidence": [
+    "f11-honda — groundedness register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f11-honda"
+}

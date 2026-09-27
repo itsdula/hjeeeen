@@ -1,0 +1,161 @@
+/* ── HJEN SPACE — the gateway + the pipeline rail ──────────────────────────
+   Every number here was signed off in STUDY/ux_redesign/space_gateway_lab.html.
+   They change in the lab first and come back as numbers; do not retune them in
+   this file. */
+
+/* ══ THE GATEWAY ═══════════════════════════════════════════════════════════ */
+.sg {
+  position: absolute; inset: 0; z-index: 3;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 0 24px;
+}
+.sg__q { font-weight: 700; letter-spacing: -0.02em; line-height: 1.12; text-align: center; color: var(--ink); }
+.sg__sub { margin-top: 10px; color: var(--ink-muted); text-align: center; }
+
+.sg__field { position: relative; margin-top: 26px; width: min(680px, 92%); }
+.sg__field textarea {
+  width: 100%; resize: none;
+  background: var(--bg-elev); color: var(--ink);
+  border: 1px solid var(--line-strong); border-radius: 14px;
+  padding: 16px 128px 16px 18px;
+  font: inherit; line-height: 1.45; outline: 0;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  transition: border-color var(--t-fast);
+}
+.sg__field textarea::placeholder { color: var(--ink-faint); }
+.sg__field textarea:focus { border-color: var(--accent); }
+.sg__go {
+  position: absolute; right: 10px; bottom: 10px;
+  display: flex; align-items: center; gap: 7px;
+  background: var(--accent); color: var(--bg);
+  border: 0; border-radius: 10px; padding: 8px 14px;
+  font: inherit; font-weight: 700; font-size: 12.5px; cursor: pointer;
+  transition: opacity var(--t-fast);
+}
+.sg__go:disabled { opacity: 0.4; cursor: default; }
+.sg__go kbd { font: inherit; font-size: 10px; opacity: 0.62; }
+
+.sg__err { margin-top: 14px; color: var(--danger, #E0726A); font-size: 13px; text-align: center; }
+
+/* The four make-cards, demoted — never removed. Someone who already knows what
+   they want must not be made to describe it first. */
+.sg__blank { margin-top: 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
+.sg__blankLbl { font-size: 11.5px; color: var(--ink-faint); }
+.sg__chip {
+  display: flex; align-items: center; gap: 7px; padding: 7px 13px;
+  background: transparent; border: 1px solid var(--line-strong); border-radius: 9px;
+  color: var(--ink-muted); font: inherit; font-size: 12.5px; cursor: pointer;
+  transition: color var(--t-fast), border-color var(--t-fast);
+}
+.sg__chip:hover { color: var(--ink); border-color: var(--sg-c, var(--line-strong)); }
+.sg__chip svg { width: 15px; height: 15px; color: var(--sg-c, currentColor); }
+
+/* ── thinking ── */
+.sg--think { gap: 14px; }
+.sg__echo { max-width: min(680px, 90%); text-align: center; color: var(--ink-muted); font-size: 14px; }
+.sg__line { display: flex; align-items: center; gap: 10px; color: var(--ink-faint); }
+.sg__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: sg-pulse 1.1s infinite; }
+@keyframes sg-pulse { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+
+/* ══ THE PIPELINE RAIL ═════════════════════════════════════════════════════ */
+.pr {
+  position: relative; z-index: 2; flex: 0 0 auto;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg-elev);
+}
+.pr__head { display: flex; align-items: center; gap: 12px; padding: 9px 14px 0; }
+.pr__title { font-size: 12.5px; font-weight: 700; letter-spacing: -0.01em; }
+.pr__ask { flex: 1; min-width: 0; color: var(--ink-faint); font-size: 11.5px;
+           overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pr__act {
+  background: none; border: 1px solid var(--line-strong); border-radius: 7px;
+  color: var(--ink-muted); padding: 4px 10px; font: inherit; font-size: 11.5px; cursor: pointer;
+  transition: color var(--t-fast), border-color var(--t-fast);
+}
+.pr__act:hover { color: var(--ink); border-color: var(--ink-muted); }
+
+.pr__track { display: flex; padding: 10px 14px 12px; overflow-x: auto; }
+.pr__track::-webkit-scrollbar { height: 6px; }
+.pr__track::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 3px; }
+
+/* ── one pipeline ── */
+.pr__pipe {
+  flex: 0 0 auto; display: block; text-align: left;
+  background: var(--bg-elev-2); border: 1px solid var(--line); border-radius: 12px;
+  padding: 9px 10px; color: inherit; font: inherit; cursor: pointer;
+  transition: border-color var(--t-fast), background var(--t-fast), transform var(--t-fast);
+}
+.pr__pipe:hover { border-color: color-mix(in srgb, var(--pr-c) 55%, var(--line-strong)); transform: translateY(-1px); }
+.pr__pipe--on { border-color: var(--pr-c); }
+.pr__pipeTop { display: flex; align-items: center; gap: 8px; }
+.pr__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--pr-c); flex: 0 0 auto; }
+.pr__name { font-size: 12.5px; font-weight: 700; letter-spacing: -0.01em; }
+.pr__n { margin-left: auto; color: var(--ink-faint); }
+.pr__sub { display: block; font-size: 11px; color: var(--ink-faint); margin-top: 2px;
+           overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Progress as segments — one per step, so the SHAPE of the work reads before
+   you open it. A fresh plan is all-grey by contract. */
+.pr__bar { display: flex; gap: 2px; margin-top: 8px; }
+.pr__seg { flex: 1; height: 3px; border-radius: 2px; background: var(--line-strong); }
+.pr__seg--done { background: var(--pr-c); }
+.pr__seg--running { background: var(--pr-c); animation: sg-pulse 1.1s infinite; }
+.pr__seg--open { background: color-mix(in srgb, var(--pr-c) 45%, transparent); }
+.pr__seg--failed { background: var(--danger, #E0726A); }
+
+/* ── the opened pipeline ── */
+.pr__steps { padding: 0 14px 12px; }
+.pr__stepsBox { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+.pr__stepsHead { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+.pr__close { margin-left: auto; background: none; border: 0; color: var(--ink-faint);
+             font: inherit; font-size: 12px; cursor: pointer; }
+.pr__close:hover { color: var(--ink); }
+.pr__stepsList { display: flex; align-items: stretch; overflow-x: auto; padding-bottom: 2px; }
+.pr__stepWrap { display: flex; align-items: center; flex: 0 0 auto; }
+.pr__link { flex: 0 0 auto; height: 1px; background: var(--line-strong); }
+
+.pr__step {
+  flex: 0 0 auto; display: flex; align-items: center; gap: 9px;
+  background: var(--bg-elev-2); border: 1px solid var(--line-strong); border-radius: 10px;
+  padding: 7px 9px 7px 8px; min-height: 34px;
+  color: inherit; font: inherit; text-align: left; cursor: pointer;
+  transition: border-color var(--t-fast), background var(--t-fast);
+}
+.pr__step:hover { border-color: var(--pr-c); }
+.pr__step:disabled { cursor: default; }
+.pr__stepIco {
+  width: 24px; height: 24px; display: grid; place-items: center; border-radius: 7px;
+  background: rgba(255, 255, 255, 0.05); color: var(--pr-c); flex: 0 0 auto;
+}
+.pr__stepIco svg { width: 15px; height: 15px; }
+.pr__stepTxt { min-width: 0; display: flex; flex-direction: column; }
+.pr__stepTool { color: var(--ink-faint); }
+.pr__stepLbl { font-size: 12px; line-height: 1.25; white-space: nowrap; }
+.pr__stepNote { font-size: 10.5px; color: var(--pr-c); white-space: nowrap; }
+
+.pr__run {
+  flex: 0 0 auto; width: 22px; height: 22px; display: grid; place-items: center;
+  border-radius: 50%; border: 1px solid var(--line-strong); color: var(--ink-muted);
+  margin-left: 4px;
+  transition: color var(--t-fast), border-color var(--t-fast), background var(--t-fast);
+}
+.pr__run svg { width: 11px; height: 11px; }
+.pr__step:hover .pr__run { color: var(--pr-c); border-color: var(--pr-c); }
+
+.pr__step--done { opacity: 0.62; }
+.pr__step--done .pr__stepIco { background: color-mix(in srgb, var(--pr-c) 20%, transparent); }
+.pr__step--done .pr__run { border-color: transparent; color: var(--pr-c); }
+.pr__step--running { border-color: var(--pr-c); background: var(--bg-elev); }
+.pr__step--running .pr__stepIco { background: var(--pr-c); color: var(--bg); }
+.pr__step--running .pr__run { background: var(--pr-c); color: var(--bg); border-color: var(--pr-c); }
+.pr__step--running .pr__run svg { animation: pr-spin 0.9s linear infinite; }
+@keyframes pr-spin { to { transform: rotate(360deg); } }
+/* 'open' is not 'done' — we handed the work to the user and only they can
+   close it. It must never wear the finished look. */
+.pr__step--open .pr__run { color: var(--pr-c); border-color: color-mix(in srgb, var(--pr-c) 50%, transparent); }
+.pr__step--failed { border-color: var(--danger, #E0726A); }
+.pr__step--failed .pr__run { color: var(--danger, #E0726A); border-color: var(--danger, #E0726A); }
+
+@media (prefers-reduced-motion: reduce) {
+  .sg__dot, .pr__seg--running, .pr__step--running .pr__run svg { animation: none; }
+}

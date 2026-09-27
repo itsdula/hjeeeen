@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.*
+deploy.env
+data/
+*.log
+.DS_Store
+
+# console build artifact (deployed via rsync, built from src)
+console/dist/
+.test-tools.env

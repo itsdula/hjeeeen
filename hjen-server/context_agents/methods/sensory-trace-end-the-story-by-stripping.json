@@ -1,0 +1,23 @@
+{
+  "id": "sensory-trace-end-the-story-by-stripping",
+  "craft": "sensory-trace",
+  "principle": "End the story by stripping away plot and listing a few concrete sensory details—touch, expression, scent—as the only things that remain, tying one of them directly to the product.",
+  "when_it_works": {
+    "register": [
+      "longing"
+    ],
+    "beat": [
+      "result"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Anchor an abstract emotion in specific sensations so the product becomes the physical trigger that can reliably bring the memory back.",
+  "evidence": [
+    "f12-chanel — longing register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f12-chanel"
+}

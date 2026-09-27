@@ -1,0 +1,23 @@
+{
+  "id": "imperative-use-a-run-of-short",
+  "craft": "imperative",
+  "principle": "Use a run of short, direct imperative sentences that challenge the audience to upgrade their current goals, each one pushing beyond the previous ceiling.",
+  "when_it_works": {
+    "register": [
+      "resolve"
+    ],
+    "beat": [
+      "desire"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Create a rhythmic, motivational pressure that nudges the audience from passive agreement into an active, self-directed challenge.",
+  "evidence": [
+    "f01-nike — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f01-nike"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "prof-f02-apple",
+  "name": "prof-f02-apple — extracted from f02-apple",
+  "palette": "Cold, desaturated blue-grey base with harsh white highlights; oppressive monotone world punctuated by high-contrast black typography.",
+  "light_logic": "Flat, institutional, overhead and screen-driven light that washes people into sameness, with occasional backlit haze around the central screen to heighten its dominance.",
+  "lens": "Moderate wide lenses for tunnels and crowds to emphasize scale and repetition, moving to slightly longer focal lengths on the leader’s face and the flying hammer for impact.",
+  "texture": "Metallic, industrial surfaces; CRT scanlines and flicker; smoke and haze softening distance; worn fabrics and shaved heads reinforcing uniformity.",
+  "world": "A closed, authoritarian industrial complex where information is centralized on omnipresent screens and human bodies move as a single, controlled mechanism.",
+  "forbidden": [
+    "Warm, natural daylight or sunlit exteriors",
+    "Rich, varied color palettes suggesting individuality",
+    "Handheld, casual camera movement that feels free or playful",
+    "Visible personal belongings, decoration, or signs of private life",
+    "Soft, flattering beauty lighting that individualizes faces"
+  ]
+}

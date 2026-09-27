@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HJEN SET — World Viewer</title>
+<!--
+  HJEN SET · موقع التصوير — local "pocket stage" world viewer.
+  Reads ?img= & ?depth= (produced by the depth sidecar), builds a metric-ish
+  depth-displaced world, flies a focal-true camera (full-frame 36×24 sensor),
+  and captures an Angle Pack plate + camera pose. Three.js vendored, fully
+  offline. Talks to the host WorldView via postMessage; also exposes window.__hjen.
+-->
+<style>
+  :root{ --bg:#0b0d0c; --paper:#EDEDE7; --teal:#14B8A6; --ink-40:rgba(237,237,231,.45); --rule:rgba(237,237,231,.14); }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--bg);color:var(--paper);font:13px/1.5 -apple-system,Inter,system-ui,sans-serif;overflow:hidden}
+  #stage{position:fixed;inset:0}
+  canvas{display:block;cursor:grab}
+  canvas:active{cursor:grabbing}
+  .hud{position:fixed;z-index:10;background:rgba(0,0,0,.5);backdrop-filter:blur(10px);border:1px solid var(--rule);border-radius:7px;padding:8px 11px}
+  .hud.br{right:14px;bottom:14px;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--ink-40);letter-spacing:.03em;white-space:pre;text-align:right}
+  .hud.bl{left:14px;bottom:14px;font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--ink-40)}
+  #msg{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;color:var(--ink-40);font-size:13px;pointer-events:none}
+  .pip{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--teal);margin-right:6px;vertical-align:middle}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="msg">Loading world…</div>
+<div class="hud br"><span id="cam">—</span></div>
+<div class="hud bl"><span class="pip"></span>drag = orbit · scroll = dolly · right-drag = pan</div>
+
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<script type="module">
+import * as THREE from 'three';
+
+const q = new URLSearchParams(location.search);
+const RGB = q.get('img'), DEP = q.get('depth');
+const SENSOR_W = 36, SENSOR_H = 24;            // full-frame mm
+let HFOV_SRC = parseFloat(q.get('hfov') || '54');  // assumed source lens ≈ 35mm
+let ZN = parseFloat(q.get('zn') || '1.6');     // metres at nearest disparity
+let ZF = parseFloat(q.get('zf') || '120');     // far clamp
+
+const stage = document.getElementById('stage');
+const msg = document.getElementById('msg');
+const camEl = document.getElementById('cam');
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(innerWidth, innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+stage.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b0d0c);
+const camera = new THREE.PerspectiveCamera(37.8, innerWidth / innerHeight, 0.03, 2000);
+
+let ready = false, worldMesh = null, focalMm = 35, subjectAnchor = new THREE.Vector3(0, 0, -3);
+
+// --- focal (mm) → vertical fov for the full-frame sensor ---
+function focalToVFov(mm){ return 2 * Math.atan((SENSOR_H / 2) / mm) * 180 / Math.PI; }
+function setFocal(mm){
+  focalMm = Math.max(12, Math.min(300, mm));
+  camera.fov = focalToVFov(focalMm);
+  camera.updateProjectionMatrix();
+  updateHud();
+}
+// nearest catalog prime + shot-size label (mirrors storyboardCamera vocab)
+const LENS_PRIMES = [14,20,24,35,50,85,100,135,200];
+function nearestLens(mm){ return LENS_PRIMES.reduce((a,b)=>Math.abs(b-mm)<Math.abs(a-mm)?b:a); }
+const SHOT_TABLE = [['ECU',0.28],['CU',0.45],['MCU',0.75],['MS',1.10],['MLS',1.40],['LS',2.00],['WS',4.50],['EWS',12.0]];
+function shotSizeFor(distanceM){
+  // visible frame height at the subject for the current focal, ÷ a 1.75m subject
+  const vFovRad = camera.fov * Math.PI / 180;
+  const visH = 2 * distanceM * Math.tan(vFovRad / 2);
+  const r = visH / 1.75;
+  let code = 'EWS';
+  for (const [c, h] of SHOT_TABLE){ if (r * 1.75 <= h){ code = c; break; } }
+  return code;
+}
+
+let orbit = { yaw: 0, pitch: 0, dist: 3, target: new THREE.Vector3(0, 0, -3) };
+function applyOrbit(){
+  const t = orbit.target;
+  camera.position.set(
+    t.x + orbit.dist * Math.sin(orbit.yaw) * Math.cos(orbit.pitch),
+    t.y + orbit.dist * Math.sin(orbit.pitch),
+    t.z + orbit.dist * Math.cos(orbit.yaw) * Math.cos(orbit.pitch));
+  camera.lookAt(t);
+  updateHud();
+}
+function updateHud(){
+  const d = camera.position.distanceTo(orbit.target);
+  camEl.textContent = `${focalMm.toFixed(0)}mm (≈${nearestLens(focalMm)}mm) · ${shotSizeFor(d)}\n${d.toFixed(2)} m to subject`;
+}
+
+// --- shot-size assist: place camera at the right distance for a shot size + focal + angle ---
+// Keeps the CURRENT look-at target (the subject the user is framing) and only
+// adjusts distance (d = Hvis·f/24) + elevation. Distance is clamped so the camera
+// never dives inside the near geometry.
+function shotSizeAssist(code, mm, angle){
+  if (mm) setFocal(mm);
+  const row = SHOT_TABLE.find(r => r[0] === code) || ['MS', 1.10];
+  const Hvis = row[1];
+  const d = Math.max(0.5, Hvis * focalMm / SENSOR_H);   // d = Hvis·f / 24, never < 0.5 m
+  const elev = { EL:0, HA:20, LA:-20, OH:75, WE:-45 }[angle] ?? 0;
+  orbit.pitch = -elev * Math.PI / 180;                  // looking down = negative pitch offset
+  orbit.dist = d;                                       // orbit target stays where the user last framed
+  applyOrbit();
+  return { shot: code, focalMm, angle, distanceM: d };
+}
+
+// --- move presets: parametric camera paths from the current pose (t=0..1) ---
+function movePath(id, t){
+  const base = orbit.dist, ty = orbit.pitch, tx = orbit.yaw;
+  const p = { ...orbit, yaw: tx, pitch: ty, dist: base };
+  switch(id){
+    case 'push-in':  p.dist = base * (1 - 0.35 * t); break;
+    case 'pull-out': p.dist = base * (1 + 0.5 * t);  break;
+    case 'orbit-l':  p.yaw = tx - 0.6 * t;           break;
+    case 'orbit-r':  p.yaw = tx + 0.6 * t;           break;
+    case 'crane-up': p.pitch = ty - 0.4 * t;         break;
+    case 'tilt-down':p.pitch = ty + 0.35 * t;        break;
+    default: break;
+  }
+  return p;
+}
+function applyMove(id, t){
+  const p = movePath(id, t);
+  orbit.yaw = p.yaw; orbit.pitch = p.pitch; orbit.dist = p.dist;
+  applyOrbit();
+}
+
+// hjen-file:// is a different origin → fetch it to a same-origin blob URL first,
+// otherwise reading pixels (getImageData / toDataURL) taints the canvas.
+async function loadImage(src){
+  if (/^hjen-file:/.test(src)){
+    const blob = await fetch(src).then(r => r.blob());
+    src = URL.createObjectURL(blob);
+  }
+  return new Promise((res, rej)=>{ const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=src; });
+}
+
+async function build(){
+  if (!RGB || !DEP){ msg.textContent = 'No image — pick one first'; return; }
+  try{
+    const [imRgb, imDep] = await Promise.all([loadImage(RGB), loadImage(DEP)]);
+    const c = document.createElement('canvas'); c.width = imDep.width; c.height = imDep.height;
+    const g = c.getContext('2d'); g.drawImage(imDep, 0, 0);
+    const px = g.getImageData(0, 0, c.width, c.height).data;
+    const COLS = 720, ROWS = Math.max(2, Math.round(720 * imDep.height / imDep.width));
+    const geo = new THREE.PlaneGeometry(1, 1, COLS - 1, ROWS - 1);
+    const pos = geo.attributes.position;
+    const aspect = imDep.width / imDep.height;
+    const tanH = Math.tan(THREE.MathUtils.degToRad(HFOV_SRC) / 2), tanV = tanH / aspect;
+    const invZn = 1 / ZN, invZf = 1 / ZF;
+    for (let r = 0; r < ROWS; r++) for (let ci = 0; ci < COLS; ci++){
+      const i = r * COLS + ci, u = ci / (COLS - 1), v = r / (ROWS - 1);
+      const sx = Math.min(imDep.width - 1, Math.round(u * (imDep.width - 1)));
+      const sy = Math.min(imDep.height - 1, Math.round(v * (imDep.height - 1)));
+      const d = px[(sy * imDep.width + sx) * 4] / 255;   // 1 = near
+      const z = 1 / (d * (invZn - invZf) + invZf);
+      pos.setXYZ(i, (u * 2 - 1) * tanH * z, (1 - v * 2) * tanV * z, -z);
+    }
+    geo.computeVertexNormals();
+    const tex = new THREE.Texture(imRgb); tex.needsUpdate = true; tex.colorSpace = THREE.SRGBColorSpace;
+    worldMesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide }));
+    scene.add(worldMesh);
+    // subject anchor: a stable NEAR target ~3 m in front (the foreground subject),
+    // never the far background — sampling image-centre depth can land on the sky/city.
+    const anchorZ = 3.0;
+    subjectAnchor.set(0, 0, -anchorZ);
+    // dist = anchorZ puts the camera back at the origin = the original source framing.
+    orbit.target.copy(subjectAnchor); orbit.yaw = 0; orbit.pitch = 0; orbit.dist = anchorZ;
+    setFocal(35); applyOrbit();
+    ready = true; msg.style.display = 'none';
+    post('hjen:world-ready', { ok: true });
+  }catch(e){
+    msg.textContent = 'Could not build the world: ' + (e?.message || e);
+    post('hjen:world-ready', { ok: false, error: String(e) });
+  }
+}
+
+// --- capture: Angle Pack plate + camera pose + prompt fragment ---
+function vocabPrompt(){
+  const d = camera.position.distanceTo(orbit.target);
+  const lens = nearestLens(focalMm), shot = shotSizeFor(d);
+  const pitch = orbit.pitch * 180 / Math.PI;
+  const angle = Math.abs(pitch) < 8 ? 'eye level' : pitch < 0 ? 'high angle looking down' : 'low angle looking up';
+  const LENS_WORD = { 14:'14mm ultra-wide', 20:'20mm wide', 24:'24mm wide', 35:'35mm', 50:'50mm normal', 85:'85mm portrait', 100:'100mm', 135:'135mm telephoto', 200:'200mm long lens' }[lens];
+  const SHOT_WORD = { ECU:'extreme close-up', CU:'close-up', MCU:'medium close-up', MS:'medium shot', MLS:'medium-long shot', LS:'long shot', WS:'wide shot', EWS:'extreme wide shot' }[shot];
+  return `${SHOT_WORD}, ${LENS_WORD}, ${angle}. Keep this exact camera angle, composition and framing — do not reframe, re-crop or rotate.`;
+}
+function capture(){
+  renderer.render(scene, camera);
+  const d = camera.position.distanceTo(orbit.target);
+  return {
+    png: renderer.domElement.toDataURL('image/png'),
+    camera: {
+      schema: 'hjen.anglepack.camera/1', space: 'three-y-up',
+      position: camera.position.toArray(), target: orbit.target.toArray(), up: [0,1,0],
+      fov: camera.fov, aspect: camera.aspect,
+      lens: { focal_mm: focalMm, sensor: { name:'FF-36x24', w_mm:SENSOR_W, h_mm:SENSOR_H } },
+      vocab: { shot_size: shotSizeFor(d), lens_prime: nearestLens(focalMm) },
+    },
+    prompt: vocabPrompt(),
+  };
+}
+
+// --- input ---
+let dragging = false, panning = false, lx = 0, ly = 0;
+renderer.domElement.addEventListener('mousedown', e => { dragging = e.button === 0; panning = e.button === 2; lx = e.clientX; ly = e.clientY; });
+addEventListener('mouseup', () => { dragging = panning = false; });
+addEventListener('contextmenu', e => e.preventDefault());
+addEventListener('mousemove', e => {
+  if (!dragging && !panning) return;
+  const dx = e.clientX - lx, dy = e.clientY - ly; lx = e.clientX; ly = e.clientY;
+  if (dragging){ orbit.yaw += dx * 0.005; orbit.pitch = Math.max(-1.35, Math.min(1.35, orbit.pitch + dy * 0.004)); }
+  else if (panning){ const s = orbit.dist * 0.0016; orbit.target.x -= dx * s; orbit.target.y += dy * s; }
+  applyOrbit();
+});
+addEventListener('wheel', e => { orbit.dist = Math.max(0.15, orbit.dist + e.deltaY * 0.0022 * orbit.dist); applyOrbit(); }, { passive: true });
+addEventListener('resize', () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth/innerHeight; camera.updateProjectionMatrix(); });
+
+function loop(){ renderer.render(scene, camera); requestAnimationFrame(loop); }
+loop();
+
+// --- host protocol (postMessage) + programmatic seam ---
+function post(type, data){ parent && parent.postMessage({ type, data }, '*'); }
+addEventListener('message', e => {
+  const m = e.data; if (!m || !m.cmd) return;
+  switch(m.cmd){
+    case 'setFocal': setFocal(m.mm); break;
+    case 'shotAssist': post('hjen:assist', shotSizeAssist(m.shot, m.mm, m.angle)); break;
+    case 'move': applyMove(m.id, m.t ?? 1); break;
+    case 'reset': orbit.yaw = 0; orbit.pitch = 0; orbit.dist = -subjectAnchor.z; orbit.target.copy(subjectAnchor); setFocal(35); applyOrbit(); break;
+    case 'capture': post('hjen:capture-result', capture()); break;
+  }
+});
+window.__hjen = { setFocal, shotSizeAssist, applyMove, capture, status: () => ({ loaded: ready }) };
+
+build();
+</script>
+</body>
+</html>

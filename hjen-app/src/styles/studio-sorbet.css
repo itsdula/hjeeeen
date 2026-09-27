@@ -1,0 +1,426 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   STUDIO HUB · SORBET GRID skin — Style Bible No. 7, NIGHT SHIFT mood.
+   Candy-bento re-skin of the Studio product hub. EVERYTHING is scoped under
+   `.hub.studio-sorbet` so tokens.css (the graphite source of truth) and every
+   OTHER view render exactly as before. This file deliberately REVERSES the
+   app's "no colourful filled buttons" law — candy is the point here, and Anwar
+   adopted Sorbet Grid as the new direction (2026-07-26).
+
+   Sibling of cuts-sorbet.css (the dense-tool experiment). Same local palette,
+   same discipline: local `--sb-*` vars, borrow the token grid (--s-*, --t-*,
+   --ease) so the 8pt rhythm + motion system stay consistent.
+
+   Palette (exact bible hues — the local source of truth for this view):
+     canvas = Licorice #13131A          ink-on-candy = #13131A (ALWAYS)
+     violet #8455EA · sky #1AAEFC · coral #F07A3C · mint #35C4A8 · lemon #F5E642
+     accent-only dot = bubblegum pink #F2B8DC
+   Hue law: 5 candy hues laid out on a SIX-step cycle over the 5-column grid —
+   see the `data-sb-hue` block below for why the cycle length is 6, not 5.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.hub.studio-sorbet {
+  /* Outer gutter. Declared as a variable because the tile-width maths below
+     subtracts it — change it here and the whole grid re-measures itself. */
+  --sb-pad-x: var(--s-7);
+  padding-left: var(--sb-pad-x);
+  padding-right: var(--sb-pad-x);
+
+  /* Canvas + ink */
+  --sb-canvas: #13131A;
+  --sb-ink: #13131A;             /* ink-black — every glyph/label on candy */
+  --sb-card-dark: #17171E;       /* neutral well — SOON tiles + mascot card */
+  /* Candy */
+  --sb-violet: #8455EA;
+  --sb-sky: #1AAEFC;
+  --sb-coral: #F07A3C;
+  --sb-mint: #35C4A8;
+  --sb-lemon: #F5E642;
+  --sb-lemon-hi: #FBEF5A;
+  --sb-pink: #F2B8DC;            /* accent-dot only, never a card fill */
+  /* White ink ramp — only ever on the black canvas, never on candy */
+  --sb-white: #F6F6F2;
+  --sb-dim: rgba(246, 246, 242, .64);
+  --sb-faint: rgba(246, 246, 242, .34);
+  /* Hairlines */
+  --sb-line: rgba(255, 255, 255, .09);
+  --sb-line-2: rgba(255, 255, 255, .18);
+  /* Ink hairline used INSIDE candy tiles (icon frame, pill) */
+  --sb-ink-line: rgba(19, 19, 26, .22);
+  /* Radii — one consistent card-radius family */
+  --sb-r: 18px;
+  --sb-r-sm: 12px;
+  --sb-r-pill: 999px;
+
+  background: var(--sb-canvas);
+  color: var(--sb-white);
+}
+
+/* One high-contrast focus signal on the black canvas. */
+.studio-sorbet .hub-tile:focus-visible,
+.studio-sorbet .hub-toggle__btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--sb-canvas), 0 0 0 5px var(--sb-white);
+}
+
+/* ── Header ────────────────────────────────────────────────────────────────
+   head (title block) · toggle (centre) · aside (lemon stat + reel mascot). */
+.studio-sorbet .hub-bar {
+  align-items: center;
+  gap: var(--s-5);
+  margin-bottom: var(--s-6);
+}
+.studio-sorbet .hub-bar__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  margin-right: auto;
+  min-width: 0;
+  /* Match the tile's own inner padding so "Studio" sits on the same optical
+     line as the tile copy — it tracks the tile padding clamp, not a fixed 24px
+     that only happened to be right at one window width. */
+  padding-left: clamp(13px, 1.1vw, 24px);
+}
+.studio-sorbet .hub-bar__eyebrow {
+  color: var(--sb-faint);
+  font-size: var(--t-micro);
+  letter-spacing: 0.22em;
+}
+.studio-sorbet .hub-bar__title {
+  color: var(--sb-white);
+  font-family: var(--font-latin);
+  font-weight: 800;
+  font-size: clamp(40px, 4.6vw, 72px);
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  margin: 2px 0 4px;
+  user-select: text;
+}
+.studio-sorbet .hub-bar__lead { color: var(--sb-dim); user-select: text; }
+.studio-sorbet .hub-bar__hiddenbtn {
+  color: var(--sb-white);
+  border-bottom: 1px solid var(--sb-line-2);
+}
+
+/* Segmented toggle — square black frame, white active slab w/ ink text (bible:
+   white text lives ONLY on the black canvas; the active slab is white). */
+.studio-sorbet .hub-toggle {
+  background: #0E0E13;
+  border: 1px solid var(--sb-line-2);
+  border-radius: var(--r-square);
+  padding: 4px;
+}
+.studio-sorbet .hub-toggle__glider {
+  background: var(--sb-white);
+  border-radius: var(--r-square);
+}
+.studio-sorbet .hub-toggle__btn {
+  color: var(--sb-dim);
+  min-width: 104px;
+  border-radius: var(--r-square);
+}
+.studio-sorbet .hub-toggle__btn--on { color: var(--sb-ink); }
+
+/* Aside — square stat slab. It gives up room below 1180px (see responsive). */
+.studio-sorbet .hub-sb-aside {
+  display: flex;
+  align-items: stretch;
+  gap: var(--s-4);
+  height: clamp(104px, 8.8vw, 132px);
+  flex: none;
+}
+.studio-sorbet .hub-sb-stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: clamp(136px, 11vw, 172px);
+  padding: var(--s-4) var(--s-5);
+  border-radius: var(--r-square);
+  background: var(--sb-lemon);
+  color: var(--sb-ink);
+}
+.studio-sorbet .hub-sb-stat__num {
+  font-family: var(--font-latin);
+  font-weight: 800;
+  font-size: clamp(52px, 4.6vw, 72px);
+  line-height: 0.86;
+  letter-spacing: -0.04em;
+  user-select: text;
+}
+.studio-sorbet .hub-sb-stat__lbl {
+  margin-top: var(--s-2);
+  font-family: var(--font-latin);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 1.15;
+  user-select: text;
+}
+/* ── Tiles grid — the bento ────────────────────────────────────────────────
+   FIVE columns. Every internal size is derived from `--sb-tw`, the real pixel
+   width one column occupies on THIS machine's window — so the tile reads the
+   same on a 13" laptop and a 32" monitor instead of pinning fixed 12px/18px
+   type to a column that silently doubles in width.
+
+   `.hub` is position:fixed / left:0 / right:0, so its content box is exactly
+   `100vw - 2 × --sb-pad-x`; --sb-tw removes the gutters and divides by the
+   column count. Only `--sb-cols` (+ the matching grid-template) changes at a
+   breakpoint — every clamp below re-measures itself for free.
+
+   Available tiles first (order 0), SOON tiles floated to the end (order 1). */
+.studio-sorbet .hub-tiles {
+  --sb-cols: 5;
+  --sb-gap: clamp(12px, 1.05vw, 20px);
+  --sb-tw: calc(
+    (100vw - 2 * var(--sb-pad-x) - (var(--sb-cols) - 1) * var(--sb-gap)) / var(--sb-cols)
+  );
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--sb-gap);
+  align-items: stretch;
+  counter-reset: sbtile;
+}
+
+/* The tile no longer carries a fixed aspect-ratio. A locked ratio is exactly
+   what was cutting the copy: the ratio decided the height, the content needed
+   more, and `overflow:hidden` ate the difference. Now the CONTENT decides the
+   height, `min-height` only stops a short tile from collapsing, and grid
+   stretch keeps every tile in a row the same height. Nothing can be clipped. */
+.studio-sorbet .hub-tiles .hub-tile {
+  --sb-pad: clamp(13px, calc(var(--sb-tw) * 0.062), 24px);
+  aspect-ratio: auto;
+  min-height: clamp(190px, calc(var(--sb-tw) * 0.86), 340px);
+  height: 100%;
+  border-radius: var(--r-square);
+  padding: var(--sb-pad);
+  color: var(--sb-ink) !important;   /* GATE 3 — ink-black on ALL candy, always */
+  order: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition:
+    transform var(--t-fast) var(--ease),
+    box-shadow var(--t-med) var(--ease);
+}
+.studio-sorbet .hub-tiles .hub-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.7);
+}
+
+/* Number — a CSS counter over available tiles only, so it reads 01…22 clean
+   regardless of the interleaved SOON tiles. */
+.studio-sorbet .hub-tiles .hub-tile:not(.hub-tile--soon) { counter-increment: sbtile; }
+.studio-sorbet .hub-tiles .hub-tile:not(.hub-tile--soon)::before {
+  content: counter(sbtile, decimal-leading-zero);
+  position: absolute;
+  top: var(--sb-pad); left: var(--sb-pad);
+  font-family: var(--font-latin);
+  font-weight: 700;
+  font-size: clamp(12px, calc(var(--sb-tw) * 0.045), 17px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--sb-ink);
+  opacity: 0.72;
+}
+
+/* Doodle icon — the existing mono-line glyph, framed in a bordered square,
+   ink-black lines. Sits in the upper band; text block sinks below it. */
+.studio-sorbet .hub-tiles .hub-tile__glyph {
+  order: 1;
+  align-self: flex-end;
+  flex: none;
+  width: clamp(58px, calc(var(--sb-tw) * 0.30), 108px);
+  height: clamp(58px, calc(var(--sb-tw) * 0.30), 108px);
+  margin: clamp(14px, calc(var(--sb-tw) * 0.07), 30px) 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--sb-ink-line);
+  border-radius: var(--sb-r-sm);
+}
+.studio-sorbet .hub-tiles .hub-tile__glyph svg { width: 58%; height: 58%; }
+
+/* Hand-drawn doodle — the REAL drawing, BIG and BEHIND the copy.
+   Three decisions, each fixing something that was wrong:
+   1. The art is now KNOCKED OUT (transparent PNG, the ink is the alpha), so
+      there is no white ground to hide with mix-blend-mode — and no black block
+      left standing on the dark SOON tiles, which is what multiply was papering
+      over. `filter: invert()` on transparent art flips the strokes only.
+   2. Every file is trimmed to its ink and re-framed to the same 88% box, so a
+      wide doodle and a tall one carry the same visual weight card to card.
+   3. It is ABSOLUTE, not a flex child: it can be large without ever pushing the
+      name, tagline or pill around, and the copy sits on top of it. A mask fades
+      the drawing out before the text band, so nothing is read through ink. */
+.hub-tiles .tile-doodle {
+  /* TUNED BY ANWAR in STUDY/ux_redesign/card_lab.html — full-strength ink,
+     66% of the card, pushed up and to the right so the drawing bleeds off the
+     top-right corner and the copy keeps the lower-left quiet.
+     The one translation: he tuned `translate(80px, -50px)` on a 272px-wide
+     card; those are the SAME offsets expressed against the drawing's own box
+     (80/179 = 45%, 50/162 = 31%), so the composition holds at every column
+     count instead of sliding further off a narrow card. Identical at the width
+     he tuned it on — measured, not assumed. */
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 66%;
+  height: 66%;
+  object-fit: contain;
+  object-position: center;
+  transform: translate(45%, -31%);
+  z-index: 0;
+  opacity: 1;
+  /* The drawings are WHITE on every tile, full stop. They were keyed off
+     `hub-tile--ink-light` before, which is computed from each product's ORIGINAL
+     accent — and the sorbet skin repaints every background from its own hue
+     cycle, so that class describes a colour the tile no longer wears. Story
+     (#D1B310) and Pitch (#E5AAD8) are light accents, so they alone stayed black
+     while their neighbours on the same candy went white. One invert here, no
+     per-tile condition, nothing left to disagree with. */
+  filter: invert(1);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+/* Dark SOON tiles: flip the strokes to light. Alpha survives the filter, so the
+   drawing stays a drawing instead of the black square it used to be. */
+/* SOON tiles inherit the same white strokes and only drop in presence. */
+.hub-tiles .hub-tile--soon .tile-doodle {
+  opacity: 0.24;
+}
+/* The copy rides above the drawing — unscoped with the doodle rule itself.
+   The drawing is a POSITIONED element at z-index 0; in-flow text with no
+   position of its own paints BELOW it, so without this line the App hub's
+   names would sit under the ink. */
+.hub-tiles .hub-tile > *:not(.tile-doodle) { position: relative; z-index: 1; }
+
+/* Text block — anchored to the BOTTOM of the tile (one `margin-top:auto`, not
+   two competing autos, so the name never drifts between neighbouring cards).
+   Order: doodle → free space → name → tagline. The entire tile is the action. */
+.studio-sorbet .hub-tiles .hub-tile__name {
+  order: 2;
+  flex: none;
+  width: 100%;
+  margin-top: auto;
+  padding-top: clamp(10px, calc(var(--sb-tw) * 0.05), 22px);
+  font-family: var(--font-latin);
+  font-weight: 700;
+  font-size: clamp(15px, calc(var(--sb-tw) * 0.054), 22px);
+  letter-spacing: -0.015em;
+  line-height: 1.12;
+  overflow-wrap: break-word;
+  user-select: text;
+}
+/* The tagline. Two lines are RESERVED (min-height) so the pill sits on the same
+   baseline across a row; a third line is allowed rather than clipped, and only
+   a genuinely runaway string ever ellipses. */
+.studio-sorbet .hub-tiles .hub-tile__desc {
+  order: 3;
+  flex: none;
+  width: 100%;
+  margin-top: clamp(3px, calc(var(--sb-tw) * 0.014), 7px);
+  font-size: clamp(11px, calc(var(--sb-tw) * 0.037), 14px);
+  line-height: 1.34;
+  min-height: 2.68em;          /* = 2 lines — keeps the pill baseline honest */
+  opacity: 0.82;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  user-select: text;
+}
+
+/* ── The hue cycle — no two orthogonally-adjacent tiles share a hue ────────
+   `data-sb-hue` is assigned in ProductHub.tsx from the tile's VISUAL position
+   (available tiles first, SOON floated after), not from nth-child — nth-child
+   counts DOM order, which the `order` property then reshuffles, so the old
+   selectors could never guarantee the law once a SOON tile sat mid-list.
+
+   The cycle is SIX steps over five hues, deliberately. On a 5-column grid a
+   5-step cycle puts the same hue in the same column on every row — vertical
+   stripes, the exact thing the law forbids. With a 6-step cycle the vertical
+   neighbour (index + 5) lands on the PREVIOUS step, so both the horizontal and
+   the vertical neighbour differ; it also survives the 4-column breakpoint
+   (index + 4 → two steps back, also distinct). */
+.studio-sorbet .hub-tiles .hub-tile[data-sb-hue="0"] { background: var(--sb-violet) !important; --sb-dot: var(--sb-lemon); }
+.studio-sorbet .hub-tiles .hub-tile[data-sb-hue="1"] { background: var(--sb-sky) !important;    --sb-dot: var(--sb-coral); }
+.studio-sorbet .hub-tiles .hub-tile[data-sb-hue="2"] { background: var(--sb-coral) !important;  --sb-dot: var(--sb-sky); }
+.studio-sorbet .hub-tiles .hub-tile[data-sb-hue="3"] { background: var(--sb-mint) !important;   --sb-dot: var(--sb-pink); }
+.studio-sorbet .hub-tiles .hub-tile[data-sb-hue="4"] { background: var(--sb-lemon) !important;  --sb-dot: var(--sb-violet); }
+.studio-sorbet .hub-tiles .hub-tile[data-sb-hue="5"] { background: var(--sb-coral) !important;  --sb-dot: var(--sb-lemon); }
+
+/* ── SOON tiles — one unified dimmed treatment, floated to the end ─────────
+   ~45% presence, neutral mono badge, no pill, not clickable (handler already
+   no-ops for non-available). */
+.studio-sorbet .hub-tiles .hub-tile--soon {
+  order: 1;
+  background: var(--sb-card-dark) !important;
+  color: var(--sb-dim) !important;
+  border: 1px solid var(--sb-line);
+  opacity: 0.5;
+}
+.studio-sorbet .hub-tiles .hub-tile--soon:hover { transform: none; box-shadow: none; }
+.studio-sorbet .hub-tiles .hub-tile--soon .hub-tile__glyph { border-color: var(--sb-line-2); }
+.studio-sorbet .hub-tiles .hub-tile--soon .hub-tile__glyph svg { color: var(--sb-dim); }
+.studio-sorbet .hub-tiles .hub-tile--soon .hub-tile__name,
+.studio-sorbet .hub-tiles .hub-tile--soon .hub-tile__desc { color: var(--sb-dim); }
+/* Status chip → neutral "SOON" badge (replaces the "Coming soon" copy). The
+   original label is collapsed to font-size:0; the badge sizes to the ::before. */
+.studio-sorbet .hub-tiles .hub-tile--soon .hub-tile__st {
+  top: var(--sb-pad); right: var(--sb-pad);
+  width: auto; height: auto;
+  padding: 4px 8px;
+  border-radius: var(--sb-r-sm);
+  background: rgba(255, 255, 255, 0.12) !important;
+  font-size: 0;
+  color: transparent;
+}
+.studio-sorbet .hub-tiles .hub-tile--soon .hub-tile__st::before {
+  content: 'SOON';
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--sb-dim);
+}
+
+/* Manage-mode: hidden tiles keep the existing scrim; nothing to override. */
+
+/* ── Responsive ────────────────────────────────────────────────────────────
+   Only the column count steps. `--sb-cols` MUST be updated alongside the
+   grid-template or every internal clamp measures against the wrong width.
+   The 5-up is held down to 1220px so a 1440/1512/1680-wide window — every
+   MacBook and most external monitors — still lands on five. */
+/* The stat gives up room before the grid does, so the header never wraps. */
+@media (max-width: 1219px) {
+  .studio-sorbet .hub-tiles {
+    --sb-cols: 4;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (max-width: 1180px) {
+  .hub.studio-sorbet { --sb-pad-x: var(--s-5); }
+  .studio-sorbet .hub-sb-aside { display: none; }
+  .studio-sorbet .hub-toggle__btn { min-width: 88px; padding: 9px 14px; }
+}
+@media (max-width: 940px) {
+  .studio-sorbet .hub-tiles {
+    --sb-cols: 3;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+/* Three columns is the one width where the six-step cycle cannot hold the law
+   on its own: the vertical neighbour lands three steps away, and steps 2 and 5
+   are the pair that shares coral. Re-point step 5 to mint for this band only —
+   it must go BACK to coral at two columns, where the vertical neighbour is two
+   steps away and mint would collide with step 3 instead. */
+@media (min-width: 681px) and (max-width: 940px) {
+  .studio-sorbet .hub-tiles .hub-tile[data-sb-hue="5"] {
+    background: var(--sb-mint) !important;
+    --sb-dot: var(--sb-lemon);
+  }
+}
+@media (max-width: 680px) {
+  .studio-sorbet .hub-tiles {
+    --sb-cols: 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .hub.studio-sorbet { --sb-pad-x: var(--s-4); }
+}

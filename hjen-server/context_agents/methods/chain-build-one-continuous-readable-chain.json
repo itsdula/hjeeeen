@@ -1,0 +1,23 @@
+{
+  "id": "chain-build-one-continuous-readable-chain",
+  "craft": "chain",
+  "principle": "Build one continuous, readable chain reaction in a single space so each shot feels like a new link in the same mechanism, letting the audience experience the product benefit as inevitability rather than claim.",
+  "when_it_works": {
+    "register": [
+      "groundedness"
+    ],
+    "beat": [
+      "result"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Make the viewer feel that the outcome is guaranteed because they’ve watched every step that leads to it.",
+  "evidence": [
+    "f11-honda — groundedness register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f11-honda"
+}

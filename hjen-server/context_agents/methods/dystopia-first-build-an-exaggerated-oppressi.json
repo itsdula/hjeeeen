@@ -1,0 +1,20 @@
+{
+  "id": "dystopia-first-build-an-exaggerated-oppressi",
+  "craft": "dystopia",
+  "principle": "First build an exaggerated, oppressive version of the current norm so the audience emotionally feels what is wrong before you ever show your solution.",
+  "when_it_works": {
+    "beat": [
+      "setup"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Make the existing world feel viscerally unbearable so any alternative you later offer feels necessary, not optional.",
+  "evidence": [
+    "f02-apple — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f02-apple"
+}

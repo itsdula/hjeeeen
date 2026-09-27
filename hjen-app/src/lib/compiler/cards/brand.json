@@ -1,0 +1,26 @@
+[
+  {
+    "id": "brand.presence-restraint.001",
+    "dimension": "brand",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["براند", "لوقو", "brand", "logo", "منتج", "product"],
+    "ar": "حضور البراند المقبول: المنتج يعيش في المشهد كغرض حقيقي (عصير على الطبلون، كيس على الكاونتر) — لا يطفو ولا يلمع وسط الكادر. تجاوز نسبة الحضور يكسر الصدق ويحوّل المشهد لكتالوج.",
+    "en": "Acceptable brand presence: the product lives in the scene as a real object (juice bottle on a dashboard, bag on the counter) — integrated, used, never floating or hero-lit mid-frame. Exceed the honest ratio and the scene collapses into catalog. Arabic-label products add truth.",
+    "negatives": ["product levitating with glow", "logo repeated on every surface"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  },
+  {
+    "id": "brand.endframe-lockup.002",
+    "dimension": "brand",
+    "region": "ksa",
+    "era": "2020s",
+    "tags": ["ختام", "packshot", "endframe", "lockup", "لوكب", "ثنائي اللغة"],
+    "ar": "لوحة الختام السعودية: خلفية هادئة من باليت الحملة، لوكب ثنائي اللغة (عربي يمين أعلى بحكم RTL، إنجليزي أسفل)، سطر واحد + شعار. تُبنى بالتايبوغرافي الحقيقي (Overlay) فوق فريم مصنوع — لا تُطلب من موديل الصورة.",
+    "en": "Saudi end-frame convention: calm background pulled from the campaign palette, bilingual lockup (Arabic upper-right RTL gravity, English lower-left), one line + logo. Built with REAL typography (overlay) on a made frame — never requested from the image model.",
+    "negatives": ["model-generated logo art", "cluttered end frame with three messages"],
+    "sources": ["seed:arabic_text"],
+    "weight": 2
+  }
+]

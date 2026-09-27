@@ -1,0 +1,257 @@
+/* ============================================================
+   Assets — the four factories (Character · Location · Prop ·
+   Wardrobe). View-specific parts on top of the shared .pp-
+   skeleton. Namespace: .ppa-
+   One law, inherited: colour lives on substrates (--pp-accent);
+   ink stays Whiteout on the dark field.
+   Numbers approved in STUDY/ux_redesign/asset_lab.html.
+   ============================================================ */
+
+.pp--assets {
+  --ppa-rail: 232px;     /* .pp-aside on an asset floor (pp default 320) */
+  --ppa-gutter: 10px;
+  --ppa-radius: 5px;     /* .ppr-tile ships --r-1 = 4px; plates sit one step up */
+  --ppa-plate: 330px;    /* base plate height */
+  --ppa-pad: 20px;       /* .pp-main on an asset floor (pp default --s-6) */
+  --ppa-ground: #808080; /* mirrors lib/assets/plateGround.ts — do not fork */
+}
+.pp--assets .pp-aside { width: var(--ppa-rail); padding: var(--s-4); }
+.pp--assets .pp-main { padding: var(--ppa-pad); }
+
+/* The aside on an asset floor is a stack of dividers, not a stack of cards —
+   the plates are the only thing that should read as a surface. */
+.pp--assets .pp-aside .pp-panel {
+  background: none; border: none; border-bottom: 1px solid var(--line);
+  border-radius: 0; padding: 0 0 var(--s-4); margin-bottom: var(--s-4);
+}
+.pp--assets .pp-aside .pp-panel:last-child { border-bottom: none; margin-bottom: 0; }
+
+/* ─── the roster — every asset of this kind in the project ─── */
+.ppa-roster { display: flex; flex-direction: column; gap: 2px; }
+.ppa-rosteritem {
+  display: flex; align-items: center; gap: var(--s-2);
+  background: none; border: none; text-align: left; cursor: pointer;
+  padding: 7px 8px; border-radius: var(--r-2); color: var(--ink-muted); width: 100%;
+}
+.ppa-rosteritem:hover { background: var(--field-bg); color: var(--ink-dim); }
+.ppa-rosteritem.is-current { background: var(--field-bg); color: var(--ink); }
+.ppa-rosteritem__thumb {
+  width: 26px; height: 26px; border-radius: var(--r-1); flex: 0 0 auto;
+  background: var(--ppa-ground); border: 1px solid var(--line); object-fit: cover;
+}
+.ppa-rosteritem__thumb--empty { background: var(--field-bg); border-style: dashed; }
+.ppa-rosteritem__name {
+  flex: 1; min-width: 0; font: 500 12.5px/1.2 var(--font-sans);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ppa-rosteritem__n { font: 500 9.5px/1 var(--font-mono); color: var(--ink-faint); }
+
+/* ─── THE PLATE — .ppr-tile's structure on the grey it is made on ─── */
+.ppa-plate {
+  position: relative; display: grid; place-items: center; padding: 0; border: none;
+  background: var(--ppa-ground); border-radius: var(--ppa-radius); overflow: hidden;
+  cursor: pointer; width: 100%;
+  transition: transform var(--t-fast) var(--ease), box-shadow var(--t-fast) var(--ease);
+}
+.ppa-plate:hover { transform: scale(1.012); z-index: 3; box-shadow: 0 8px 22px rgba(0,0,0,.40); }
+.ppa-plate:focus-visible { outline: 2px solid var(--pp-accent); outline-offset: 2px; z-index: 3; }
+.ppa-plate__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ppa-plate::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: inset 0 0 0 0 transparent; transition: box-shadow var(--t-fast) var(--ease);
+}
+.ppa-plate.is-active::after { box-shadow: inset 0 0 0 2px var(--pp-accent); }
+
+.ppa-plate__role {
+  position: absolute; top: var(--s-2); left: var(--s-2); z-index: 2;
+  font-family: var(--font-mono); font-size: 8.5px; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(0,0,0,.62); background: rgba(255,255,255,.36);
+  padding: 4px 7px; border-radius: var(--r-1);
+}
+.ppa-plate__ok {
+  position: absolute; top: var(--s-2); right: var(--s-2); z-index: 2;
+  width: 16px; height: 16px; border-radius: 50%; background: var(--job-done);
+  display: grid; place-items: center; font-size: 9px; color: #fff;
+}
+.ppa-plate__warn {
+  position: absolute; top: var(--s-2); right: var(--s-2); z-index: 2;
+  width: 8px; height: 8px; border-radius: 50%; background: var(--sunflare);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sunflare) 26%, transparent);
+}
+.ppa-plate--empty {
+  background: var(--field-bg); border: 1px dashed var(--line-strong);
+  color: var(--ink-faint); font-size: 12px;
+}
+.ppa-plate--empty:hover { transform: none; box-shadow: none; border-color: var(--pp-accent); }
+.ppa-plate--empty .ppa-plate__role { color: var(--ink-faint); background: transparent; }
+.ppa-plate--making { background: var(--field-bg); cursor: default; }
+.ppa-plate--making:hover { transform: none; box-shadow: none; }
+.ppa-plate--making::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(100deg, transparent 25%, rgba(255,255,255,.07) 50%, transparent 75%);
+  background-size: 220% 100%; animation: ppa-sweep 1.4s var(--ease) infinite;
+}
+@keyframes ppa-sweep { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+
+.ppa-slotmeta {
+  display: flex; justify-content: space-between; gap: var(--s-2);
+  margin-top: 6px; font-size: 11px; color: var(--ink-muted);
+}
+.ppa-slotmeta b { color: var(--ink-dim); font-weight: 500; }
+
+/* ─── the anchor — what actually rides into the prompt ─── */
+.ppa-anchor {
+  position: relative; background: var(--field-bg); border: 1px solid var(--line);
+  border-radius: var(--r-2); padding: 11px 13px 11px 16px;
+  margin-bottom: var(--s-4);
+}
+.ppa-anchor::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  border-radius: 3px 0 0 3px; background: var(--pp-accent);
+}
+.ppa-anchor__label { font-weight: 600; color: var(--ink); }
+.ppa-anchor__field {
+  width: 100%; background: none; border: none; color: var(--ink-dim);
+  font: 400 12.5px/1.55 var(--font-sans); padding: 0; resize: vertical; min-height: 34px;
+}
+.ppa-anchor__field:focus { outline: none; color: var(--ink); }
+.ppa-anchor__count { float: right; margin-left: var(--s-3); font-family: var(--font-mono); font-size: 10px; }
+.ppa-anchor__count.is-over { color: var(--sunflare); }
+
+/* ─── takes — append-only history, one active pointer ─── */
+.ppa-takes { display: flex; gap: 6px; align-items: center; overflow-x: auto; padding: 2px 0; }
+.ppa-take {
+  flex: 0 0 auto; width: 42px; height: 42px; border-radius: var(--r-1); padding: 0;
+  background: var(--ppa-ground); border: 2px solid transparent; cursor: pointer;
+  overflow: hidden; position: relative;
+}
+.ppa-take img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ppa-take.is-active { border-color: var(--pp-accent); }
+
+/* ─── negatives — the refusal list ─── */
+.ppa-negs { display: flex; flex-wrap: wrap; gap: 5px; }
+.ppa-neg {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; line-height: 1; padding: 5px 6px 5px 9px; border-radius: var(--r-pill);
+  background: color-mix(in srgb, var(--flash) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--flash) 34%, transparent);
+  color: var(--ink-dim);
+}
+.ppa-neg__x {
+  width: 14px; height: 14px; border: none; border-radius: 50%; background: none;
+  color: var(--ink-faint); cursor: pointer; font: 400 12px/1 var(--font-sans);
+  display: grid; place-items: center;
+}
+.ppa-neg__x:hover { color: var(--flash); }
+
+/* ─── source photos — what the asset was built FROM ─── */
+.ppa-src { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.ppa-src__s {
+  aspect-ratio: 1; border-radius: var(--r-1); background: var(--bg-elev-2);
+  border: 1px solid var(--line); position: relative; overflow: hidden; padding: 0; cursor: pointer;
+}
+.ppa-src__s img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; }
+.ppa-src__s--add {
+  border-style: dashed; display: grid; place-items: center;
+  color: var(--ink-faint); font-size: 15px; background: var(--field-bg);
+}
+.ppa-src__s--add:hover { border-color: var(--pp-accent); color: var(--ink-dim); }
+.ppa-src__x {
+  position: absolute; top: 2px; right: 2px; width: 16px; height: 16px; border-radius: 50%;
+  background: rgba(0,0,0,.6); border: none; color: #fff; font: 400 11px/1 var(--font-sans);
+  cursor: pointer; display: grid; place-items: center; opacity: 0;
+}
+.ppa-src__s:hover .ppa-src__x { opacity: 1; }
+.ppa-src__s:focus-visible { outline: 2px solid var(--pp-accent); outline-offset: 2px; }
+.ppa-plate.is-active { cursor: zoom-in; }
+.ppa-rosteritem__thumb[title] { cursor: zoom-in; }
+
+.ppa-cascade {
+  font-family: var(--font-mono); font-size: 9.5px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-faint); margin-top: var(--s-2);
+}
+.ppa-cascade b { color: var(--pp-accent); }
+
+/* ─── CHARACTER · the contact sheet ─── */
+.ppa-contact { display: grid; gap: var(--ppa-gutter); grid-template-columns: minmax(190px, .8fr) 1.7fr; }
+.ppa-contact__face { grid-row: 1 / 3; aspect-ratio: 4/5; min-height: var(--ppa-plate); align-self: start; }
+.ppa-contact__sheet { aspect-ratio: 16/9; }
+.ppa-contact__anchor { aspect-ratio: 21/9; min-height: 92px; }
+.ppa-contact__wide { grid-column: 1 / -1; }
+
+/* the placeholder drawn inside an unmade plate's slot */
+.ppa-views { display: flex; width: 100%; height: 100%; }
+.ppa-views i {
+  flex: 1; border-right: 1px dashed rgba(0,0,0,.18); display: grid; place-items: center;
+  position: relative;
+}
+.ppa-views i:last-child { border-right: 0; }
+.ppa-views i::after {
+  content: attr(data-v); position: absolute; bottom: 6px;
+  font-family: var(--font-mono); font-size: 8px; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(0,0,0,.5);
+}
+
+/* ─── LOCATION · the scout board ─── */
+.ppa-board { display: grid; grid-template-columns: 1fr 1fr; gap: var(--ppa-gutter); align-content: start; }
+.ppa-board .ppa-plate { aspect-ratio: 16/9; min-height: calc(var(--ppa-plate) * .55); }
+.ppa-bind {
+  display: flex; border: 1px solid var(--line-strong); border-radius: var(--r-2);
+  overflow: hidden; margin-bottom: var(--s-3);
+}
+.ppa-bind button {
+  flex: 1; padding: 7px 8px; background: none; border: 0; cursor: pointer;
+  color: var(--ink-muted); font: 500 11.5px/1.3 var(--font-sans);
+}
+.ppa-bind button[aria-pressed="true"] { background: var(--pp-accent); color: var(--on-accent); font-weight: 600; }
+.ppa-bindnote { font-size: 11.5px; color: var(--ink-muted); line-height: 1.5; margin: 0; }
+.ppa-bindnote b { color: var(--ink-dim); font-weight: 500; }
+
+/* ─── PROP · the turnaround strip ─── */
+.ppa-strip { aspect-ratio: 32/9; min-height: calc(var(--ppa-plate) * .62); margin-bottom: var(--ppa-gutter); }
+.ppa-inserts { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: var(--ppa-gutter); }
+.ppa-inserts .ppa-plate { aspect-ratio: 1; }
+.ppa-req {
+  font-family: var(--font-mono); font-size: 8.5px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--flash);
+}
+
+/* ─── WARDROBE · the garment ledger ─── */
+.ppa-bound {
+  display: flex; align-items: center; gap: var(--s-3); background: var(--field-bg);
+  border: 1px solid var(--line); border-radius: var(--r-2); padding: 9px 13px;
+  margin-bottom: var(--s-4);
+}
+.ppa-bound__av {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--ppa-ground);
+  flex: 0 0 auto; object-fit: cover;
+}
+.ppa-bound__who { font: 600 12.5px/1 var(--font-sans); }
+.ppa-bound__rel { font-size: 11.5px; color: var(--ink-muted); }
+.ppa-ledger { width: 100%; border-collapse: separate; border-spacing: 0; }
+.ppa-ledger th {
+  text-align: left; padding: 0 10px 9px; font-family: var(--font-mono);
+  font-size: var(--t-micro); font-weight: 500; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--ink-muted);
+}
+.ppa-ledger td { padding: 9px 10px; border-top: 1px solid var(--line); vertical-align: middle; font-size: 12.5px; }
+.ppa-ledger tr:hover td { background: var(--field-bg); }
+.ppa-ledger .ppa-plate { width: 50px; height: 50px; display: inline-grid; }
+.ppa-ledger .pp-input, .ppa-ledger .pp-select { padding: 6px 8px; font-size: 12px; }
+.ppa-addrow td {
+  border-top: 1px dashed var(--line-strong); color: var(--ink-faint);
+  cursor: pointer; font-size: 12px; padding: 11px 10px;
+}
+.ppa-addrow td:hover { color: var(--ink-dim); }
+.ppa-note { font-size: 11.5px; color: var(--ink-muted); line-height: 1.6; margin: var(--s-4) 0 0; max-width: 76ch; }
+
+/* ─── empty state ─── */
+.ppa-blank { display: grid; place-items: center; height: 100%; min-height: 360px; text-align: center; }
+.ppa-blank__inner { max-width: 46ch; }
+.ppa-blank h3 { font: 600 15px/1.4 var(--font-sans); margin: 0 0 8px; }
+.ppa-blank p { font-size: 12.5px; color: var(--ink-muted); line-height: 1.65; margin: 0 0 var(--s-4); }
+.ppa-graph-contract {
+  border-color: color-mix(in srgb, var(--pp-accent) 48%, var(--line));
+  background: color-mix(in srgb, var(--pp-accent) 8%, var(--bg-elev));
+}
+.ppa-graph-contract > b { display: block; color: var(--ink); font-size: 13px; margin-bottom: 6px; }

@@ -1,0 +1,25 @@
+{
+  "id": "tightening-move-from-wide-spectacular-scenes",
+  "craft": "tightening",
+  "principle": "Move from wide, spectacular scenes into progressively tighter shots on a single speaker or symbol as the message becomes more personal and declarative.",
+  "when_it_works": {
+    "register": [
+      "groundedness"
+    ],
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Guide the audience from awe to intimacy so the final brand or belief statement feels like a direct, one-to-one conversation.",
+  "evidence": [
+    "f01-nike — resolve register",
+    "f04-john-lewis — longing register",
+    "CONFIRMED-TRANSFERABLE: resolve+longing+groundedness"
+  ],
+  "weight": 3,
+  "status": "candidate",
+  "source": "auto:f01-nike"
+}

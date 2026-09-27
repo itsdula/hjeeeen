@@ -1,0 +1,133 @@
+/* ============================================================
+   Story — نص القصة (stage 05). View-specific parts on top of
+   preprod.css. Namespace: .pps- . Colour stays on --pp-accent;
+   failure states use --flash. Arabic content = serif, RTL.
+   ============================================================ */
+
+/* ─── panel subtitles — English UI descriptors (replaced the old
+       Arabic .pp-panel__ar spans in this view) ─────────────── */
+.pps-sub {
+  font: 400 11px/1.4 var(--font-sans); color: var(--ink-muted);
+  align-self: center;
+}
+
+/* ─── aside extras ─────────────────────────────────────────── */
+.pps-side { margin-top: var(--s-5); display: flex; flex-direction: column; gap: var(--s-4); }
+.pps-side__label { color: var(--ink-muted); margin-bottom: 6px; }
+.pps-side__compass {
+  border: 1px dashed var(--line-strong); border-radius: var(--r-2);
+  padding: 10px 12px;
+}
+.pps-side__compass p {
+  margin: 0; direction: ltr;
+  font: 400 11.5px/1.55 var(--font-mono); color: var(--ink-dim);
+  word-break: break-word;
+}
+
+/* ─── rows ─────────────────────────────────────────────────── */
+.pps-row { display: flex; align-items: center; gap: var(--s-4); margin-top: var(--s-3); flex-wrap: wrap; }
+.pps-row--head { margin: 0 0 var(--s-4); }
+
+/* ─── source / treatment context ───────────────────────────── */
+.pps-source { display: flex; flex-direction: column; gap: var(--s-4); }
+.pps-source__status {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-3);
+  padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--r-2);
+  background: var(--field-bg);
+}
+.pps-source__status.is-ready { border-color: color-mix(in srgb, var(--pp-accent) 50%, transparent); }
+.pps-source__status.is-ready .mono-label { color: var(--pp-accent); }
+.pps-source__status.is-thin { border-color: color-mix(in srgb, var(--flash) 50%, transparent); }
+.pps-source__status.is-thin .mono-label { color: var(--flash); }
+.pps-source__fingerprint { font: 400 10px/1 var(--font-mono); color: var(--ink-faint); }
+.pps-source__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--r-2); overflow: hidden; }
+.pps-source__row { min-width: 0; padding: 10px 12px; background: var(--surface); }
+.pps-source__row .mono-label { display: block; margin-bottom: 5px; color: var(--ink-muted); }
+.pps-source__row p { margin: 0; font: 400 12.5px/1.65 var(--font-serif); color: var(--ink); direction: auto; }
+.pps-source__row.is-empty p { color: var(--ink-faint); }
+.pps-source__missing { padding: 9px 11px; border-inline-start: 2px solid var(--flash); font: 400 11.5px/1.6 var(--font-sans); color: var(--ink-muted); }
+.pps-source__missing .mono-label { display: block; margin-bottom: 3px; color: var(--flash); }
+@media (max-width: 900px) { .pps-source__grid { grid-template-columns: 1fr; } }
+.pps-treat { display: flex; flex-direction: column; gap: 8px; }
+.pps-treat__line {
+  margin: 0; direction: rtl; font-family: var(--font-serif);
+  font-size: 13.5px; line-height: 1.8; color: var(--ink);
+}
+.pps-treat__line .mono-label {
+  display: inline-block; direction: ltr; color: var(--pp-accent);
+  margin-left: 10px; font-size: 10px;
+}
+.pps-treat__empty { margin: 0; font-size: 12.5px; color: var(--ink-muted); }
+
+/* ─── verdicts (gate / compass) ────────────────────────────── */
+.pps-verdict {
+  margin-top: var(--s-4); border-radius: var(--r-2); padding: 11px 14px;
+  border: 1px solid var(--line);
+}
+.pps-verdict.is-pass {
+  border-color: color-mix(in srgb, var(--pp-accent) 55%, transparent);
+  background: color-mix(in srgb, var(--pp-accent) 9%, transparent);
+}
+.pps-verdict.is-fail {
+  border-color: color-mix(in srgb, var(--flash) 55%, transparent);
+  background: color-mix(in srgb, var(--flash) 10%, transparent);
+}
+.pps-verdict__tag { margin-bottom: 6px; color: var(--ink-dim); letter-spacing: .04em; }
+.pps-verdict.is-pass .pps-verdict__tag { color: var(--pp-accent); }
+.pps-verdict.is-fail .pps-verdict__tag { color: var(--flash); }
+.pps-verdict__reason {
+  margin: 0; direction: rtl; font-family: var(--font-serif);
+  font-size: 13.5px; line-height: 1.8; color: var(--ink);
+}
+.pps-verdict__dig {
+  margin: 8px 0 0; direction: rtl; font-family: var(--font-serif);
+  font-size: 14px; line-height: 1.8; color: var(--flash);
+}
+.pps-verdict__note { margin: 0; font: 400 12px/1.6 var(--font-sans); color: var(--ink-dim); }
+.pps-verdict__ok { color: var(--pp-accent); }
+
+/* ─── beats ────────────────────────────────────────────────── */
+.pps-beat__rule { font-size: 10.5px; color: var(--ink-faint); text-align: right; max-width: 46%; }
+.pps-beat__line { min-height: 64px; }
+
+/* ─── budget + rules ───────────────────────────────────────── */
+.pps-budgetrow {
+  display: flex; gap: var(--s-6); flex-wrap: wrap; margin-bottom: var(--s-4);
+}
+.pps-meter { margin-bottom: var(--s-3); }
+.pps-rules {
+  margin: var(--s-3) 0 0; padding: 0 0 0 18px;
+  font-size: 11.5px; line-height: 1.7; color: var(--ink-muted);
+}
+.pps-rules li::marker { color: var(--pp-accent); }
+
+/* ─── AV blocks ────────────────────────────────────────────── */
+.pps-block__tc { display: inline-flex; align-items: center; gap: 5px; color: var(--ink-muted); }
+.pps-block__num {
+  width: 56px; padding: 5px 7px; text-align: center;
+  font: 500 12px/1 var(--font-mono);
+}
+/* hide number spinners — the field is two digits, arrows are noise */
+.pps-block__num::-webkit-outer-spin-button,
+.pps-block__num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.pps-block__visual { min-height: 66px; }
+.pps-block__vo { min-height: 56px; }
+.pps-block__pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s-4); }
+@media (max-width: 900px) { .pps-block__pair { grid-template-columns: 1fr; } }
+
+/* live rule flags — red hints under a failing channel */
+.pps-flag {
+  margin-top: 6px; font-size: 11px; line-height: 1.5; color: var(--flash);
+}
+.pps-flag--inline { margin-top: 0; align-self: center; }
+
+/* ─── compiled script ──────────────────────────────────────── */
+.pps-script {
+  margin: 0; padding: var(--s-4);
+  background: var(--field-bg); border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  direction: rtl; text-align: right;
+  font: 400 13px/1.9 var(--font-mono);
+  color: var(--ink); white-space: pre-wrap; word-break: break-word;
+  max-height: 60vh; overflow-y: auto;
+}

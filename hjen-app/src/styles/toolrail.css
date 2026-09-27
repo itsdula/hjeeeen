@@ -1,0 +1,98 @@
+/* ── FLOATING TOOL RAIL ────────────────────────────────────────────────────
+   The create-tool rail, unpinned: draggable, dockable to any edge, collapsible
+   to a puck. It reuses .nv-toolrail (the shell, the blur, the border) so a
+   docked-left rail is pixel-identical to the rail Node has always had — the
+   movement is added, the look is not changed.
+   Everything below is scoped to .tr so nothing here can reach a fixed rail. */
+
+.nv-toolrail.tr {
+  /* Overrides .nv-toolrail's hard-coded left/top/transform — the inline style
+     from the component is the single source of position truth. */
+  left: auto; top: auto; transform: none;
+  gap: 4px;
+  transition: box-shadow var(--t-fast), border-color var(--t-fast);
+  /* A dragged rail must not select text under the cursor. */
+  touch-action: none;
+}
+.nv-toolrail.tr--dragging {
+  cursor: grabbing;
+  border-color: var(--accent);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.6);
+  transition: none;                 /* follow the pointer with zero lag */
+}
+
+/* Horizontal rail — the same shell laid on its side. */
+.nv-toolrail.tr--h { flex-direction: row; align-items: center; gap: 4px; }
+.nv-toolrail.tr--h .nv-toolrail__div { width: 1px; height: 20px; margin: 0 2px; }
+
+/* ── head: grip + fold ── */
+.tr-head {
+  display: flex; align-items: center; justify-content: center; gap: 2px;
+  flex: 0 0 auto;
+}
+.nv-toolrail.tr--h .tr-head { flex-direction: column; gap: 0; }
+
+.tr-grip {
+  display: grid; place-items: center;
+  width: 24px; height: 22px; padding: 0;
+  background: none; border: none; border-radius: 6px;
+  color: var(--ink-faint, var(--ink-muted));
+  cursor: grab;
+  transition: color var(--t-fast), background var(--t-fast);
+}
+.tr-grip:hover { color: var(--ink); background: rgba(255, 255, 255, 0.06); }
+.nv-toolrail.tr--dragging .tr-grip { cursor: grabbing; color: var(--ink); }
+.nv-toolrail.tr--h .tr-grip { transform: rotate(90deg); }
+
+.tr-fold {
+  display: grid; place-items: center;
+  width: 22px; height: 22px; padding: 0;
+  background: none; border: none; border-radius: 6px;
+  color: var(--ink-faint, var(--ink-muted));
+  cursor: pointer;
+  transition: color var(--t-fast), background var(--t-fast), transform var(--t-fast);
+}
+.tr-fold:hover { color: var(--ink); background: rgba(255, 255, 255, 0.06); }
+/* Chevron points the way the rail will move: closed → open it back out. */
+.nv-toolrail.tr--collapsed .tr-fold { transform: rotate(-90deg); }
+.nv-toolrail.tr--h .tr-fold { transform: rotate(-90deg); }
+.nv-toolrail.tr--h.tr--collapsed .tr-fold { transform: rotate(180deg); }
+
+/* ── body ── */
+.tr-body {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+}
+.nv-toolrail.tr--h .tr-body { flex-direction: row; }
+
+/* ── axis flip — a quiet affordance at the tail of the rail ── */
+.tr-axis {
+  display: grid; place-items: center;
+  width: 22px; height: 18px; padding: 0; margin-top: 2px;
+  background: none; border: none; border-radius: 5px;
+  color: var(--ink-faint, var(--ink-muted)); opacity: 0.55;
+  cursor: pointer;
+  transition: opacity var(--t-fast), color var(--t-fast), background var(--t-fast);
+}
+.nv-toolrail.tr:hover .tr-axis { opacity: 1; }
+.tr-axis:hover { color: var(--ink); background: rgba(255, 255, 255, 0.06); }
+.nv-toolrail.tr--h .tr-axis { width: 18px; height: 22px; margin: 0 0 0 2px; }
+
+/* ── collapsed puck ── */
+.nv-toolrail.tr--collapsed { padding: 4px; }
+.nv-toolrail.tr--collapsed .tr-head { gap: 0; }
+
+/* ── snap hint — the edge the rail will dock to on release ── */
+.tr-snap {
+  position: absolute; z-index: 5; pointer-events: none;
+  background: linear-gradient(var(--snap-dir, to right),
+    color-mix(in srgb, var(--accent) 26%, transparent), transparent);
+  border-radius: 14px;
+}
+.tr-snap--left   { left: 0; top: 0; bottom: 0; width: 76px; --snap-dir: to right; }
+.tr-snap--right  { right: 0; top: 0; bottom: 0; width: 76px; --snap-dir: to left; }
+.tr-snap--top    { top: 0; left: 0; right: 0; height: 76px; --snap-dir: to bottom; }
+.tr-snap--bottom { bottom: 0; left: 0; right: 0; height: 76px; --snap-dir: to top; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nv-toolrail.tr, .tr-grip, .tr-fold, .tr-axis { transition: none; }
+}

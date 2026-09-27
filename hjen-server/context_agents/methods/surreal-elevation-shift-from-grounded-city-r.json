@@ -1,0 +1,23 @@
+{
+  "id": "surreal-elevation-shift-from-grounded-city-r",
+  "craft": "surreal-elevation",
+  "principle": "Shift from grounded city realism into a single, clearly artificial or storybook set piece—like a rooftop crescent or floating platform—where the couple can exist apart from the world, signaling that this space is emotional rather than literal.",
+  "when_it_works": {
+    "register": [
+      "longing"
+    ],
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Give the relationship a visual ‘other world’ where normal rules don’t apply, so the audience feels their bond as magical and temporary.",
+  "evidence": [
+    "f12-chanel — longing register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f12-chanel"
+}

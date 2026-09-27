@@ -1,0 +1,23 @@
+{
+  "id": "danger-ignore-let-the-audio-or-lyrics",
+  "craft": "danger-ignore",
+  "principle": "Let the audio or lyrics describe risk, conflict, or pursuit while the visuals calmly show harmony and play, so the contrast reframes danger as something that can be moved through together.",
+  "when_it_works": {
+    "register": [
+      "groundedness"
+    ],
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Soften anxiety around high-stakes themes by making togetherness feel like the real headline.",
+  "evidence": [
+    "f16-android — joy register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f16-android"
+}

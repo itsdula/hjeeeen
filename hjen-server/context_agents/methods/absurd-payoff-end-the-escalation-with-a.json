@@ -1,0 +1,23 @@
+{
+  "id": "absurd-payoff-end-the-escalation-with-a",
+  "craft": "absurd-payoff",
+  "principle": "End the escalation with a single, blatantly absurd visual punchline that breaks logic but fits the tone, then hold on it just long enough for the audience to register the joke as the brand’s signature move.",
+  "when_it_works": {
+    "register": [
+      "joy"
+    ],
+    "beat": [
+      "result"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Leaves a sticky, quotable final image that audiences associate with the brand’s attitude, not just its product.",
+  "evidence": [
+    "f10-old-spice — joy register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f10-old-spice"
+}

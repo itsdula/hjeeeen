@@ -1,0 +1,23 @@
+{
+  "id": "dreamframe-frame-the-entire-narrative-as",
+  "craft": "dreamframe",
+  "principle": "Frame the entire narrative as a remembered dream from the protagonist’s point of view, using first‑person voiceover and slightly unreal visuals so every scene feels like a fragment he is replaying rather than an objective present.",
+  "when_it_works": {
+    "register": [
+      "longing"
+    ],
+    "beat": [
+      "setup"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Make the audience experience the story as an intimate memory they are being invited into, which softens logic gaps and heightens emotional acceptance of fantasy.",
+  "evidence": [
+    "f12-chanel — longing register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f12-chanel"
+}

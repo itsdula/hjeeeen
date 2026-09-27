@@ -1,0 +1,22 @@
+{
+  "id": "kinetic-release-after-a-prolonged-still-or",
+  "craft": "kinetic-release",
+  "principle": "After a prolonged still or minimal sequence, cut hard into chaotic, high-motion imagery that physically embodies the emotional tension you’ve been building.",
+  "when_it_works": {
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "loud"
+    ]
+  },
+  "effect": "Transforms abstract buildup into visceral action, giving the viewer a bodily sense of struggle or breakthrough instead of just being told about it.",
+  "evidence": [
+    "f05-guinness — resolve register",
+    "f06-sony — turbulence register",
+    "CONFIRMED-TRANSFERABLE: resolve+turbulence"
+  ],
+  "weight": 3,
+  "status": "candidate",
+  "source": "auto:f05-guinness"
+}

@@ -1,0 +1,161 @@
+/* ============================================================
+   Brief Mind — عقل البريف · view-specific styles only.
+   Generic skeleton lives in preprod.css (.pp-*); everything
+   here is .ppb-. Colour lives on substrates via --pp-accent;
+   ink stays on the ink scale.
+   ============================================================ */
+
+/* ─── top-bar: Canvas view toggle ─────────────────────────── */
+.ppb-canvasbtn { display: inline-flex; align-items: baseline; gap: 4px; }
+.ppb-canvasbtn__ar { font-size: var(--t-meta); color: var(--ink-muted); }
+.ppb-canvasbtn:hover .ppb-canvasbtn__ar { color: var(--ink-dim); }
+
+/* ─── aside: raw brief + analysis ─────────────────────────── */
+.ppb-raw { min-height: 180px; }
+.ppb-raw__load { display: flex; margin-bottom: var(--s-2); }
+.ppb-raw__load .pp-btn { font-size: 12px; padding: 4px 10px; }
+
+.ppb-aside__actions {
+  display: flex; align-items: center; gap: var(--s-4);
+  margin-bottom: var(--s-4);
+}
+
+.ppb-cost { color: var(--ink-faint); margin-bottom: var(--s-4); }
+
+.ppb-analysis {
+  border-top: 1px solid var(--line);
+  padding-top: var(--s-4);
+  display: flex; flex-direction: column; gap: var(--s-4);
+}
+.ppb-analysis__label { color: var(--ink-muted); margin-bottom: 6px; }
+.ppb-species {
+  display: inline-block;
+  border: 1px solid color-mix(in srgb, var(--pp-accent) 55%, transparent);
+  background: color-mix(in srgb, var(--pp-accent) 14%, transparent);
+  color: var(--ink);
+  border-radius: var(--r-pill); padding: 5px 11px;
+}
+/* Static bilingual species — the Arabic label sits beside the mono chip; the
+   joined-letters law keeps it serif, non-mono, no letter-spacing. */
+.ppb-species-row { display: flex; align-items: center; flex-wrap: wrap; gap: var(--s-2); }
+.ppb-species__ar {
+  font-family: var(--font-serif); letter-spacing: 0;
+  font-size: 13px; line-height: 1.6; color: var(--ink-dim);
+}
+/* Reading line inside a compact read-only list (gaps · collider ideas) —
+   drops the form-field hairline, tightens the gap. */
+.ppb-inline-ar { border-top: none; margin-top: var(--s-1); padding-top: 0; }
+.ppb-list {
+  margin: 0; padding: 0; list-style: none;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.ppb-list li {
+  unicode-bidi: plaintext; text-align: start; font-family: var(--font-serif);
+  font-size: 12.5px; line-height: 1.7; color: var(--ink-dim);
+  background: var(--field-bg); border: 1px solid var(--line);
+  border-radius: var(--r-2); padding: 7px 10px;
+}
+.ppb-list--dim li { color: var(--ink-muted); background: none; }
+
+/* ─── shared small parts ──────────────────────────────────── */
+.ppb-warn {
+  margin-top: 6px; font-size: 11.5px; line-height: 1.5;
+  color: var(--flash);
+}
+.ppb-empty {
+  margin: 0; font-size: 12.5px; line-height: 1.6; color: var(--ink-muted);
+}
+/* English one-line panel subtitle (replaces the retired rtl .pp-panel__ar) */
+.ppb-panel__sub { font-size: 12px; color: var(--ink-muted); }
+.ppb-restate { min-height: 130px; }
+
+/* ─── seeds ───────────────────────────────────────────────── */
+.ppb-seeds {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: var(--s-3);
+}
+.ppb-seed {
+  background: var(--field-bg); border: 1px solid var(--line);
+  border-radius: var(--r-2); padding: 10px 12px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.ppb-seed__head { display: flex; align-items: center; justify-content: space-between; }
+.ppb-seed__dim {
+  color: var(--pp-accent);
+  border: 1px solid color-mix(in srgb, var(--pp-accent) 40%, transparent);
+  border-radius: var(--r-pill); padding: 3px 8px;
+}
+.ppb-seed__reroll {
+  background: none; border: 1px solid var(--line); color: var(--ink-muted);
+  width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
+  font-size: 13px; line-height: 1; display: grid; place-items: center;
+  transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease);
+}
+.ppb-seed__reroll:hover { border-color: var(--pp-accent); color: var(--ink); }
+.ppb-seed__ar {
+  unicode-bidi: plaintext; text-align: start; font-family: var(--font-serif);
+  font-size: 13px; line-height: 1.75; color: var(--ink);
+}
+.ppb-seed__id { color: var(--ink-faint); }
+
+/* ─── the collider ────────────────────────────────────────── */
+.ppb-designline {
+  font-size: 12.5px; color: var(--ink-muted);
+  margin: 0 0 var(--s-4);
+}
+.ppb-killcount { color: var(--ink-muted); margin-bottom: var(--s-3); }
+.ppb-cols { display: flex; flex-direction: column; gap: 6px; }
+.ppb-col {
+  display: flex; align-items: flex-start; gap: var(--s-4);
+  background: var(--field-bg); border: 1px solid var(--line);
+  border-left: 3px solid var(--line);
+  border-radius: var(--r-2); padding: 10px 12px;
+}
+.ppb-col.is-kept {
+  border-left-color: var(--pp-accent);
+  background: color-mix(in srgb, var(--pp-accent) 8%, var(--field-bg));
+}
+.ppb-col__machine {
+  flex: 0 0 auto; color: var(--ink-muted);
+  border: 1px solid var(--line-strong); border-radius: var(--r-pill);
+  padding: 4px 9px; margin-top: 2px; white-space: nowrap;
+}
+.ppb-col__body { flex: 1; min-width: 0; }
+.ppb-col__idea {
+  unicode-bidi: plaintext; text-align: start; font-family: var(--font-serif);
+  font-size: 13px; line-height: 1.75; color: var(--ink);
+}
+.ppb-col__seed { color: var(--ink-faint); margin-top: 4px; }
+.ppb-keep {
+  flex: 0 0 auto; align-self: center;
+  background: none; border: 1px solid var(--line-strong); color: var(--ink-muted);
+  border-radius: var(--r-pill); padding: 6px 12px; cursor: pointer;
+  transition: all var(--t-fast) var(--ease);
+}
+.ppb-keep:hover { border-color: var(--pp-accent); color: var(--ink); }
+.ppb-keep.is-on {
+  background: var(--pp-accent); border-color: var(--pp-accent); color: var(--on-accent);
+}
+
+/* ─── territories + big idea ──────────────────────────────── */
+.ppb-terrs { margin-bottom: var(--s-5); }
+.ppb-terr { padding-left: calc(var(--s-4) + 6px); }
+.ppb-terr.is-big {
+  border-color: color-mix(in srgb, var(--pp-accent) 60%, var(--line));
+}
+.ppb-terr__name {
+  font-weight: 600; margin-bottom: var(--s-3);
+}
+.ppb-terr__field {
+  display: block; color: var(--ink-muted);
+  margin: var(--s-3) 0 5px;
+}
+.ppb-terr__ta { min-height: 64px; }
+.ppb-terr__pick {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: var(--s-4); padding-top: var(--s-3);
+  border-top: 1px solid var(--line); cursor: pointer;
+  color: var(--ink-dim);
+}
+.ppb-terr__pick input[type='radio'] { accent-color: var(--pp-accent); cursor: pointer; }
+.ppb-terr.is-big .ppb-terr__pick { color: var(--ink); }

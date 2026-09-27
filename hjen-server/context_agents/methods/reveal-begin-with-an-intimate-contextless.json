@@ -1,0 +1,17 @@
+{
+  "id": "reveal-begin-with-an-intimate-contextless",
+  "craft": "reveal",
+  "principle": "Begin with an intimate, contextless close-up and only later widen to reveal a surprising, high-stakes environment that reinterprets everything the viewer has already seen.",
+  "when_it_works": {
+    "beat": [
+      "change"
+    ]
+  },
+  "effect": "Makes the audience re-evaluate the character and situation in a jolt of surprise that hooks attention and retroactively deepens the opening lines.",
+  "evidence": [
+    "f08-volvo-trucks — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f08-volvo-trucks"
+}

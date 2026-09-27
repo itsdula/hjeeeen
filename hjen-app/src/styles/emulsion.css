@@ -1,0 +1,754 @@
+/* ============================================================================
+ * EMULSION — الجسم · Camera Body × Lens × Film.
+ * A LOCAL (offline, instant) post-process that gives an AI frame a real cinema
+ * camera body. Chrome mirrors the Enhancer view; every value is a token so it
+ * survives the six themes + Light + Daylight + the Pro graphite appearance.
+ * ========================================================================== */
+
+.emu {
+  position: fixed;
+  inset: 0;
+  top: var(--top-chrome-h, 56px);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background: var(--bg);
+  color: var(--ink);
+  z-index: 2;
+}
+
+/* ---- header ---- */
+.emu__header {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-6);
+  border-bottom: 1px solid var(--line);
+}
+/* Image | Video mode toggle — reuses the shared .segmented pill */
+.emu-mode { justify-self: end; }
+
+/* Engine transparency line (video) — a quiet status caption, not a panel */
+.emu-engine {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s-2);
+  padding: var(--s-2) var(--s-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--field-bg);
+  color: var(--ink-muted);
+  font-size: var(--t-micro);
+  line-height: 1.5;
+}
+.emu-engine__dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+.emu-engine__text { min-width: 0; overflow-wrap: anywhere; }
+
+/* Read-only "Output matches source" line (video) — informational, not a control */
+.emu-output {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.emu-output__label { color: var(--ink-dim); }
+.emu-output__val { color: var(--ink-muted); font-size: var(--t-micro); letter-spacing: 0.04em; }
+.emu__back {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  color: var(--ink-dim);
+  padding: var(--s-1) var(--s-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  background: transparent;
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.emu__back:hover { color: var(--ink); border-color: var(--line-strong); }
+.emu__back:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.emu__title h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--t-h2);
+  font-weight: 500;
+}
+.emu__title .mono-label { color: var(--ink-muted); margin-top: 2px; display: block; }
+.emu__project { font-size: var(--t-meta); color: var(--ink-muted); }
+
+/* ---- body: stage + controls rail ---- */
+.emu__body {
+  display: grid;
+  grid-template-columns: 1fr minmax(280px, 320px);
+  gap: var(--s-4);
+  padding: var(--s-4) var(--s-6);
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ---- left column: stage (1fr) over the library film-strip (auto) ---- */
+.emu-main {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: var(--s-4);
+  min-height: 0;
+  min-width: 0;
+}
+
+/* ---- stage ---- */
+.emu-stage-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  overflow: hidden;
+  padding: var(--s-4);
+}
+.emu-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: ew-resize;
+  user-select: none;
+  touch-action: none;
+}
+.emu-plate {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.emu-plate--after { will-change: clip-path; }
+
+.emu-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px solid var(--whiteout);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+  transform: translateX(-0.5px);
+  pointer-events: none;
+}
+.emu-divider__grip {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-pill);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--line-strong);
+  color: var(--ink-dim);
+  cursor: ew-resize;
+  pointer-events: auto;
+}
+.emu-divider__grip svg { width: 16px; height: 16px; }
+
+.emu-tag {
+  position: absolute;
+  bottom: var(--s-3);
+  font-size: var(--t-micro);
+  color: var(--ink);
+  padding: var(--s-1) var(--s-2);
+  border-radius: var(--r-1);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+.emu-tag--before { inset-inline-start: var(--s-3); }
+.emu-tag--after { inset-inline-end: var(--s-3); color: var(--accent); }
+
+/* quiet reassurance: the soft preview is not the output quality */
+.emu-hint {
+  position: absolute;
+  bottom: var(--s-3);
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  font-size: var(--t-micro);
+  color: var(--ink-muted);
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-pill);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* click-to-focus: crosshair over the stage + a ring that pings at the click */
+.emu-stage--focus { cursor: crosshair; }
+.emu-focus-ring {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  margin-left: -22px;
+  margin-top: -22px;
+  border-radius: var(--r-pill);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  transform: scale(0.4);
+  opacity: 0;
+  animation: emu-focus-ping var(--t-slow) var(--ease) forwards;
+}
+@keyframes emu-focus-ping {
+  0%   { transform: scale(1.2); opacity: 0; }
+  25%  { transform: scale(1);   opacity: 1; }
+  100% { transform: scale(0.62); opacity: 0; }
+}
+
+/* library-reopen fallback note (original frame missing → editing the render) */
+.emu-libnote {
+  position: absolute;
+  top: var(--s-3);
+  inset-inline-start: var(--s-3);
+  font-size: var(--t-micro);
+  color: var(--sunflare);
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-pill);
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  max-width: 60%;
+}
+
+.emu-working {
+  position: absolute;
+  top: var(--s-3);
+  inset-inline-start: 50%;
+  transform: translateX(-50%);
+  font-size: var(--t-micro);
+  color: var(--ink);
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-pill);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+
+.emu-stage__swap {
+  position: absolute;
+  top: var(--s-3);
+  inset-inline-end: var(--s-3);
+  display: flex;
+  gap: var(--s-2);
+}
+.emu-swap {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0.14em;
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--ink);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.emu-swap:hover { border-color: var(--accent); color: var(--accent); }
+.emu-swap:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---- dropzone (empty state) ---- */
+.emu-dropzone-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-3);
+}
+.emu-dropzone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-3);
+  background: transparent;
+  border: 2px dashed var(--line);
+  border-radius: var(--r-3);
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.emu-dropzone:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 5%, transparent); }
+.emu-dropzone:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.emu-dropzone__mark { width: 64px; height: 64px; opacity: 0.4; }
+.emu-dropzone__title { font-family: var(--font-serif); font-size: var(--t-h3); color: var(--ink); }
+.emu-dropzone__sub { color: var(--ink-muted); font-size: var(--t-micro); }
+.emu-fromproject {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  letter-spacing: 0.14em;
+  padding: var(--s-3) var(--s-4);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  color: var(--ink-dim);
+  background: transparent;
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.emu-fromproject:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); background: color-mix(in srgb, var(--accent) 6%, transparent); }
+.emu-fromproject:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.emu-fromproject:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ---- controls rail ---- */
+.emu-rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--s-2);
+}
+/* ---- Match to Cinema: the headline self-calibration action (graphite) ---- */
+.emu-match { display: flex; flex-direction: column; gap: var(--s-2); }
+.emu-match__btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+  padding: var(--s-3) var(--s-4);
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  font-weight: 500;
+  color: var(--ink);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-2);
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.emu-match__btn svg { width: 16px; height: 16px; }
+.emu-match__btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.emu-match__btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.emu-match__btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.emu-match__spin {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--r-pill);
+  border: 2px solid var(--line-strong);
+  border-top-color: var(--accent);
+  animation: emu-match-spin 0.7s linear infinite;
+}
+@keyframes emu-match-spin { to { transform: rotate(360deg); } }
+.emu-match__track {
+  height: 3px;
+  border-radius: var(--r-pill);
+  background: var(--field-bg);
+  overflow: hidden;
+}
+.emu-match__fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: var(--r-pill);
+  transition: width var(--t-fast) var(--ease);
+}
+.emu-match__readout {
+  font-size: var(--t-micro);
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+  cursor: help;
+}
+.emu-match__readout b { color: var(--ink); font-weight: 600; }
+
+.emu-group { display: flex; flex-direction: column; gap: var(--s-3); }
+.emu-group__head {
+  color: var(--ink-dim);
+  padding-bottom: var(--s-2);
+  border-bottom: 1px solid var(--line);
+}
+.emu-field { display: flex; flex-direction: column; gap: var(--s-2); }
+.emu-field > .mono-label { color: var(--ink-muted); }
+.emu-field__row { display: flex; justify-content: space-between; align-items: baseline; }
+.emu-field__val { color: var(--accent); font-family: var(--font-mono); letter-spacing: 0; }
+
+.emu-select {
+  font-family: var(--font-sans);
+  font-size: var(--t-body);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-2);
+  border: 1px solid var(--line);
+  background: var(--field-bg);
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease);
+}
+.emu-select:hover:not(:disabled) { border-color: var(--line-strong); }
+.emu-select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+.emu-select:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.emu-range { width: 100%; accent-color: var(--accent); cursor: pointer; }
+.emu-range:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Amount has no effect when Profile = None — dim the whole field to signal it */
+.emu-field[aria-disabled="true"] > .mono-label { opacity: 0.4; }
+.emu-field[aria-disabled="true"] .emu-field__val { color: var(--ink-muted); }
+
+/* scene picker — wraps 6 options in a soft segmented grid */
+.emu-scenes {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--s-2);
+}
+.emu-scene-opt {
+  font-family: var(--font-sans);
+  font-size: var(--t-meta);
+  color: var(--ink-dim);
+  padding: var(--s-2) 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--field-bg);
+  cursor: pointer;
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.emu-scene-opt:hover:not(:disabled) { color: var(--ink); border-color: var(--line-strong); }
+.emu-scene-opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.emu-scene-opt--on { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+.emu-scene-opt:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.emu-badge {
+  align-self: flex-start;
+  margin-top: var(--s-1);
+  font-size: var(--t-micro);
+  color: var(--ink-dim);
+  padding: var(--s-1) var(--s-2);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+  background: var(--bg-elev-2);
+}
+
+.emu-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-2);
+  font-size: var(--t-micro);
+  color: var(--ink-faint);
+  line-height: 1.5;
+  cursor: help;
+}
+.emu-note svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+
+/* segmented (Scan) — the shared primitive, RTL font fix for the tokens */
+.emu-field .segmented { align-self: flex-start; }
+
+/* ---- Library film-strip (the dedicated Emulsion folder) ---- */
+/* ---- Scrub + Play transport (video mode) ---- */
+/* off-layout decoder surface — intrinsic resolution is what drawImage samples */
+.emu-hidden-video {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  left: -9999px;
+}
+.emu-transport {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-2) var(--s-3);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+}
+.emu-transport__play {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-strong);
+  background: var(--bg-elev-2);
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.emu-transport__play svg { width: 15px; height: 15px; }
+.emu-transport__play:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.emu-transport__play:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.emu-transport__play:disabled { opacity: 0.4; cursor: not-allowed; }
+.emu-transport__time {
+  flex: none;
+  min-width: 34px;
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+  font-size: var(--t-micro);
+}
+.emu-transport__scrub { flex: 1; min-width: 0; }
+
+/* ---- Video result / progress panel (video mode, row 2 of emu-main) ---- */
+.emu-vidout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  min-width: 0;
+  padding: var(--s-3) var(--s-4);
+  background: var(--bg-elev);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+}
+.emu-vidout__idle { color: var(--ink-faint); font-size: var(--t-micro); }
+.emu-vidout__running { display: flex; flex-direction: column; gap: var(--s-2); }
+.emu-vidout__label { color: var(--ink-dim); }
+.emu-vidout__hint { color: var(--ink-muted); font-size: var(--t-micro); }
+.emu-vidout__track {
+  height: 4px;
+  border-radius: var(--r-pill);
+  background: var(--field-bg);
+  overflow: hidden;
+}
+.emu-vidout__fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: var(--r-pill);
+  transition: width var(--t-med) var(--ease);
+}
+.emu-vidout__done { display: flex; flex-direction: column; gap: var(--s-3); }
+.emu-vidout__player {
+  width: 100%;
+  max-height: 220px;
+  border-radius: var(--r-2);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  object-fit: contain;
+}
+.emu-vidout__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+}
+.emu-vidout__acts { display: flex; gap: var(--s-2); }
+
+.emu-lib {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  min-width: 0;
+}
+.emu-lib__head {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  color: var(--ink-dim);
+}
+.emu-lib__count {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: 0;
+  color: var(--ink-muted);
+  padding: 0 var(--s-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+}
+.emu-lib__empty {
+  color: var(--ink-faint);
+  font-size: var(--t-micro);
+  padding: var(--s-3) 0;
+}
+.emu-lib__strip {
+  display: flex;
+  gap: var(--s-3);
+  overflow-x: auto;
+  padding-bottom: var(--s-1);
+  scrollbar-width: thin;
+}
+.emu-lib__item { position: relative; flex: 0 0 auto; }
+.emu-lib__thumb-btn {
+  display: block;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--bg-elev-2);
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+.emu-lib__thumb-btn:hover { border-color: var(--accent); transform: translateY(-1px); }
+.emu-lib__thumb-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.emu-lib__thumb {
+  display: block;
+  width: 116px;
+  height: 74px;
+  object-fit: cover;
+  background: var(--bg-elev-2);
+}
+.emu-lib__actions {
+  position: absolute;
+  top: var(--s-1);
+  inset-inline-end: var(--s-1);
+  display: flex;
+  gap: var(--s-1);
+  opacity: 0;
+  transition: opacity var(--t-fast) var(--ease);
+}
+.emu-lib__item:hover .emu-lib__actions,
+.emu-lib__actions:focus-within { opacity: 1; }
+.emu-lib__act {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-1);
+  border: 1px solid var(--line-strong);
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--ink);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+}
+.emu-lib__act:hover { color: var(--accent); border-color: var(--accent); }
+.emu-lib__act:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.emu-lib__act svg { width: 13px; height: 13px; }
+
+/* ---- footer ---- */
+.emu__foot {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-3) var(--s-6);
+  border-top: 1px solid var(--line);
+  background: var(--bg-elev);
+}
+.emu__foot-meta {
+  text-align: center;
+  color: var(--ink-muted);
+  font-size: var(--t-micro);
+  letter-spacing: 0.1em;
+}
+.emu__foot-meta code {
+  font-family: var(--font-mono);
+  color: var(--ink-dim);
+  letter-spacing: 0;
+  font-size: var(--t-meta);
+}
+.emu__foot-err { color: var(--flash); }
+.emu__cta { padding: var(--s-3) var(--s-6); min-width: 148px; }
+
+/* ---- project picker modal (mirrors the Enhancer picker) ---- */
+.emu-picker .modal__header { display: flex; align-items: center; gap: var(--s-3); }
+.emu-picker__project {
+  flex: 1;
+  max-width: 320px;
+  font-family: var(--font-sans);
+  font-size: var(--t-meta);
+  padding: var(--s-1) var(--s-3);
+  border-radius: var(--r-2);
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+}
+.emu-picker__body { flex: 1; min-height: 0; overflow-y: auto; padding: var(--s-4); }
+.emu-picker__empty { padding: var(--s-6); text-align: center; color: var(--ink-muted); }
+.emu-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--s-3);
+}
+.emu-picker__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+  padding: var(--s-1);
+  min-width: 0;                 /* let the card shrink so children can ellipsis */
+  overflow: hidden;             /* nothing escapes the card box */
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  cursor: pointer;
+  transition: border-color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+  text-align: start;
+}
+.emu-picker__card:hover { border-color: var(--accent); transform: translateY(-1px); }
+.emu-picker__card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.emu-picker__thumb-wrap { position: relative; min-width: 0; }
+.emu-picker__thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: var(--r-1);
+  background: var(--bg-elev-2);
+}
+/* Neutral clip placeholder for thumbnail-less video cards (no broken-image glyph) */
+.emu-picker__thumb--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-faint);
+  background:
+    repeating-linear-gradient(45deg, transparent 0 10px, color-mix(in srgb, var(--ink) 3%, transparent) 10px 20px),
+    var(--bg-elev-2);
+}
+.emu-picker__thumb--placeholder svg { width: 30%; height: 30%; }
+/* Readable caption: a clean single-line title + a quiet resolution line.
+   Natural case (no mono-caps) so it reads as a title, not a token string. */
+.emu-picker__cap {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 0 2px 1px;
+  min-width: 0;          /* enable ellipsis inside the grid/flex track */
+  overflow: hidden;
+}
+.emu-picker__cap-title {
+  max-width: 100%;
+  font-size: var(--t-meta);
+  color: var(--ink-dim);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.emu-picker__cap-meta {
+  min-height: 12px;
+  font-size: var(--t-micro);
+  color: var(--ink-muted);
+}
+/* Video clip card — model badge + quality/duration (Video mode picker) */
+.emu-picker__vmeta {
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  min-height: 14px;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  flex-wrap: wrap;
+}
+.emu-picker__vbadge {
+  font-size: var(--t-micro);
+  color: var(--ink-dim);
+  padding: 0 var(--s-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+.emu-picker__vqual {
+  font-size: var(--t-micro);
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  letter-spacing: 0;
+  white-space: nowrap;
+}

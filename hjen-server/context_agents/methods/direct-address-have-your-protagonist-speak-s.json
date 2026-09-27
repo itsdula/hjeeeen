@@ -1,0 +1,17 @@
+{
+  "id": "direct-address-have-your-protagonist-speak-s",
+  "craft": "direct-address",
+  "principle": "Have your protagonist speak straight to camera as if in a one-on-one conversation, so the viewer feels personally implicated in the promise or joke.",
+  "when_it_works": {
+    "beat": [
+      "setup"
+    ]
+  },
+  "effect": "Pulls the audience into the scene as an active participant rather than a distant observer.",
+  "evidence": [
+    "f10-old-spice — joy register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f10-old-spice"
+}

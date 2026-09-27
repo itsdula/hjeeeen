@@ -1,0 +1,23 @@
+{
+  "id": "communal-peak-stage-a-single-visually-rich",
+  "craft": "communal-peak",
+  "principle": "Stage a single, visually rich gathering scene at the emotional high point, filled with many small interactions, to embody the promise of community or shared ritual before returning to a more intimate scale.",
+  "when_it_works": {
+    "register": [
+      "joy"
+    ],
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Give the audience a vivid, memorable image of togetherness that can echo emotionally even after the story narrows back to just one or two characters.",
+  "evidence": [
+    "f04-john-lewis — longing register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f04-john-lewis"
+}

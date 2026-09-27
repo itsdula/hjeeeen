@@ -1,0 +1,20 @@
+{
+  "id": "proof-stunt-design-a-single-visually-impossi",
+  "craft": "proof-stunt",
+  "principle": "Design a single, visually impossible-seeming physical feat whose success can only be explained by the product benefit, then hold on it long enough that it reads as a test, not just a spectacle.",
+  "when_it_works": {
+    "beat": [
+      "result"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Transforms raw spectacle into persuasive evidence, so viewers intuitively credit the product for what they’re seeing.",
+  "evidence": [
+    "f08-volvo-trucks — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f08-volvo-trucks"
+}

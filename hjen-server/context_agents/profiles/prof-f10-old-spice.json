@@ -1,0 +1,15 @@
+{
+  "id": "prof-f10-old-spice",
+  "name": "prof-f10-old-spice — extracted from f10-old-spice",
+  "palette": "Bold primaries with a hero brand color (red) popping against neutral interiors and saturated natural blues; skin tones and towels kept warm to feel inviting.",
+  "light_logic": "Flat, practical light in the bathroom that shifts to bright, clean daylight outside, with consistent frontal key lighting to keep the spokesperson readable through each jump.",
+  "lens": "Moderate wide-to-normal focal lengths that keep the spokesperson close and slightly exaggerated, minimizing depth so transitions feel like stage tricks rather than real location changes.",
+  "texture": "Smooth, glossy surfaces (tiles, bottle, water, horse coat) with minimal visual noise, emphasizing the polished, almost plastic perfection of the fantasy.",
+  "world": "A theatrical, tongue-in-cheek reality where environments swap instantly on command and luxury symbols (oysters, tickets, diamonds, horse) appear as props in a magic show led by the spokesperson.",
+  "forbidden": [
+    "Gritty, handheld realism that would undermine the controlled, stagey feel of the transformations",
+    "Complex multi-character drama that distracts from the one-on-one address",
+    "Muted, desaturated color schemes that soften the bold, comedic tone",
+    "Slow, contemplative pacing that breaks the snap of the command-driven cuts"
+  ]
+}

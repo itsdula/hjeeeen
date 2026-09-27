@@ -1,0 +1,16 @@
+{
+  "id": "prof-f14-dove",
+  "name": "prof-f14-dove — extracted from f14-dove",
+  "palette": "Cool, desaturated daylight for introspection and self-critique, with occasional warmer beige and cream notes in domestic inserts to signal comfort and reflection.",
+  "light_logic": "Soft, high-key natural light from large windows in the loft to keep everything honest and observational, with slightly dimmer, cozier light for intimate hand and ritual shots.",
+  "lens": "Shallow-focus close-ups and macro details for vulnerability and fixation, moving to wider, slightly longer-lens views that keep subjects grounded in a spacious, airy environment.",
+  "texture": "Matte, natural skin and fabric textures; visible pores, denim grain, steam and ceramic glaze to emphasize realism over gloss.",
+  "world": "A real-feeling industrial loft repurposed as a neutral studio-lab, plus glimpses of a calm domestic setting; minimal props, lots of negative space, everything arranged to feel documentary but gently composed.",
+  "forbidden": [
+    "Overly glossy beauty lighting or heavy retouching that erases real skin texture",
+    "Fast, flashy cutting or hyper-saturated color that breaks the reflective tone",
+    "Overt product glamour shots that overshadow the human experiment",
+    "Heavy-handed voice-of-god narration that tells the viewer what to think",
+    "Crowded locations or busy backgrounds that distract from the emotional comparison"
+  ]
+}

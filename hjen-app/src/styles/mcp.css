@@ -1,0 +1,71 @@
+/* ============================================================================
+   MCP Assistant surface — chat typography, the living "thinking" loader, and
+   the Pro structural pass. The overlay/panel are inline-styled on real tokens
+   (so they follow theme + background shade + accent); this sheet owns what a
+   stylesheet does best: a clean reading font, the animated loader, and the
+   [data-appearance="pro"] sharpening (inline can't answer the attribute).
+   ========================================================================== */
+
+/* ── Clean chat reading font — SCOPED OVERRIDE for the MCP chat surface only.
+   Anwar's law: the MCP conversation must FEEL like Claude / ChatGPT / Gemini —
+   Latin stays Inter/system-sans, but Arabic uses the NEUTRAL SYSTEM Arabic face
+   (SF Arabic on macOS), NOT the editorial Inter. Inter carries no Arabic
+   glyphs, so Arabic falls straight through to system-ui → SF Arabic. This
+   override is confined to `.mcp-assistant`; the house law (Inter for Arabic)
+   stays in force everywhere else. No mono, no letter-spacing on Arabic. */
+.mcp-assistant {
+  font-family: 'Inter', system-ui, -apple-system, 'SF Arabic', 'Segoe UI',
+    'Noto Sans Arabic', 'IBM Plex Sans Arabic', sans-serif;
+}
+.mcp-assistant .assistant-text {
+  line-height: 1.6;
+  letter-spacing: 0;
+  font-size: 14px;
+}
+
+/* ── Living "thinking" loader — a pulsing dot + a shimmering, cycling phrase. */
+.mcp-thinking {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  font-size: 13px;
+  color: var(--ink-dim);
+  letter-spacing: 0;
+}
+.mcp-thinking__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--r-pill);
+  background: var(--accent);
+  flex: 0 0 auto;
+  animation: mcp-pulse 1.2s var(--ease) infinite;
+}
+.mcp-thinking__txt {
+  background: linear-gradient(90deg, var(--ink-muted) 0%, var(--ink) 50%, var(--ink-muted) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: mcp-shimmer 1.8s linear infinite, mcp-fade 0.4s var(--ease);
+}
+.mcp-thinking__tool {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.04em;
+}
+@keyframes mcp-shimmer { to { background-position: -200% 0; } }
+@keyframes mcp-pulse { 0%, 100% { opacity: 0.35; transform: scale(0.82); } 50% { opacity: 1; transform: scale(1); } }
+@keyframes mcp-fade { from { opacity: 0; transform: translateY(2px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .mcp-thinking__dot, .mcp-thinking__txt { animation: none; }
+  .mcp-thinking__txt { color: var(--ink-dim); }
+}
+
+/* ── Pro structural pass — hard corners on every MCP control + the drawer.
+   Colour is untouched (it stays token-driven); only the shape hardens. */
+:root[data-appearance="pro"] :is(.mcp-overlay, .mcp-assistant) :is(button, input, textarea, .mcp-field) {
+  border-radius: var(--r-2) !important;
+}
+:root[data-appearance="pro"] .mcp-overlay { border-radius: var(--r-4) !important; }

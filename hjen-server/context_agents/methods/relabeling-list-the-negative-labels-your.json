@@ -1,0 +1,20 @@
+{
+  "id": "relabeling-list-the-negative-labels-your",
+  "craft": "relabeling",
+  "principle": "List the negative labels your audience fears or receives, then explicitly flip their meaning into markers of value, talent, or courage.",
+  "when_it_works": {
+    "beat": [
+      "conflict"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Transforms stigma into pride, so the audience feels seen and revalued instead of corrected.",
+  "evidence": [
+    "f03-apple — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f03-apple"
+}

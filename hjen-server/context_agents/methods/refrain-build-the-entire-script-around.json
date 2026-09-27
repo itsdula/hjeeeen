@@ -1,0 +1,13 @@
+{
+  "id": "refrain-build-the-entire-script-around",
+  "craft": "refrain",
+  "principle": "Build the entire script around a tiny handful of repeated lines so the words become an in-joke and emotional rhythm rather than just information.",
+  "when_it_works": {},
+  "effect": "Make the audience feel like they’re overhearing a real catchphrase or ritual they can easily repeat and share.",
+  "evidence": [
+    "f13-budweiser — groundedness register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f13-budweiser"
+}

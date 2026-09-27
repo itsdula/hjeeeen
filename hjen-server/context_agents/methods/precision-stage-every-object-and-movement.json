@@ -1,0 +1,20 @@
+{
+  "id": "precision-stage-every-object-and-movement",
+  "craft": "precision",
+  "principle": "Stage every object and movement with visible clearance, alignment, and timing so the composition itself communicates meticulous engineering without verbal explanation.",
+  "when_it_works": {
+    "beat": [
+      "result"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Make the viewer trust the product’s reliability because the visuals embody care and exactness.",
+  "evidence": [
+    "f11-honda — groundedness register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f11-honda"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "low-stakes-honesty-let-characters-openly-adm",
+  "craft": "low-stakes-honesty",
+  "principle": "Let characters openly admit they’re doing something simple or unremarkable, and frame that plainness as the whole point of the connection.",
+  "when_it_works": {
+    "register": [
+      "groundedness"
+    ],
+    "beat": [
+      "desire"
+    ],
+    "energy": [
+      "quiet"
+    ]
+  },
+  "effect": "Reassure the audience that they don’t need a big occasion or performance to be ‘doing it right’ with your product.",
+  "evidence": [
+    "f13-budweiser — groundedness register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f13-budweiser"
+}

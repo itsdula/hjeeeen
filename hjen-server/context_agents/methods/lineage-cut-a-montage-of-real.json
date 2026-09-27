@@ -1,0 +1,23 @@
+{
+  "id": "lineage-cut-a-montage-of-real",
+  "craft": "lineage",
+  "principle": "Cut a montage of real, historically resonant individuals in a unified visual treatment to imply your audience belongs to a timeless lineage of people like them.",
+  "when_it_works": {
+    "register": [
+      "resolve"
+    ],
+    "beat": [
+      "change"
+    ],
+    "energy": [
+      "mid"
+    ]
+  },
+  "effect": "Makes the viewer feel they are joining an existing, larger story rather than starting alone.",
+  "evidence": [
+    "f03-apple — resolve register"
+  ],
+  "weight": 2,
+  "status": "candidate",
+  "source": "auto:f03-apple"
+}

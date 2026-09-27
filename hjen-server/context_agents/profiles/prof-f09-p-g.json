@@ -1,0 +1,15 @@
+{
+  "id": "prof-f09-p-g",
+  "name": "prof-f09-p-g — extracted from f09-p-g",
+  "palette": "Muted blues and greys for night and interiors, shifting into warm creams and yellows at breakfast, then more saturated primaries (yellows, reds, turquoise) in play and sports scenes.",
+  "light_logic": "Naturalistic progression from dim, bluish night light to soft morning interiors, then bright daylight exteriors and evenly lit sports facilities, always motivated by believable sources like windows and ambient daylight.",
+  "lens": "Mostly medium and wide lenses that keep children in their environments, with occasional closer shots for emphasis but no extreme distortion; perspective stays human and observational.",
+  "texture": "Soft, lived-in domestic textures (blankets, wallpaper, laundry, concrete alleys) contrasted with clean, slightly glossy sports surfaces (pool water, gym equipment, leotards).",
+  "world": "Realistic, slightly idealized working- to middle-class urban neighborhood where homes, alleys, and public sports facilities form one continuous, coherent world centered on children’s daily lives.",
+  "forbidden": [
+    "Overly glossy, hyper-stylized lighting that breaks the natural morning-to-day progression",
+    "Abstract graphics or heavy VFX that detach the story from real spaces",
+    "Harsh conflict or scolding tones that would make the wake-up feel punitive",
+    "Fragmented, music-video-style cutting that obscures the sense of a single day unfolding"
+  ]
+}

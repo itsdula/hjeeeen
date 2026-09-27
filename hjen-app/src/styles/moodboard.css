@@ -1,0 +1,156 @@
+/* Mood Board — لوحة الإلهام.
+   One namespace (.mb-), tokens only, so the board reads identically in every
+   theme and in the Pro re-skin. Graphite, not Sorbet: Sorbet is the hub idiom,
+   pro tools stay on the token system. The only literals are two neutral
+   drop-shadow alphas, which is exactly what .ppr-tile already does. */
+
+.mb-surface {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  background: var(--bg);
+  min-height: 0;
+}
+
+/* ─── toolbar ─────────────────────────────────────────────── */
+.mb-toolbar {
+  flex: 0 0 auto;
+  height: 44px;
+  display: flex; align-items: center; gap: var(--s-2);
+  padding-inline: var(--s-3);
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--line);
+}
+.mb-toolbar__spacer { flex: 1 1 auto; }
+.mb-toolbar__zoom {
+  min-width: 44px; text-align: right;
+  color: var(--ink-muted);
+  /* The zoom readout is information, and information is copyable. */
+  user-select: text;
+}
+.mb-toolbar__del { color: var(--flash); }
+
+/* ─── the board ───────────────────────────────────────────── */
+.mb-board {
+  position: relative;
+  flex: 1 1 auto;
+  overflow: hidden;
+  background: var(--bg);
+  cursor: default;
+  /* A drag on the board is a marquee or a pan — never a text selection. */
+  user-select: none;
+}
+.mb-board.is-pan { cursor: grab; }
+.mb-board.is-pan:active { cursor: grabbing; }
+
+/* The dot grid tracks the camera, so panning reads as movement over a surface
+   rather than pictures sliding on nothing. */
+.mb-grid {
+  position: absolute; inset: -4000px;
+  pointer-events: none;
+  background-image: radial-gradient(circle, var(--ink-faint) 1px, transparent 1px);
+}
+
+.mb-layer { position: absolute; inset: 0; transform-origin: 0 0; }
+
+/* ─── one item ────────────────────────────────────────────── */
+.mb-item {
+  position: absolute;
+  border-radius: var(--r-1);
+  background: var(--field-bg);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .30);
+}
+.mb-item:not(.mb-item--note) { overflow: hidden; }
+.mb-item__media {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  -webkit-user-drag: none;
+  pointer-events: none;   /* the ITEM owns the gesture, not the picture */
+}
+.mb-item.is-sel {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .44);
+}
+.mb-item__caption {
+  position: absolute; inset-inline: 0; bottom: 0;
+  padding: var(--s-1) var(--s-2);
+  font-size: var(--t-micro);
+  color: var(--ink-dim);
+  background: linear-gradient(to top, rgba(0, 0, 0, .68), transparent);
+  pointer-events: none;
+}
+
+/* A note is a blank page, not a picture frame. */
+.mb-item--note {
+  background: var(--bg-elev-2);
+  border: 1px solid var(--line);
+}
+.mb-note__text {
+  width: 100%; height: 100%;
+  padding: var(--s-3);
+  border: 0; outline: none; resize: none;
+  background: transparent;
+  color: var(--ink-dim);
+  font-family: var(--font-sans);
+  font-size: var(--t-meta);
+  line-height: 1.5;
+  user-select: text;
+}
+.mb-note__text::placeholder { color: var(--ink-faint); }
+
+/* ─── resize handles ──────────────────────────────────────── */
+/* Constant SCREEN size — the inline transform:scale(1/scale) from the item view
+   cancels the camera, so a handle is grabbable at 20% zoom and not gigantic at
+   200%. transform-origin sits at the handle's own centre for that reason. */
+.mb-h {
+  position: absolute;
+  width: 11px; height: 11px;
+  background: var(--accent);
+  border: 1px solid var(--on-accent);
+  border-radius: 2px;
+  z-index: 3;
+}
+.mb-h--nw { left: -5px;  top: -5px;    cursor: nwse-resize; transform-origin: 100% 100%; }
+.mb-h--ne { right: -5px; top: -5px;    cursor: nesw-resize; transform-origin: 0 100%; }
+.mb-h--sw { left: -5px;  bottom: -5px; cursor: nesw-resize; transform-origin: 100% 0; }
+.mb-h--se { right: -5px; bottom: -5px; cursor: nwse-resize; transform-origin: 0 0; }
+.mb-h--n  { left: 50%; top: -5px;      cursor: ns-resize; margin-left: -5px; transform-origin: 50% 100%; }
+.mb-h--s  { left: 50%; bottom: -5px;   cursor: ns-resize; margin-left: -5px; transform-origin: 50% 0; }
+.mb-h--w  { top: 50%; left: -5px;      cursor: ew-resize; margin-top: -5px;  transform-origin: 100% 50%; }
+.mb-h--e  { top: 50%; right: -5px;     cursor: ew-resize; margin-top: -5px;  transform-origin: 0 50%; }
+
+/* ─── marquee + drop state ────────────────────────────────── */
+.mb-marquee {
+  position: absolute;
+  pointer-events: none;
+  border: 1px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-radius: 2px;
+}
+.mb-board.is-drop::after {
+  content: ''; position: absolute; inset: var(--s-3);
+  pointer-events: none;
+  border: 2px dashed var(--accent);
+  border-radius: var(--r-4);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+/* ─── empty ───────────────────────────────────────────────── */
+.mb-blank {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: var(--s-2);
+  pointer-events: none;
+  text-align: center;
+  padding: var(--s-6);
+}
+.mb-blank__eyebrow { color: var(--ink-faint); }
+.mb-blank__p {
+  max-width: 46ch;
+  color: var(--ink-muted);
+  font-size: var(--t-meta);
+  line-height: 1.6;
+  user-select: text;
+  pointer-events: auto;
+}

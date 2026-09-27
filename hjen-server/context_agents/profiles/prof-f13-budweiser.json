@@ -1,0 +1,16 @@
+{
+  "id": "prof-f13-budweiser",
+  "name": "prof-f13-budweiser — extracted from f13-budweiser",
+  "palette": "Warm, lived-in browns and reds with occasional bold color pops (red sweatshirt, yellow jersey) against neutral interiors, capped by stark black with red-and-white brand graphics.",
+  "light_logic": "Soft, practical interior sources (lamps, TV glow, desk light) creating cozy pools of warmth and gentle contrast, then a hard, graphic shift to flat, high-contrast logo lighting.",
+  "lens": "Moderate focal lengths with intimate, eye-level framing and slight depth-of-field separation to keep focus on faces and beers within cluttered home environments.",
+  "texture": "Slightly grainy, unpolished domestic realism—visible household clutter, worn furniture, and analog tech—contrasted with the clean, noise-free finish of the end card.",
+  "world": "Everyday late-90s/early-2000s domestic spaces—living rooms, hallways, home offices—occupied by friends in casual clothes, connected only by phone calls and a shared game on TV.",
+  "forbidden": [
+    "Overly glossy, aspirational lifestyle sets that feel staged or luxurious",
+    "Complex plot twists or visual effects that distract from the simple phone banter",
+    "High-stakes drama, conflict, or sentimentality that would undercut the laid-back tone",
+    "Crowded party scenes that replace the idea of connection-at-a-distance",
+    "Dense explanatory voiceover or product feature lists"
+  ]
+}

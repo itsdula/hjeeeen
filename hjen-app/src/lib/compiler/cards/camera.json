@@ -1,0 +1,62 @@
+[
+  {
+    "id": "camera.environmental-portrait.001",
+    "dimension": "camera",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["portrait", "بورتريه", "environment", "بيئي", "composition", "كادر"],
+    "ar": "البورتريه بيئي دائماً: الإنسان مغروس في عالمه والمكان يرويه قبل أن يتكلم. الفخّاري أمام جرفه بأوانيه، الجدّة في مطبخها ببخاره. احذف الخلفية تخسر نص الحكاية.",
+    "en": "Every portrait is ENVIRONMENTAL: the person embedded in their world, the place telling their story before they speak. Subject and setting are one narrative unit — the potter before his cliff holding vessels, the elder at the bakery counter, palms flat, weight on his hands. Remove the background and half the story dies.",
+    "negatives": ["studio-isolated subject on seamless backdrop", "generic bokeh wall behind a character with a story"],
+    "sources": ["seed:clay_basil"],
+    "weight": 3
+  },
+  {
+    "id": "camera.commit-rule.002",
+    "dimension": "camera",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["composition", "shot", "لقطة", "angle", "زاوية", "framing"],
+    "ar": "لا كادر وسطي آمن: إما مسافة أو قرب، إما تماثل مركزي أو ثلث ملتزم، إما اتساع جغرافي أو مواجهة حميمة. الكلوز أب الشديد يقص أعلى الرأس — عن الضحكة لا عن التسريحة.",
+    "en": "No safe middle-ground composition: commit to distance OR proximity, dead-center symmetry OR rule-of-thirds, geographic wide OR confrontational close. Extreme close-up crops the top of the head — it's about the laugh, not the haircut. Eye contact with lens used sparingly; when eyes meet lens, the frame becomes confrontation.",
+    "negatives": ["timid medium shot with subject dead center and headroom to spare", "every character looking at camera"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  },
+  {
+    "id": "camera.lens-language.003",
+    "dimension": "camera",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["lens", "عدسة", "focal", "بعد بؤري", "bokeh", "vintage"],
+    "ar": "لغة العدسات: 35mm بيئي، 50mm متوسط، 85–100mm كلوز، 24mm واسع، تيليفوتو يضغط القافلة والبحر في مستوى واحد. طابع عدسة قديم: هالة دافئة في الفلير، بوكيه بيضاوي، حدة إنسانية لا سريرية.",
+    "en": "Lens language: 35mm environmental, 50mm medium, 85–100mm close-ups, 24mm wide, telephoto compression flattening caravan-palm-sea into one plane. Vintage character: warm halation in flare, oval anamorphic bokeh on wides, micro-contrast that renders skin dimensional, never clinically sharp.",
+    "negatives": ["smartphone ultra-sharp HDR look", "fisheye novelty"],
+    "sources": ["seed:clay_basil"],
+    "weight": 2
+  },
+  {
+    "id": "camera.vehicle-grammar.004",
+    "dimension": "camera",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["سيارة", "vehicle", "windshield", "car", "through-glass", "شاص"],
+    "ar": "نحو السيارة السعودية: عبر الزجاج الأمامي بغبار أو مطر كفلتر طبيعي؛ من المقعد الخلفي للحميمية؛ زاوية منخفضة تجعل الشاص عمارة. السيارة حصن وبيت ثانٍ.",
+    "en": "Saudi vehicle grammar: through-windshield with dust or rain on glass as a physical filter; from the back seat for road intimacy; low angle making the Land Cruiser architectural. The vehicle is a fortress and second home — frame it as such.",
+    "negatives": ["showroom 3/4 beauty angle for a story moment"],
+    "sources": ["seed:clay_basil"],
+    "weight": 1
+  },
+  {
+    "id": "camera.aspect-logic.005",
+    "dimension": "camera",
+    "region": "ksa",
+    "era": "timeless",
+    "tags": ["aspect", "أبعاد", "16:9", "9:16", "anamorphic", "ratio"],
+    "ar": "منطق الأبعاد: 16:9 وثائقي أساسي؛ 2.39:1 للاتساع والسلويت والساعة الزرقاء؛ 9:16 للسوشال يُبنى من البلوكينج لا بقص أعمى — المساحات الآمنة للنص الثنائي اللغة تُحجز من التكوين.",
+    "en": "Aspect logic: 16:9 documentary primary; 2.39:1 anamorphic for landscape, silhouette, blue hour; 9:16 social must be COMPOSED for vertical (blocking stacked, headroom planned), not blind-cropped. Reserve safe areas for bilingual caption + logo lockup (RTL top-right gravity, LTR bottom-left).",
+    "negatives": ["vertical crop that amputates hands and props"],
+    "sources": ["seed:kv_craft"],
+    "weight": 1
+  }
+]

@@ -1,0 +1,141 @@
+{
+  "longing": {
+    "_n": 24,
+    "shotSize": {
+      "wide": 0.35,
+      "medium-wide": 0.69
+    },
+    "lightState": {
+      "day": 0.73
+    },
+    "palette": {
+      "brown": 0.65,
+      "warm yellow": 0.43,
+      "skin tone": 2.9,
+      "grey": 0.76,
+      "beige": 0.44,
+      "dark green": 2.28,
+      "gold": 1.04
+    }
+  },
+  "resolve": {
+    "_n": 51,
+    "shotSize": {
+      "wide": 0.26,
+      "cu": 0.45
+    },
+    "shotAngle": {
+      "high": 1.28
+    },
+    "lightState": {
+      "night": 0.82,
+      "mixed": 0.33,
+      "golden": 0.5
+    },
+    "palette": {
+      "blue": 0.4,
+      "black": 0.41,
+      "warm orange": 1.62,
+      "light blue": 0.69,
+      "dark blue": 0.28,
+      "tan": 1.85,
+      "cream": 1.95
+    }
+  },
+  "joy": {
+    "_n": 36,
+    "shotSize": {
+      "medium-wide": 0.25,
+      "cu": 0.36,
+      "medium": 0.55
+    },
+    "lightState": {
+      "day": 0.78,
+      "mixed": 0.84
+    },
+    "palette": {
+      "yellow": 1.41,
+      "red": 0.17,
+      "dark blue": 0.78,
+      "brown": 0.17,
+      "skin tones": 1.02,
+      "green": 0.64,
+      "warm yellow": 0.82,
+      "dark green": 1.67,
+      "pink": 1.43,
+      "light blue": 0.6,
+      "warm red": 3
+    }
+  },
+  "desolation": {
+    "_n": 14,
+    "shotSize": {
+      "mcu": 0.16,
+      "wide": 0.54,
+      "medium-wide": 0.47
+    },
+    "shotAngle": {
+      "high": 1.14
+    },
+    "lightState": {
+      "day": 0.66,
+      "night": 0.69
+    },
+    "palette": {
+      "dark blue": 1.5,
+      "grey": 0.93,
+      "warm yellow": 1.87,
+      "muted green": 3
+    }
+  },
+  "turbulence": {
+    "_n": 41,
+    "shotSize": {
+      "medium-wide": 0.19,
+      "medium": 0.36
+    },
+    "shotAngle": {
+      "high": 1.18,
+      "top": 1.65
+    },
+    "lightState": {
+      "interior-practical": 0.27,
+      "mixed": 0.65
+    },
+    "palette": {
+      "green": 1.12,
+      "brown": 0.52,
+      "red": 0.32,
+      "gold": 0.62,
+      "dark brown": 0.46,
+      "pink": 0.2,
+      "light brown": 3
+    }
+  },
+  "groundedness": {
+    "_n": 70,
+    "shotSize": {
+      "medium-wide": 0.29,
+      "extreme-wide": 1.12
+    },
+    "shotAngle": {
+      "top": 0.29
+    },
+    "lightState": {
+      "golden": 0.46
+    },
+    "palette": {
+      "white": 0.18,
+      "green": 0.72,
+      "orange": 0.28,
+      "warm": 2.56,
+      "dark brown": 0.35,
+      "purple": 0.16,
+      "beige": 0.61,
+      "warm brown": 2.99,
+      "neutral": 2.53,
+      "teal": 0.46,
+      "silver": 0.82
+    }
+  }
+}
